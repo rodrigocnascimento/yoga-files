@@ -1,0 +1,17 @@
+function parse_git_branch {
+   git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/(\1)/'
+}
+
+function prompt_right() {
+    echo -e "[\A] \[\e[31;0m\]\w\n \\$"
+}
+
+function prompt_left() {
+    echo -e "\u@\h\$(parse_git_branch)\[\e[0m\]"
+}
+
+function prompt() {
+    compensate=2
+    PS1=$(printf "%*s\r%s " "$(($(tput cols)+${compensate}))" "$(prompt_left)" "$(prompt_right)" )
+}
+PROMPT_COMMAND=prompt
