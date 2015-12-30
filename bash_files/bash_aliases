@@ -1,0 +1,5 @@
+alias ..='cd ..'
+alias ~='cd ~'
+alias lsd='ls -lh | grep "^d"'
+alias lsf='ls -lh | grep "^-"'
+alias lsa='ls -lahF ${colorflag}'
