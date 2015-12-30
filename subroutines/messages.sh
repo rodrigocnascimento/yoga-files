@@ -11,7 +11,7 @@ cat << "EOT"
  _--                  --_
 <   EVERYTHING WAS FINE  >)
 |                          |
- \._  yoga installed :) _./
+ \._   yoga installed  __./
     ```--. . , ; .--'''
           | |   |
        .-=||  | |=-.
