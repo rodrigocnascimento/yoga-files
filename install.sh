@@ -3,25 +3,34 @@
 
 # first we need to check if the directory exists
 source envvars.sh
-source ./subroutines/messages.sh
+source messages.sh
 
 yoga_install(){
     printf "installing yoga-files \n"
-    source ./subroutines/is_git_installed.#!/bin/sh
 
-    # creating .yoga-files dir
-    mkdir -p ${YOGA_HOME}
+    # creating .yoga-files dir and backup oldfiles dir
+    if [ ! -d ${YOGA_HOME}/old_files ]; then
+        mkdir -p ~/.profile ${YOGA_HOME}/old_files
+    fi
 
-    # creating dir to backup old files
-    mkdir -p ${YOGA_HOME}/old_files
+    # here we need to check whatever 
+    # os is and create the files properly
+    # for now only macosx
+    if [ ! -e ~/.profile ]; then
+        mv ~/.profile ${YOGA_HOME}/old_files
+    fi
 
-    # backing up old files
-    mv ~/.bashrc ${YOGA_HOME}/old_files
+    # if [ ! -e ~/.bash_* ]; then
+    #     mv ~/.bash_* ${YOGA_HOME}/old_files
+    # fi
 
-    #if [ $_IS_GIT_INSTALLED -eq 0 ]; then
-    #    printf "cloning yoga-files \n"
-    #    git clone https://github.com/rodreego/yoga-files.git ${YOGA_HOME}
-    #fi
+    cp files/bash_aliases ~/.profile_aliases
+    cp files/bash_functions ~/.profile_functions
+    cp files/bashrc ~/.profile
+
+    sourcereload
+    
+    yoga_ok
 }
 
 yoga_quit(){
@@ -45,6 +54,12 @@ is_yoga_installed?(){
         fi
     else
         echo "yoga-files is installed, wish update?"
+        read  _ANSWER
+
+        if [[ "$_ANSWER" =~ [Yy] ]]
+         then
+            yoga_install
+        fi
     fi
 }
 

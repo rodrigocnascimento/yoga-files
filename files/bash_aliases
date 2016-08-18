@@ -1,5 +1,10 @@
+# cd back
 alias ..='cd ..'
+
+# Home
 alias ~='cd ~'
+
+# Ls Aliases
 alias lsd='ls -lh | grep "^d"'
 alias lsf='ls -lh | grep "^-"'
 alias lsa='ls -lahF ${colorflag}'

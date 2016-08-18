@@ -14,4 +14,5 @@ function prompt() {
     compensate=2
     PS1=$(printf "%*s\r%s " "$(($(tput cols)+${compensate}))" "$(prompt_left)" "$(prompt_right)" )
 }
+
 PROMPT_COMMAND=prompt

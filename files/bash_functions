@@ -1,0 +1,16 @@
+# Função para criar um volume
+function mountsshfs() {
+	$host=$0
+	print $host
+}
+
+# Executar o mongodb
+function executemongod() {
+	mongod --dbpath /Applications/MAMP/htdocs/$0/app/data/db/
+}
+
+function sourcereload() {
+	source ~/.profile
+    source ~/.profile_aliases
+    source ~/.profile_functions
+}
