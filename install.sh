@@ -26,9 +26,13 @@ yoga_install(){
 
     cp files/bash_aliases ~/.profile_aliases
     cp files/bash_functions ~/.profile_functions
+    cp files/envvars ~/.profile_envvars
     cp files/bashrc ~/.profile
 
-    sourcereload
+    source ~/.profile
+    source ~/.profile_aliases
+    source ~/.profile_functions
+    source ~/.profile_envvars
     
     yoga_ok
 }
