@@ -10,4 +10,4 @@ Este é apenas um repositório pessoal, dos meus .dotfiles
 São funcões que uso no dia a dia, aliases, etc... É mais um repositório para estudos de shell script
 do que um dotfile que o valha. 
 
-Qualquer pull request será mais que bem binda :)
+Qualquer pull request será mais que bem vindo :)
