@@ -9,7 +9,7 @@ function executemongod() {
 	mongod --dbpath /Applications/MAMP/htdocs/$0/app/data/db/
 }
 
-function sourcereload() {
+function yoga_sourcereload() {
 	source ~/.profile
     source ~/.profile_aliases
     source ~/.profile_functions

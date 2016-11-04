@@ -33,7 +33,7 @@ yoga_install(){
     source ~/.profile_aliases
     source ~/.profile_functions
     source ~/.profile_envvars
-    
+
     yoga_ok
 }
 
