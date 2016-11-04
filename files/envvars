@@ -1,10 +1,10 @@
 # MAMP
-export MAMP_PHP=/Applications/MAMP/bin/php/php5.6.10/bin
+export MAMP_PHP=/Applications/MAMP/bin/php/php7.0.0/bin
 export PATH="$MAMP_PHP:$PATH"
 
 # LOAD NVM
 export NVM_DIR="/Users/darth-tyranus/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  
+[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
 
 # BIN PATH
 export PATH="/usr/local/sbin:$PATH"
