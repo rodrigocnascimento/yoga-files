@@ -4,6 +4,10 @@ alias ..='cd ..'
 # Home
 alias ~='cd ~'
 
+# Projects
+alias projects='cd ~/Projects'
+alias phpProjects='cd ~/Projects/phpProjects'
+
 # Ls Aliases
 alias lsd='ls -lh | grep "^d"'
 alias lsf='ls -lh | grep "^-"'
