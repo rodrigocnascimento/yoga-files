@@ -37,6 +37,22 @@ yoga_install(){
     yoga_ok
 }
 
+yoga_update(){
+	echo "updating repository"
+	git pull
+	echo "copying files"
+   	cp files/bash_aliases ~/.profile_aliases
+    cp files/bash_functions ~/.profile_functions
+    cp files/envvars ~/.profile_envvars
+    cp files/bashrc ~/.profile
+	echo "reloading files"
+    source ~/.profile
+    source ~/.profile_aliases
+    source ~/.profile_functions
+    source ~/.profile_envvars
+	yoga_ok
+}
+
 yoga_quit(){
     yoga_fail
 }
@@ -62,7 +78,7 @@ is_yoga_installed?(){
 
         if [[ "$_ANSWER" =~ [Yy] ]]
          then
-            yoga_install
+            yoga_update
         fi
     fi
 }
