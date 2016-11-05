@@ -15,6 +15,16 @@ function yoga_sourcereload() {
     source ~/.profile_functions
 }
 
+function update_vim() {
+    vim -N -u ~/.vimrc -c "try | \
+        NeoBundleClean! | \
+        NeoBundleCheck | \
+        NeoBundleUpdate! | \
+        NeoBundleUpdatesLog $* | \
+        finally | qall! | endtry" \
+        -U NONE -i NONE -V1 -e -s
+}
+
 function parse_git_branch {
    git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/(\1)/'
 }
