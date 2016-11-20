@@ -5,6 +5,6 @@ PROMPT_COMMAND=prompt
 source ~/.profile_aliases
 source ~/.profile_functions
 source ~/.profile_envvars
-if [ -e ~/.profile_custom ]; then
+if [ -f ~/.profile_custom ]; then
 	source ~/.profile_custom
 fi
