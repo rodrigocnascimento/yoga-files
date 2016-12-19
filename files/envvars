@@ -8,3 +8,6 @@ export NVM_DIR="/Users/darth-tyranus/.nvm"
 
 # BIN PATH
 export PATH="/usr/local/sbin:$PATH"
+
+# laravel composer
+export PATH="$PATH:$HOME/.composer/vendor/bin"
