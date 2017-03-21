@@ -13,4 +13,4 @@ export PATH="/usr/local/sbin:$PATH"
 export PATH="$PATH:$HOME/.composer/vendor/bin"
 
 # python wrapper env
-export VIRTUALENVWRAPPER_PYTHON=/Library/Frameworks/Python.framework/Versions/3.6/bin/python3
+export VIRTUALENVWRAPPER_PYTHON=/usr/local/Cellar/python3/3.6.0_1/bin/python3
