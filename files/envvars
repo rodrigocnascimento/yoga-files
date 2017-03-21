@@ -11,3 +11,6 @@ export PATH="/usr/local/sbin:$PATH"
 
 # laravel composer
 export PATH="$PATH:$HOME/.composer/vendor/bin"
+
+# python wrapper env
+export VIRTUALENVWRAPPER_PYTHON=/Library/Frameworks/Python.framework/Versions/3.6/bin/python3
