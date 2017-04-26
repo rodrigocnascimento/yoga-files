@@ -6,23 +6,7 @@ source envvars.sh
 source messages.sh
 
 yoga_install(){
-    printf "installing yoga-files \n"
-
-    # creating .yoga-files dir and backup oldfiles dir
-    if [ ! -d ${YOGA_HOME}/old_files ]; then
-        mkdir -p ~/.profile ${YOGA_HOME}/old_files
-    fi
-
-    # here we need to check whatever 
-    # os is and create the files properly
-    # for now only macosx
-    if [ ! -e ~/.profile ]; then
-        mv ~/.profile ${YOGA_HOME}/old_files
-    fi
-
-    # if [ ! -e ~/.bash_* ]; then
-    #     mv ~/.bash_* ${YOGA_HOME}/old_files
-    # fi
+    printf "Installing yoga-files \n"
 
     cp files/bash_aliases ~/.profile_aliases
     cp files/bash_functions ~/.profile_functions
