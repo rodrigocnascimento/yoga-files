@@ -27,6 +27,5 @@ function prompt_left() {
 }
 
 function prompt() {
-    compensate=2
-    PS1=$(printf "%*s\r%s " "$(($(tput cols)+${compensate}))" "$(prompt_left)" "$(prompt_right)" )
+    PS1=$(printf "%*s\r%s " "$(($(tput cols) - 50))" "$(prompt_left)" "$(prompt_right)" )
 }
