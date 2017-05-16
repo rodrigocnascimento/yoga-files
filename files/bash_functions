@@ -42,7 +42,7 @@ function prompt_left() {
 }
 
 function prompt_right() {
-    echo -e "\e[0;33m$(parse_git_branch)\e[m \n \e[0;37mಠ_ಠ λ\e[m"
+    echo -e "\e[0;33m$(parse_git_branch)\e[m \n \e[0;37mಠ_ಠ\e[m "
 }
 
 function prompt() {
