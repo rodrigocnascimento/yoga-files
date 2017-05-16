@@ -18,14 +18,14 @@ function parse_git_branch {
    git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/(\1)/'
 }
 
-function prompt_right() {
-    echo -e "[\A] \[\e[31;0m\]\w\n \\$"
+function prompt_left() {
+    echo -e "[\A] \[\e[0;32m\]\w\e[m"
 }
 
-function prompt_left() {
-    echo -e "\u@\h\$(parse_git_branch)\[\e[0m\]"
+function prompt_right() {
+    echo -e "\u@\h\$(parse_git_branch) \$ \n \[\e[0;36m\]ಠ_ಠ\e[m"
 }
 
 function prompt() {
-    PS1=$(printf "%s~>%s" "$(prompt_left)" "$(prompt_right)")
+    PS1=$(printf "%s ☞ %s" "$(prompt_right)" "$(prompt_right)")
 }
