@@ -38,11 +38,11 @@ function parse_git_branch {
 }
 
 function prompt_left() {
-    echo -e "$GREEN1\w"
+    echo -e "\e[0;32m\w\e[m"
 }
 
 function prompt_right() {
-    echo -e "$CYAN1$(parse_git_branch) \n $YELLOW1ಠ_ಠ λ"
+    echo -e "\e[0;33m$(parse_git_branch)\e[m \n \e[0;37mಠ_ಠ λ\e[m"
 }
 
 function prompt() {
