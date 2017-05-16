@@ -27,5 +27,5 @@ function prompt_right() {
 }
 
 function prompt() {
-    PS1=$(printf "%s ☞ %s" "$(prompt_right)" "$(prompt_right)")
+    PS1=$(printf "%s ☞ %s" "$(prompt_left)" "$(prompt_right)")
 }
