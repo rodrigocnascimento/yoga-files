@@ -1,0 +1,14 @@
+[core]
+	excludesfile = /Users/darth-tyranus/.gitignore_global
+[user]
+	name = Rodrigo Nascimento
+	email = rodrigocesarnascimento@gmail.com
+[filter "lfs"]
+	clean = git-lfs clean %f
+	smudge = git-lfs smudge %f
+	required = true
+[alias]
+	yolo = !git add -A && git commit -m \"$(curl -s whatthecommit.com/index.txt)\"
+    tree = log --graph --date-order -C -M --pretty=format:'<%h> %ad [%an] %Cgreen%d%Creset %s' --all --date=short
+    s = status
+	wip = !git add -A && git commit -m \"WIP\"
