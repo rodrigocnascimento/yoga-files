@@ -8,11 +8,14 @@ source messages.sh
 yoga_install(){
     printf "Installing yoga-files \n"
 
-    cp files/bash_aliases ~/.profile_aliases
+	echo "copying files"
+   	cp files/bash_aliases ~/.profile_aliases
     cp files/bash_functions ~/.profile_functions
     cp files/envvars ~/.profile_envvars
     cp files/bashrc ~/.profile
+    cp files/.gitconfig ~/.gitconfig
 
+    echo "reloading files"
     source ~/.profile
     source ~/.profile_aliases
     source ~/.profile_functions
@@ -22,18 +25,13 @@ yoga_install(){
 }
 
 yoga_update(){
-	echo "updating repository"
-	git pull
-	echo "copying files"
-   	cp files/bash_aliases ~/.profile_aliases
-    cp files/bash_functions ~/.profile_functions
-    cp files/envvars ~/.profile_envvars
-    cp files/bashrc ~/.profile
-	echo "reloading files"
-    source ~/.profile
-    source ~/.profile_aliases
-    source ~/.profile_functions
-    source ~/.profile_envvars
+	echo "ROUND 2 ... FIGHT! rebasing repo"
+	git pull --rebase
+
+    echo "reinstalling"
+    yoga_install
+
+    echo "I think we're done"
 	yoga_ok
 }
 

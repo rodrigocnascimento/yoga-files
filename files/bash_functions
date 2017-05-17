@@ -2,16 +2,11 @@ function yoga_sourcereload() {
 	source ~/.profile
     source ~/.profile_aliases
     source ~/.profile_functions
+    source ~/.profile_envvars
 }
 
-function update_vim() {
-    vim -N -u ~/.vimrc -c "try | \
-        NeoBundleClean! | \
-        NeoBundleCheck | \
-        NeoBundleUpdate! | \
-        NeoBundleUpdatesLog $* | \
-        finally | qall! | endtry" \
-        -U NONE -i NONE -V1 -e -s
+function canary_debugger() {
+   canary --remote-debugging-port=$1 http://localhost:$1
 }
 
 function parse_git_branch {
