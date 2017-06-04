@@ -1,4 +1,4 @@
 #!/bin/bash
-YOGA_HOME=~/.yoga-files
+YOGA_HOME=~/.yoga
 
 export YOGA_HOME

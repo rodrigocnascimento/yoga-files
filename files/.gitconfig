@@ -9,6 +9,12 @@
 	required = true
 [alias]
 	yolo = !git add -A && git commit -m \"$(curl -s whatthecommit.com/index.txt)\"
+	wip = !git add -A && git commit -m \"WIP\"
     tree = log --graph --date-order -C -M --pretty=format:'<%h> %ad [%an] %Cgreen%d%Creset %s' --all --date=short
     s = status
-	wip = !git add -A && git commit -m \"WIP\"
+	del = branch -d 
+	delf = branch -D 
+	fall = fech --all
+	forigin = fetch origin 
+	alist = branch -a
+	vlist = branch -a -v

@@ -1,8 +1,0 @@
-Host github.com
-    User git
-    HostName github.com
-    IdentityFile ~/.ssh/github_rsa
-Host bitbucket.org
-    User git
-    HostName bitbucket.org
-    IdentityFile ~/.ssh/bitbucket

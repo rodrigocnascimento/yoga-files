@@ -1,38 +1,31 @@
 #!/bin/bash
-# YOGA FILES INSTAL
 
-# first we need to check if the directory exists
 source envvars.sh
 source messages.sh
 
 yoga_install(){
-    printf "Installing yoga-files \n"
+    if [[ "$OSTYPE" == "darwin"* ]]; then
+        cp workspace.sh $YOGA_HOME/.workspace
+        cp files/home_aliases $YOGA_HOME/.aliases
+        cp files/home_functions $YOGA_HOME/.functions
+        cp files/home_envvars $YOGA_HOME/.envvars
+        cp files/.gitconfig ~/.gitconfig
 
-	echo "copying files"
-   	cp files/bash_aliases ~/.profile_aliases
-    cp files/bash_functions ~/.profile_functions
-    cp files/envvars ~/.profile_envvars
-    cp files/bashrc ~/.profile
-    cp files/.gitconfig ~/.gitconfig
+        echo -e "\n source " $YOGA_HOME/.workspace "\n" >> ~/.profile
+        source ~/.profile
 
-    echo "reloading files"
-    source ~/.profile
-    source ~/.profile_aliases
-    source ~/.profile_functions
-    source ~/.profile_envvars
-
-    yoga_ok
+        yoga_ok
+    fi
 }
 
 yoga_update(){
-	echo "ROUND 2 ... FIGHT! rebasing repo"
-	git pull --rebase
+	echo "ROUND 2 ... FIGHT! Rebasing REPO"
+	#git pull --rebase
 
-    echo "reinstalling"
+    echo "Reinstalling"
     yoga_install
 
     echo "I think we're done"
-	yoga_ok
 }
 
 yoga_quit(){
@@ -41,21 +34,25 @@ yoga_quit(){
 
 is_yoga_installed?(){
     if [ ! -d $YOGA_HOME ]; then
-        echo -n "yoga-files isn't installed ~> wish to proceed the installation? [Y/N] "
+        echo -n ".yoga não está instalado ~> INSTALL [Y/N] "
         read  _ANSWER
 
         if [[ "$_ANSWER" =~ [Yy] ]]
          then
+            printf "Installing ~/.yoga \n"
+            mkdir $YOGA_HOME
+            
+            echo "ROUND 1 files!"
             yoga_install
         elif [[ "$_ANSWER" =~ [Nn] ]]
          then
             yoga_quit
         else
-            echo "answer YES (Yy) or NO (Nn)"
+            echo "YES (Yy) NO (Nn) pls :)"
             is_yoga_installed?
         fi
     else
-        echo "yoga-files is installed, wish update?"
+        echo ".yoga está instalado ~> UPDATE [Y/N] "
         read  _ANSWER
 
         if [[ "$_ANSWER" =~ [Yy] ]]
