@@ -8,6 +8,10 @@ function canary_debugger() {
   canary --remote-debugging-port=$1 http://localhost:$1
 }
 
+function pid_port() {
+  echo $(lsof -l -Fp -iTCP:$1 -sTCP:LISTEN)
+}
+
 function _update_ps1() {    
   PS1="$(~/powerline-shell/powerline-shell.py $? 2> /dev/null)"       
 }
