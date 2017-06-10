@@ -1,20 +1,26 @@
 [core]
-	excludesfile = /Users/darth-tyranus/.gitignore_global
+  excludesfile = /Users/darth-tyranus/.gitignore_global
 [user]
-	name = Rodrigo Nascimento
-	email = rodrigocesarnascimento@gmail.com
+  name = Rodrigo Nascimento
+  email = rodrigocesarnascimento@gmail.com
 [filter "lfs"]
-	clean = git-lfs clean %f
-	smudge = git-lfs smudge %f
-	required = true
+  clean = git-lfs clean %f
+  smudge = git-lfs smudge %f
+  required = true
 [alias]
-	yolo = !git add -A && git commit -m \"$(curl -s whatthecommit.com/index.txt)\"
-	wip = !git add -A && git commit -m \"WIP\"
-    tree = log --graph --date-order -C -M --pretty=format:'<%h> %ad [%an] %Cgreen%d%Creset %s' --all --date=short
-    s = status
-	del = branch -d 
-	delf = branch -D 
-	fall = fech --all
-	forigin = fetch origin 
-	alist = branch -a
-	vlist = branch -a -v
+  yolo = !git add -A && git commit -m \"$(curl -s whatthecommit.com/index.txt)\"
+  wip = !git add -A && git commit -m \"WIP\"
+  tree = log --graph --date-order -C -M --pretty=format:'<%h> %ad [%an] %Cgreen%d%Creset %s' --all --date=short
+  s = status
+  del = branch -d 
+  delef = branch -D 
+  fall = fech --all
+  forigin = fetch origin 
+  blist = branch -a
+  vlist = branch -a -v
+  co = checkout
+  newco = checkout -b
+  put = !git push origin
+  put-wip = !git wip && !git put
+  put-yolo = !git yolo && !git put
+  cad = commit -am
