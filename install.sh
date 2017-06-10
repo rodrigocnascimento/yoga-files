@@ -7,6 +7,7 @@ yoga_install(){
     if [[ "$OSTYPE" == "darwin"* ]]; then
         cp workspace.sh $YOGA_HOME/.workspace
         cp files/home_aliases $YOGA_HOME/.aliases
+        cp files/bash_powerline.sh $YOGA_HOME/.bash_powerline
         cp files/home_functions $YOGA_HOME/.functions
         cp files/home_envvars $YOGA_HOME/.envvars
         cp files/.gitconfig ~/.gitconfig
@@ -20,7 +21,7 @@ yoga_install(){
 
 yoga_update(){
 	echo "ROUND 2 ... FIGHT! Rebasing REPO"
-	#git pull --rebase
+	git pull --rebase
 
     echo "Reinstalling"
     yoga_install
@@ -41,7 +42,7 @@ is_yoga_installed?(){
          then
             printf "Installing ~/.yoga \n"
             mkdir $YOGA_HOME
-            
+
             echo "ROUND 1 files!"
             yoga_install
         elif [[ "$_ANSWER" =~ [Nn] ]]
