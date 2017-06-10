@@ -5,7 +5,7 @@ PROMPT_COMMAND=prompt
 source ~/.yoga/.aliases
 source ~/.yoga/.functions
 source ~/.yoga/.envvars
-source ~/.yoga/.bash_poweline
+source ~/.yoga/.bash_powerline
 
 if [ -f ~/.profile_custom ]; then
     source ~/.profile_custom
