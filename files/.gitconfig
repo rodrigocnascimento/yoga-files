@@ -14,7 +14,7 @@
   s = status
   del = branch -d 
   delef = branch -D 
-  fall = fech --all
+  fall = fetch --all
   forigin = fetch origin 
   blist = branch -a
   vlist = branch -a -v
@@ -24,3 +24,4 @@
   put-wip = !git wip && !git put
   put-yolo = !git yolo && !git put
   cad = commit -am
+  aliases = !git config --list | grep alias
