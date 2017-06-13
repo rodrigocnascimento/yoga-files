@@ -21,7 +21,7 @@
   co = checkout
   newco = checkout -b
   put = !git push origin
-  put-wip = !git wip && !git put
-  put-yolo = !git yolo && !git put
+  put-wip = !git wip && git put
+  put-yolo = !git yolo && git put
   cad = commit -am
   aliases = !git config --list | grep alias
