@@ -7,21 +7,31 @@
   clean = git-lfs clean %f
   smudge = git-lfs smudge %f
   required = true
+
+[diff]
+	tool = meld
+[difftool]
+	prompt = false
+[difftool "meld"]
+	trustExitCode = true
+  cmd = /Applications/Meld.app/Contents/MacOS/Meld \"$LOCAL\" \"$PWD/$REMOTE\"
+
 [alias]
-  yolo = !git add -A && git commit -m \"$(curl -s whatthecommit.com/index.txt)\"
-  wip = !git add -A && git commit -m \"WIP\"
-  tree = log --graph --date-order -C -M --pretty=format:'<%h> %ad [%an] %Cgreen%d%Creset %s' --all --date=short
-  s = status
+  aliases = !git config --list | grep alias
+  blist = branch -a -v
+  cad = commit -am
+  co = checkout
   del = branch -d 
   delef = branch -D 
   fall = fetch --all
   forigin = fetch origin 
-  blist = branch -a
-  vlist = branch -a -v
-  co = checkout
+  meld = difftool  
   newco = checkout -b
   put = !git push origin
   put-wip = !git wip && git put
   put-yolo = !git yolo && git put
-  cad = commit -am
-  aliases = !git config --list | grep alias
+  tree = log --graph --date-order -C -M --pretty=format:'<%h> %ad [%an] %Cgreen%d%Creset %s' --all --date=short
+  s = status
+  vlist = branch -a -v
+  wip = !git add -A && git commit -m \"WIP\"
+  yolo = !git add -A && git commit -m \"$(curl -s whatthecommit.com/index.txt)\"
