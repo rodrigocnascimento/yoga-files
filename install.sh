@@ -14,8 +14,8 @@ yoga_install(){
 
 		# echo -e "\n source " $YOGA_HOME/.workspace "\n" >> ~/.profile
 		source_workspace="\n source " $YOGA_HOME/.workspace "\n"
-		sed -e "\|$source_workspace|h; \${x;s|$source_workspace||;{g;t};a\\" -e "$source_workspace" -e "}" ~/.profile
-
+		# sed -e "\|$source_workspace|h; \${x;s|$source_workspace||;{g;t};a\\" -e "$source_workspace" -e "}" ~/.profile
+		grep -q -F $source_workspace ~/.profile || echo $source_workspace >> ~/.profile
 		source ~/.profile
 
 		yoga_ok
