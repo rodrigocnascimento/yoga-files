@@ -12,11 +12,11 @@ yoga_install(){
     cp files/home_envvars $YOGA_HOME/.envvars
     cp files/.gitconfig ~/.gitconfig
 
-    # echo -e "\n source " $YOGA_HOME/.workspace "\n" >> ~/.profile
-    source_workspace="source $YOGA_HOME/.workspace"
+    echo -e "\n source " $YOGA_HOME/.workspace "\n" >> ~/.profile
+    # source_workspace="source $YOGA_HOME/.workspace"
     # sed -e "\|$source_workspace|h; \${x;s|$source_workspace||;{g;t};a\\" -e "$source_workspace" -e "}" ~/.profile
     # grep -q -F $source_workspace ~/.profile || echo $source_workspace >> ~/.profile
-    ack $source_workspace ~/.profile || echo $source_workspace >> ~/.profile
+    # ack $source_workspace ~/.profile || echo $source_workspace >> ~/.profile
 
     yoga_ok
   fi
