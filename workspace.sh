@@ -4,7 +4,8 @@
 source ~/.yoga/.aliases
 source ~/.yoga/.functions
 source ~/.yoga/.envvars
+source ~/.yoga/.ps1
 
 if [ -f ~/.profile_custom ]; then
-    source ~/.profile_custom
+  source ~/.profile_custom
 fi
