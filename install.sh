@@ -2,7 +2,6 @@
 YOGA_HOME=~/.yoga
 
 export YOGA_HOME
-source envvars.sh
 source messages.sh
 
 yoga_install(){
