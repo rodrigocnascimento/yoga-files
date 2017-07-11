@@ -7,6 +7,7 @@ yoga_install(){
   if [[ "$OSTYPE" == "darwin"* ]]; then
     cp workspace.sh $YOGA_HOME/.workspace
     cp files/home_aliases $YOGA_HOME/.aliases
+    cp files/ps1 $YOGA_HOME/.ps1
     cp files/home_functions $YOGA_HOME/.functions
     cp files/home_envvars $YOGA_HOME/.envvars
     cp files/.gitconfig ~/.gitconfig

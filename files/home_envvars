@@ -18,5 +18,3 @@ export VIRTUALENVWRAPPER_PYTHON=/usr/local/Cellar/python3/3.6.0_1/bin/python3
 export LC_CTYPE=en_US.UTF-8
 export LC_ALL=en_US.UTF-8
 
-# Export PS1
-export PROMPT_COMMAND="set_prompt"
