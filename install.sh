@@ -8,16 +8,18 @@ yoga_install(){
   if [[ "$OSTYPE" == "darwin"* ]]; then
     cp files/workspace.sh $YOGA_HOME/.workspace
     cp files/aliases.sh $YOGA_HOME/.aliases
-    # cp files/ps1.sh $YOGA_HOME/.ps1
+    cp files/bash_ps1.sh $YOGA_HOME/.bash_ps1
     cp files/functions.sh $YOGA_HOME/.functions
-    cp files/envvars.sh $YOGA_HOME/.envvars
     cp files/.gitconfig ~/.gitconfig
 
-    echo -e "\n source " $YOGA_HOME/.workspace "\n" >> ~/.profile
-    # source_workspace="source $YOGA_HOME/.workspace"
-    # sed -e "\|$source_workspace|h; \${x;s|$source_workspace||;{g;t};a\\" -e "$source_workspace" -e "}" ~/.profile
-    # grep -q -F $source_workspace ~/.profile || echo $source_workspace >> ~/.profile
-    # ack $source_workspace ~/.profile || echo $source_workspace >> ~/.profile
+    local ADD_YOGA_SOURCE=$(ack workspace ~/.profile | wc -l | sed 's/ //g')
+
+    if [$ADD_YOGA_SOURCE -eq 0];
+    then
+      echo -e "\n source " $YOGA_HOME/.workspace "\n" >> ~/.profile
+    fi
+
+    source ~/.profile
 
     yoga_ok
   fi

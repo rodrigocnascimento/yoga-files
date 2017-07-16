@@ -9,11 +9,11 @@
   required = true
 
 [diff]
-	tool = meld
+  tool = meld
 [difftool]
-	prompt = false
+  prompt = false
 [difftool "meld"]
-	trustExitCode = true
+  trustExitCode = true
   cmd = /Applications/Meld.app/Contents/MacOS/Meld \"$LOCAL\" \"$PWD/$REMOTE\"
 
 [alias]
@@ -31,7 +31,9 @@
   put-wip = !git wip && git put
   put-yolo = !git yolo && git put
   tree = log --graph --date-order -C -M --pretty=format:'<%h> %ad [%an] %Cgreen%d%Creset %s' --all --date=short
+  # log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr)%C(bold blue)<%an>%Creset' --abbrev-commit
   s = status -sbu
+  m = diff --stat
   vlist = branch -a -v
   wip = !git add -A && git commit -m \"WIP\"
   yolo = !git add -A && git commit -m \"$(curl -s whatthecommit.com/index.txt)\"
