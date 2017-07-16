@@ -15,8 +15,8 @@ function parse_git_branch {
   if we_are_in_git_work_tree
   then
     local BR=$(git rev-parse --symbolic-full-name --abbrev-ref HEAD 2> /dev/null)
-    local COUNT_MODIFIED=$(git status -s | wc -l | sed 's/ //g') 
-    local COUNT_AHEAD=$(git log origin/master..HEAD --oneline | wc -l | sed 's/ //g')
+    local COUNT_MODIFIED=$(git status -s | wc -l | sed 's/ //g')
+    local COUNT_AHEAD=$(git log $BR..HEAD --oneline | wc -l | sed 's/ //g')
     if [ "$BR" == HEAD ]
     then
       local NM=$(git name-rev --name-only HEAD 2> /dev/null)
@@ -32,7 +32,7 @@ function parse_git_branch {
 
 function parse_git_status {
   if we_are_in_git_work_tree
-  then 
+  then
     local ST=$(git status --short 2> /dev/null)
     if [ -n "$ST" ]
     then echo -n " ? "

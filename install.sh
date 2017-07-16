@@ -25,7 +25,7 @@ yoga_install(){
 
 yoga_update(){
   echo "ROUND 2 ... FIGHT! Rebasing REPO"
-  # git pull --rebase
+  git pull --rebase
 
   echo "Reinstalling"
   yoga_install
