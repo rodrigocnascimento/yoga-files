@@ -13,10 +13,8 @@ yoga_install(){
     cp files/.gitconfig ~/.gitconfig
 
     local ADD_YOGA_SOURCE=$(ack workspace ~/.profile | wc -l | sed 's/ //g')
-
-    if [$ADD_YOGA_SOURCE -eq 0];
-    then
-      echo -e "\n source " $YOGA_HOME/.workspace "\n" >> ~/.profile
+    if [ "$ADD_YOGA_SOURCE" -eq 0 ];then
+      echo -e "\n source $YOGA_HOME/.workspace \n" >> ~/.profile
     fi
 
     source ~/.profile
@@ -27,7 +25,7 @@ yoga_install(){
 
 yoga_update(){
   echo "ROUND 2 ... FIGHT! Rebasing REPO"
-  git pull --rebase
+  # git pull --rebase
 
   echo "Reinstalling"
   yoga_install
