@@ -5,22 +5,15 @@ export YOGA_HOME
 source messages.sh
 
 yoga_install(){
-  if [[ "$OSTYPE" == "darwin"* ]]; then
-    cp files/workspace.sh $YOGA_HOME/.workspace
-    cp files/aliases.sh $YOGA_HOME/.aliases
-    cp files/bash_ps1.sh $YOGA_HOME/.bash_ps1
-    cp files/functions.sh $YOGA_HOME/.functions
-    cp files/.gitconfig ~/.gitconfig
+  cp files/workspace.sh $YOGA_HOME/.workspace
+  cp files/aliases.sh $YOGA_HOME/.aliases
+  cp files/bash_ps1.sh $YOGA_HOME/.bash_ps1
+  cp files/functions.sh $YOGA_HOME/.functions
+  cp files/.gitconfig ~/.gitconfig
 
-    local ADD_YOGA_SOURCE=$(ack workspace ~/.profile | wc -l | sed 's/ //g')
-    if [ "$ADD_YOGA_SOURCE" -eq 0 ];then
-      echo -e "\n source $YOGA_HOME/.workspace \n" >> ~/.profile
-    fi
+  source ~/.profile
 
-    source ~/.profile
-
-    yoga_ok
-  fi
+  yoga_ok
 }
 
 yoga_update(){

@@ -1,5 +1,5 @@
 COLGRAY="\[\033[90m\]"
-COLYELLOW="\[\033[1;33m\]"
+COLYELLOW="\[\033[33m\]"
 COLCYAN="\[\033[96m\]"
 COLGREEN="\[\033[92m\]"
 COLBLUE="\[\033[94m\]"
@@ -16,7 +16,7 @@ function parse_git_branch {
   then
     local BR=$(git rev-parse --symbolic-full-name --abbrev-ref HEAD 2> /dev/null)
     local COUNT_MODIFIED=$(git status -s | wc -l | sed 's/ //g')
-    local COUNT_AHEAD=$(git log $BR..HEAD --oneline | wc -l | sed 's/ //g')
+    local COUNT_AHEAD=$(git log origin/$BR..$BR --oneline | wc -l | sed 's/ //g')
     if [ "$BR" == HEAD ]
     then
       local NM=$(git name-rev --name-only HEAD 2> /dev/null)
