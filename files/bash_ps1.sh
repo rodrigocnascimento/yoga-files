@@ -16,7 +16,13 @@ function parse_git_branch {
   then
     local BR=$(git rev-parse --symbolic-full-name --abbrev-ref HEAD 2> /dev/null)
     local COUNT_MODIFIED=$(git status -s | wc -l | sed 's/ //g')
-    local COUNT_AHEAD=$(git log origin/$BR..$BR --oneline | wc -l | sed 's/ //g')
+    local COUNT_AHEAD=0
+
+    if [ $COUNT_MODIFIED -gt "0" ]
+    then
+      COUNT_AHEAD=$(git log origin/$BR..$BR --oneline | wc -l | sed 's/ //g')
+    fi
+
     if [ "$BR" == HEAD ]
     then
       local NM=$(git name-rev --name-only HEAD 2> /dev/null)
