@@ -17,13 +17,13 @@ function parse_git_branch {
     local BR=$(git rev-parse --symbolic-full-name --abbrev-ref HEAD 2> /dev/null)
     local COUNT_MODIFIED=$(git status -s | wc -l | sed 's/ //g')
     local COUNT_AHEAD=0
+    let ORIGIN_EXIST=$(git branch -a | ack remotes/origin/$BR | wc -l | sed 's/ //g')
 
-    let ORIGIN_EXIST=$(git branch -a | ack remotes/origin/$BR | wc -l)
     if [ $ORIGIN_EXIST -ge "1" ]
     then
       COUNT_AHEAD=$(git log origin/$BR..$BR --oneline | wc -l | sed 's/ //g')
     else
-      COUNT_AHEAD=$(git log --branches --not --remotes --oneline | wc -l)
+      COUNT_AHEAD=$(git log --branches --not --remotes --oneline | wc -l | sed 's/ //g')
     fi
 
     if [ "$BR" == HEAD ]
