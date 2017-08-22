@@ -25,7 +25,7 @@ function parse_git_branch {
       then
         COUNT_AHEAD=$(git log origin/$BR..$BR --oneline | wc -l | sed 's/ //g')
       else
-        COUNT_AHEAD=$(git log branches --not --remotes --online | wc -l)
+        COUNT_AHEAD=$(git log --branches --not --remotes --online | wc -l)
       fi
     fi
 
