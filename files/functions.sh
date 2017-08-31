@@ -7,6 +7,6 @@ function pid_port() {
 }
 
 function kill_port() {
-  echo kill -9 $(pid_port $1)
+  kill -9 $(pid_port $1)
 }
 
