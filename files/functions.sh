@@ -3,6 +3,10 @@ function canary_debugger() {
 }
 
 function pid_port() {
-  echo $(lsof -l -Fp -iTCP:$1 -sTCP:LISTEN)
+  echo $(lsof -n -i :$1 | grep LISTEN | awk '{print $2}')
+}
+
+function kill_port() {
+  echo kill -9 $(pid_port)
 }
 
