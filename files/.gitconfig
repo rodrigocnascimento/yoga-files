@@ -31,7 +31,7 @@
   put-wip = !git wip && git put
   put-yolo = !git yolo && git put
   tree = log --all --decorate --oneline --graph --date-order -C -M --pretty=format:'<%h> %ad [%an] %Cgreen%d%Creset %s' --date=short
-  l = log --oneline --all --decorate
+  l = log --oneline --decorate
   # log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr)%C(bold blue)<%an>%Creset' --abbrev-commit
   s = status -sbu
   m = diff --stat

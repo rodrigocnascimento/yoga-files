@@ -19,7 +19,7 @@ function parse_git_branch {
     local COUNT_AHEAD=0
     let ORIGIN_EXIST=$(git branch -a | ack remotes/origin/$BR | wc -l | sed 's/ //g')
 
-    if [ $ORIGIN_EXIST -ge "1" ]
+    if [ $ORIGIN_EXIST -gt "0" ]
     then
       COUNT_AHEAD=$(git log origin/$BR..$BR --oneline | wc -l | sed 's/ //g')
     else
