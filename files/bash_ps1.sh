@@ -3,6 +3,7 @@ COLYELLOW="\[\033[33m\]"
 COLCYAN="\[\033[96m\]"
 COLGREEN="\[\033[92m\]"
 COLBLUE="\[\033[94m\]"
+COLBLACK="\[\033[30m\]"
 BACKBLUE="\[\033[104m\]"
 COLRED="\[\033[31m\]"
 COLCLEAR="\[\033[0m\]"
@@ -60,5 +61,5 @@ function pwd_depth_limit_2 {
 
 # export all these for subshells
 export -f parse_git_branch parse_git_status we_are_in_git_work_tree pwd_depth_limit_2
-export PS1="$COLBLUE\$(pwd_depth_limit_2)\$(parse_git_status)$COLGRAY\$(parse_git_branch)\n$COLCLEAR$COLYELLOW👁$COLCLEAR " 
+export PS1="$COLBLUE\$(pwd_depth_limit_2)\$(parse_git_status)$COLGRAY\$(parse_git_branch)\n$COLCLEAR$COLBLACK👁$COLCLEAR " 
 export TERM="xterm-256color"
