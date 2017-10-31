@@ -60,5 +60,5 @@ function pwd_depth_limit_2 {
 
 # export all these for subshells
 export -f parse_git_branch parse_git_status we_are_in_git_work_tree pwd_depth_limit_2
-export PS1="$COLBLUE\$(pwd_depth_limit_2)\$(parse_git_status)$COLGRAY\$(parse_git_branch)\n👁 $COLYELLOW" 
+export PS1="$COLBLUE\$(pwd_depth_limit_2)\$(parse_git_status)$COLGRAY\$(parse_git_branch)\n👁 " 
 export TERM="xterm-256color"
