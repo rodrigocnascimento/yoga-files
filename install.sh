@@ -11,8 +11,6 @@ yoga_install(){
   cp files/functions.sh $YOGA_HOME/.functions
   cp files/.gitconfig ~/.gitconfig
 
-  source ~/.profile
-
   yoga_ok
 }
 
