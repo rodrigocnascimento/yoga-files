@@ -5,6 +5,7 @@ set -e
 YOGA_HOME=~/.yoga
 
 export YOGA_HOME
+export yoga
 
 source lib/*
 
@@ -12,7 +13,7 @@ function yoga_install {
   if does_yoga_need_update; then
     echo "Rebasing REPO git pull --rebase"
     
-    # git pull --rebase
+    git pull --rebase
   fi
 
   source_scripts &&
@@ -29,7 +30,5 @@ function yoga {
     yoga_success "yoga was installed"
   )
 }
-
-export yoga
 
 yoga
