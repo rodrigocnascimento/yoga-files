@@ -12,7 +12,7 @@ function yoga_install {
   if does_yoga_need_update; then
     echo "Rebasing REPO git pull --rebase" && 
     
-    git pull --rebase && 
+    # git pull --rebase && 
     
     source_scripts &&
 
@@ -31,3 +31,5 @@ function yoga {
 }
 
 export yoga
+
+yoga
