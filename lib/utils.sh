@@ -16,7 +16,7 @@ function yoga_readln {
    return 0
 }
 
-function does_yoga_need_update? {
+function does_yoga_need_update {
   if ! git diff --quiet remotes/origin/HEAD; then
     return 0
   else 
@@ -31,7 +31,7 @@ function source_scripts {
 }
 
 export source_scripts
-export does_yoga_need_update?
+export does_yoga_need_update
 export yoga_success
 export yoga_fail
 export yoga_readln
