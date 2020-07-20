@@ -21,6 +21,7 @@ function does_yoga_need_update {
     return 0
   else 
     yoga_success "yoga does not need updates"
+    return 1
   fi
 }
 
