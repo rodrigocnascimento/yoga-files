@@ -16,15 +16,6 @@ function yoga_readln {
    return 0
 }
 
-function does_yoga_need_update {
-  if ! git diff --quiet remotes/origin/HEAD; then
-    return 0
-  else 
-    yoga_success "yoga does not need updates"
-    return 1
-  fi
-}
-
 function source_scripts {
   for script in $YOGA_HOME/scripts/*.sh; do
     echo $script
@@ -32,7 +23,6 @@ function source_scripts {
 }
 
 export source_scripts
-export does_yoga_need_update
 export yoga_success
 export yoga_fail
 export yoga_readln
