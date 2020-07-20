@@ -1,62 +1,33 @@
-#!/bin/bash
+#!/bin/zsh
+
+set -e 
+
 YOGA_HOME=~/.yoga
 
 export YOGA_HOME
-source messages.sh
 
-yoga_install(){
-  cp files/workspace.sh $YOGA_HOME/.workspace
-  cp files/aliases.sh $YOGA_HOME/.aliases
-  cp files/bash_ps1.sh $YOGA_HOME/.bash_ps1
-  cp files/functions.sh $YOGA_HOME/.functions
-  cp files/.gitconfig ~/.gitconfig
+source lib/*
 
-  yoga_ok
+function yoga_install {
+  if does_yoga_need_update?; then
+    echo "Rebasing REPO git pull --rebase" && yoga_success "ROUND 2 ... FIGHT!"
+  fi
+
+  (
+    source_scripts &&
+
+    yoga_success "yoga installed"
+  ) || (
+    yoga_fail "yoga installation failed"
+  )
 }
 
-yoga_update(){
-  echo "ROUND 2 ... FIGHT! Rebasing REPO"
-  git pull --rebase
-
-  echo "Reinstalling"
-  yoga_install
-
-  echo "I think we're done"
-}
-
-yoga_quit(){
-  yoga_fail
-}
-
-is_yoga_installed?(){
-if [ ! -d $YOGA_HOME ]; then
-  echo -n ".yoga não está instalado ~> INSTALL [Y/N] "
-  read  _ANSWER
-
-  if [[ "$_ANSWER" =~ [Yy] ]]
-  then
-    printf "Installing ~/.yoga \n"
-    mkdir $YOGA_HOME
-
-    echo "ROUND 1 files!"
+function yoga {
+  (
     yoga_install
-  elif [[ "$_ANSWER" =~ [Nn] ]]
-  then
-    yoga_quit
-  else
-    echo "YES (Yy) NO (Nn) pls :)"
-    is_yoga_installed?
-  fi
-else
-  echo ".yoga está instalado ~> UPDATE [Y/N] "
-  read  _ANSWER
-
-  if [[ "$_ANSWER" =~ [Yy] ]]
-  then
-    yoga_update
-  fi
-fi
+  ) || (
+    yoga_success "yoga was installed"
+  )
 }
 
-# Function that verifies if yoga-files is installed
-is_yoga_installed?
+yoga
