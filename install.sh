@@ -5,7 +5,6 @@ set -e
 YOGA_HOME=~/.yoga
 
 export YOGA_HOME
-export yoga
 
 source lib/*
 
