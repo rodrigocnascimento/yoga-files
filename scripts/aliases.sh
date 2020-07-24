@@ -1,3 +1,3 @@
 alias ..='cd ..'
 alias ~='cd ~'
-alias lsd='ls -lahF ${colorflag}'
+alias lsd='ls -lahF'
