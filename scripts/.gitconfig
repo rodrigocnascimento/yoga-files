@@ -1,5 +1,5 @@
 [core]
-  excludesfile = /Users/darth-tyranus/.gitignore_global
+  excludesfile = ~/.gitignore_global
 [user]
   name = Rodrigo Nascimento
   email = rodrigocesarnascimento@gmail.com
@@ -7,15 +7,6 @@
   clean = git-lfs clean %f
   smudge = git-lfs smudge %f
   required = true
-
-[diff]
-  tool = meld
-[difftool]
-  prompt = false
-[difftool "meld"]
-  trustExitCode = true
-  cmd = /Applications/Meld.app/Contents/MacOS/Meld \"$LOCAL\" \"$PWD/$REMOTE\"
-
 [alias]
   aliases = !git config --list | grep alias
   blist = branch -a -v
@@ -25,7 +16,6 @@
   delef = branch -D 
   fall = fetch --all
   forigin = fetch origin 
-  meld = difftool  
   newco = checkout -b
   put = !git push origin
   put-wip = !git wip && git put
