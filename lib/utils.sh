@@ -22,6 +22,25 @@ function source_scripts {
   done
 }
 
+function update_yoga {
+   local UPSTREAM=${1:-'@{u}'}
+   local LOCAL=$(git rev-parse @)
+   local REMOTE=$(git rev-parse "$UPSTREAM")
+   local BASE=$(git merge-base @ "$UPSTREAM")
+
+   if [ $LOCAL = $REMOTE ]; then
+      echo "update_yoga Up-to-date"
+   elif [ $LOCAL = $BASE ]; then
+      echo "update_yoga Need to pull"
+      git pull --rebase
+   elif [ $REMOTE = $BASE ]; then
+      echo "update_yoga Need to push"
+   else
+      echo "Diverged"
+   fi
+}
+
+export update_yoga
 export source_scripts
 export yoga_success
 export yoga_fail
