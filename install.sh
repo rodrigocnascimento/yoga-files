@@ -9,15 +9,19 @@ export YOGA_HOME
 source lib/*
 
 function yoga_install {
-  echo "Rebasing REPO git pull --rebase"
-  
-  git pull --rebase &&
-  
+  echo "Updating Yoga\n"
+
+  update_yoga && 
+
   source_scripts &&
+  
+  cp scripts/.gitconfig ~ &&
+  
+  cp scripts/.gitignore_global ~
 
   yoga_success "ROUND 2 ... FIGHT!" 
 
-  return 0
+  return 1
 }
 
 function yoga {
