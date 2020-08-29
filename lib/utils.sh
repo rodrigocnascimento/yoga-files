@@ -56,7 +56,7 @@ function install_system_scripts() {
 function install_git_scripts() {
    for script in $YOGA_HOME/scripts/git/*; do
       echo $script
-      cp $script ~/
+      cp $script $HOME
    done
 }
 
