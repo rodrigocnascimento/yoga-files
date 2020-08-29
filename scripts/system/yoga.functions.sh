@@ -5,7 +5,7 @@ function pid_port {
 
 function kill_port {
   if [[ $(pid_port :$1) -ne "" ]]; then
-          kill -9 $(get_port ":$1")
+          kill -9 $(pid_port ":$1")
   fi
 }
 
@@ -20,6 +20,7 @@ function ssh_agent_run {
 function please {
   sudo $(fc -ln -1)
 }
+
 function echo_ip {
-  print_f("%s", curl http://ipecho.net/plain)
+  curl 'http://ipecho.net/plain'
 }

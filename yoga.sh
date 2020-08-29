@@ -9,9 +9,8 @@ export YOGA_HOME
 source lib/*
 
 function yoga_install() {
-  yoga_updater &&
-    install_system_scripts &&
-    install_git_scripts &&
+  # yoga_updater &&
+    install_scripts &&
     yoga_success "ROUND 2 ... FIGHT!"
 
   return 0

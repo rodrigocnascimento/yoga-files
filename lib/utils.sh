@@ -46,22 +46,16 @@ function yoga_updater() {
    esac
 }
 
-function install_system_scripts() {
-   for script in $YOGA_HOME/scripts/system/*; do
-      echo $script
-      source $script
+function install_scripts() {
+   for script in $YOGA_HOME/scripts/**/*; do
+      if [[ -f $script ]]; then
+         echo $script
+         cp -r $script $HOME
+      fi
    done
 }
 
-function install_git_scripts() {
-   for script in $YOGA_HOME/scripts/git/*; do
-      echo $script
-      cp $script $HOME
-   done
-}
-
-export install_system_scripts
-export install_git_scripts
+export install_scripts
 export yoga_updater
 export yoga_success
 export yoga_fail
