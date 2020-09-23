@@ -24,3 +24,7 @@ function please {
 function echo_ip {
   curl 'http://ipecho.net/plain'
 }
+
+function dim_monitor_light {
+  xrandr --output HDMI-0 --brightness $1
+}
