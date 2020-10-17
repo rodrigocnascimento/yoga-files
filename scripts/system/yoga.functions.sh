@@ -14,7 +14,7 @@ function take {
 }
 
 function ssh_agent_run {
-  ps -p $SSH_AGENT_PID > /dev/null || eval `ssh-agent -s`; ssh-add; ssh-add -k ~/.ssh/$@
+  ps -p $SSH_AGENT_PID > /dev/null || eval `ssh-agent -s`; ssh-add; ssh-add -k ~/.ssh/$@ 2> /dev/null
 }
 
 function please {
