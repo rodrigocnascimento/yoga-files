@@ -17,12 +17,14 @@ function workspace_install {
    done
 }
 
-function copy_files_to_machine {
+function copy_dot_files {
    yoga_action "copying files to" $HOME
 
    cp core/git/.gitconfig ~
 
    cp core/git/.gitignore_global ~
+
+   cp core/terminal/.zshrc ~
 }
 
 function update_yoga {
@@ -55,9 +57,11 @@ function set_init_on_shell {
    fi
 
    source ~/.zshrc
+   
+   reset
 }
 
 export update_yoga
 export install_yoga
-export source_scripts
+export copy_dot_files
 export workspace_install
