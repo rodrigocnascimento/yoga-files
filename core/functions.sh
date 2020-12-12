@@ -1,3 +1,7 @@
+DIR="$(dirname "$(readlink -f "$0")")"
+
+source "$DIR/utils.sh"
+
 # look for the id based on a port
 function pid_port {
   echo $(lsof -n -i :$1 | grep LISTEN | awk '{print $2}')
