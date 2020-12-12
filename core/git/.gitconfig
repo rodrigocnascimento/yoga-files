@@ -1,0 +1,31 @@
+[core]
+  excludesfile = ~/.gitignore_global
+[user]
+  name = Rodrigo Nascimento
+  email = rodrigocesarnascimento@gmail.com
+[filter "lfs"]
+  clean = git-lfs clean %f
+  smudge = git-lfs smudge %f
+  required = true
+[url "git@github.com:rodrigocnascimento/"]
+    insteadOf = me:  
+[alias]
+  aliases=!git config --list | grep alias
+  update="!f() { git fetch origin -p && git rebase $(git rev-parse --abbrev-ref @{u}); }; f"
+  blist=branch -a -v
+  co=checkout
+  nco=!f() { git checkout -b ${1}; }; f
+  setup=!f() { git branch --set-upstream-to=origin/${1} ${1}; }; f
+  pp=!f() { echo 'Pull'; git pull; echo 'Push'; git push; }; f
+  del=branch -d
+  delef=branch -D
+  fall=fetch --all
+  foll=fetch origin
+  s=status -sbu
+  adog=log --abbrev-commit --decorate --pretty=oneline --graph --max-count=15 --date-order -C -M --pretty=format:'<%h> %ad [%an] %Cgreen%d%Creset %s' --date=short
+  fco="!f() { git branch -a -vv --color=always --format='%(refname)' | sed "s_refs/heads/__" | sed "s_refs/remotes/__" | fzf --query="$@" --height=40% --ansi --tac --color=16 --border | awk '{print $1}' | xargs git co; }; f"
+  # The autostash option will stash what ever you are working on if there are uncommitted changes then pop the stash after.
+  up = !git fetch && git rebase --autostash && 
+  unstage = reset HEAD --
+  uncommit = reset --soft HEAD~1
+  recommit = commit --amend --no-edit
