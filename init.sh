@@ -1,6 +1,8 @@
 #!/bin/zsh
 
-source core/common.sh
+DIR="$(dirname "$(readlink -f "$0")")"
+
+source "$DIR/../common.sh"
 
 # Carrega os arquivos de ambiente
 source $YOGA_HOME/.aliases
