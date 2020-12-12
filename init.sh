@@ -2,11 +2,9 @@
 
 DIR="$(dirname "$(readlink -f "$0")")"
 
-source "$DIR/../common.sh"
-
 # Carrega os arquivos de ambiente
-source $YOGA_HOME/.aliases
-source $YOGA_HOME/.functions
+source $DIR/core/aliases.sh
+source $DIR/core/functions.sh
 
 # Adicionar a chamada do Tempo para SP
 curl "http://wttr.in/São Paulo"
