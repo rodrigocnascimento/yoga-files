@@ -9,7 +9,7 @@ function yoga {
     yoga_warn "ROUND 1 ... FIGHT!" && install_yoga
   fi
 
-  copy_files_to_machine &&
+  copy_dot_files &&
 
   workspace_install &&
   
