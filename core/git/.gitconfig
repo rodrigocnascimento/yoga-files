@@ -14,7 +14,7 @@
   update="!f() { git fetch origin -p && git rebase $(git rev-parse --abbrev-ref @{u}); }; f"
   blist=branch -a -v
   co=checkout
-  nco=!f() { git checkout -b ${1}; }; f
+  new=!f() { git checkout -b ${1}; }; f
   setup=!f() { git branch --set-upstream-to=origin/${1} ${1}; }; f
   pp=!f() { echo 'Pull'; git pull; echo 'Push'; git push; }; f
   del=branch -d
