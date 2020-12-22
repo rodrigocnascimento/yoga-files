@@ -7,7 +7,7 @@ source $DIR/core/aliases.sh
 source $DIR/core/functions.sh
 
 # Adicionar a chamada do Tempo para SP
-curl "http://wttr.in/São Paulo"
+# curl "http://wttr.in/São Paulo"
 
 # Load custom aliases
 [ -f ~/.custom.aliases ] && source ~/.custom.aliases
