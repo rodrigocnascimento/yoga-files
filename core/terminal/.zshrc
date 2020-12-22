@@ -110,4 +110,4 @@ fi
 
 export FZF_DEFAULT_OPTS='--height 40% --border --pointer=👉'
 
-source /home/rodrigo/.yoga/init.sh
+source $HOME/.yoga/init.sh
