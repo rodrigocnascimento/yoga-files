@@ -23,8 +23,6 @@ function copy_dot_files {
    cp core/git/.gitconfig ~
 
    cp core/git/.gitignore_global ~
-
-   cp core/terminal/.zshrc ~
 }
 
 function update_yoga {
@@ -57,8 +55,6 @@ function set_init_on_shell {
    fi
 
    source ~/.zshrc
-   
-   reset
 }
 
 export update_yoga

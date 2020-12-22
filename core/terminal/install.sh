@@ -49,7 +49,12 @@ else
     yoga_success "curl installed"
 fi
 
-
+if [ ! -d "$ZSH" ]; then
+    yoga_action "installing" "oh-my-zsh ➜ https://github.com/ohmyzsh/ohmyzsh/"
+    sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+else
+    yoga_success "oh-my-zsh already installed"
+fi
 
 
 
