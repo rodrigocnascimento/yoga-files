@@ -79,7 +79,7 @@ function _popdir {
 }
 
 function goto {
-  yoga_warn "Choose an option: \n"
+  yoga_warn "Choose an option:"
   
   MENU=("_home" "_projects" "_pushdir" "_popdir")
 

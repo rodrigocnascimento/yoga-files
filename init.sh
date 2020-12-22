@@ -10,11 +10,19 @@ source $DIR/core/functions.sh
 curl "http://wttr.in/São Paulo"
 
 # Load custom aliases
-if [ -f ~/.custom.aliases.sh ]; then
-  source ~/.custom.aliases.sh
-fi
+[ -f ~/.custom.aliases ] && source ~/.custom.aliases
 
 # Load custom functions
-if [ -f ~/.custom.functions.sh ]; then
-  source ~/.custom.functions.sh
+[ -f ~/.custom.functions ] && source ~/.custom.functions
+
+
+# yoga ssh function to connect to github
+ssh_agent_run "github"
+ssh_agent_run "bitbucket"
+
+export FZF_DEFAULT_OPTS='--height 40% --border --pointer=👉'
+
+# check for updates
+if [[ -d "$YOGA_HOME" ]]; then
+  yoga_warn "ROUND 2 ... UPDATING!" && update_yoga
 fi
