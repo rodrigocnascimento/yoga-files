@@ -22,6 +22,9 @@ ssh_agent_run "bitbucket"
 
 export FZF_DEFAULT_OPTS='--height 40% --border --pointer=👉'
 
+export MYVIMRC=$YOGA_HOME/core/terminal/vimrc
+export VIMINIT='source $MYVIMRC'
+
 # check for updates
 if [[ -d "$YOGA_HOME" ]]; then
   yoga_warn "ROUND 2 ... UPDATING!" && update_yoga

@@ -1,0 +1,163 @@
+set nocompatible
+set number 
+set mouse=a
+set clipboard=unnamedplus
+
+" TextEdit might fail if hidden is not set.
+set hidden
+
+set showmatch               " show matching brackets.
+set ignorecase              " case insensitive matching
+set hlsearch                " highlight search results
+set tabstop=2               " number of columns occupied by a tab character
+set softtabstop=2           " see multiple spaces as tabstops so <BS> does the right thing
+set expandtab               " converts tabs to white space
+set shiftwidth=2            " width for autoindents
+set autoindent              " indent a new line the same amount as the line just typed
+set wildmode=longest,list   " get bash-like tab completions
+filetype plugin indent on   " allows auto-indenting depending on file type
+syntax on                   " syntax highlighting
+
+call plug#begin('~/.vim/plugged')
+  Plug 'vim-airline/vim-airline'
+  Plug 'vim-airline/vim-airline-themes'
+
+  Plug 'embear/vim-localvimrc'
+
+  Plug 'wakatime/vim-wakatime'
+
+  Plug 'neoclide/coc.nvim', {'branch': 'release'}
+
+  Plug 'sheerun/vim-polyglot'
+
+  Plug 'morhetz/gruvbox'
+
+  Plug 'joonty/vdebug'
+
+  Plug 'vim-airline/vim-airline'
+
+  Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+
+  Plug 'junegunn/fzf.vim'
+
+  Plug 'tpope/vim-fugitive'
+  
+  Plug 'airblade/vim-gitgutter'
+
+  Plug 'scrooloose/nerdtree'
+
+  Plug 'xuyuanp/nerdtree-git-plugin'
+
+  Plug 'majutsushi/tagbar'
+
+  Plug 'dense-analysis/ale'
+
+  Plug 'puremourning/vimspector'
+
+call plug#end()
+
+nnoremap <leader>sv :source $MYVIMRC<CR>
+
+" theme configs
+set background=dark 
+colorscheme gruvbox
+
+"fzf configs
+"remap
+nnoremap <C-p> :Files<CR>
+nnoremap <C-f> :call fzf#run(fzf#wrap({'source': 'git ls-files --exclude-standard --others --cached'}))<CR>
+nnoremap <Leader>b :Buffers<CR>
+nnoremap <Leader>h :History<CR>
+
+" airline configs
+let g:airline_powerline_fonts = 1
+let g:airline#extensions#whitespace#enabled = 0
+let g:airline_solarized_bg='dark'
+
+if !exists('g:airline_symbols')
+  let g:airline_symbols = {}
+endif
+
+" unicode symbols
+let g:airline_left_sep = '▓▒░'
+let g:airline_right_sep = '░▒▓'
+let g:airline_symbols.crypt = '🔒'
+let g:airline_symbols.maxlinenr = '☰'
+let g:airline_symbols.branch = '🌱'
+
+"command! FD call fzf#run(fzf#wrap({'source': 'git ls-files --exclude-standard --others --cached'}))
+"
+"NERDTree configs
+"remap
+map <C-n> :NERDTreeToggle<CR>
+
+let g:NERDTreeDirArrowExpandable = '▸'
+let g:NERDTreeDirArrowCollapsible = '▾'
+let g:NERDTreeGitStatusUseNerdFonts = 1
+let g:NERDTreeGitStatusConcealBrackets = 1 " default: 0
+let NERDTreeCustomOpenArgs={'file':{'where': 't'}}
+let NERDTreeShowHidden = 1
+
+"GitGutter configs
+let g:gitgutter_sign_added = '⊞'
+let g:gitgutter_sign_modified = '🤔'
+let g:gitgutter_sign_removed = '⊟'
+let g:gitgutter_git_executable = '/usr/bin/git'
+let g:gitgutter_use_location_list = 1
+
+" ALE configs
+let g:ale_sign_error = '❌'
+let g:ale_sign_warning = '⚠️'
+
+"TagBar configs
+nmap <F8> :TagbarToggle<CR>
+
+" Vimspector configs
+let g:vimspector_enable_mappings = 'VISUAL_STUDIO'
+let g:vimspector_base_dir='$HOME/.vim/configs/vimspector'
+
+" Navigate bewtween tabs
+" Go to tab by number
+noremap <leader>1 1gt
+noremap <leader>2 2gt
+noremap <leader>3 3gt
+noremap <leader>4 4gt
+noremap <leader>5 5gt
+noremap <leader>6 6gt
+noremap <leader>7 7gt
+noremap <leader>8 8gt
+noremap <leader>9 9gt
+noremap <leader>0 :tablast<cr>
+
+" localvimrc configs
+let g:localvimrc_enable = 1
+" whitelist all local vimrc files in users project 
+let g:localvimrc_whitelist='$HOME/code/.*'
+
+" CocConfigs
+" GoTo code navigation.
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+
+" Use `[g` and `]g` to navigate diagnostics
+" Use `:CocDiagnostics` to get all diagnostics of current buffer in location list.
+nmap <silent> [g <Plug>(coc-diagnostic-prev)
+nmap <silent> ]g <Plug>(coc-diagnostic-next)
+
+" Use K to show documentation in preview window.
+nnoremap <silent> K :call <SID>show_documentation()<CR>
+
+function! s:show_documentation()
+  if (index(['vim','help'], &filetype) >= 0)
+    execute 'h '.expand('<cword>')
+  elseif (coc#rpc#ready())
+    call CocActionAsync('doHover')
+  else
+    execute '!' . &keywordprg . " " . expand('<cword>')
+  endif
+endfunction
+
+" Highlight the symbol and its references when holding the cursor.
+autocmd CursorHold * silent call CocActionAsync('highlight')
