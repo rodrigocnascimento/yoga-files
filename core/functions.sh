@@ -9,8 +9,8 @@ function pid_port {
 
 # kill a process based on a port
 function kill_port {
-  if [[ $(pid_port :$1) -ne "" ]]; then
-    kill -9 $(pid_port ":$1")
+  if [[ $(pid_port $1) -ne "" ]]; then
+    kill -9 $(pid_port "$1")
   fi
 }
 
@@ -62,26 +62,18 @@ function fzf_search {
   fzf --query="$@" --height=50% --ansi --tac --color=16 --border
 }
 
-function _home {
-  cd ~
-}
-
-function _projects {
+function projects {
   cd ~/code/$(ls -la ~/code | awk '{print $9}' | fzf_search)
 }
 
-function _pushdir {
+function gotodir {
   pushd $(dirs -l | tr " " "\n" | awk '{print $0}' | fzf_search)
-}
-
-function _popdir {
-  popd $(dirs -l | tr " " "\n" | awk '{print $0}' | fzf_search)
 }
 
 function goto {
   yoga_warn "Choose an option:"
   
-  MENU=("_home" "_projects" "_pushdir" "_popdir")
+  MENU=("projects" "gotodir")
 
   option=$(echo $MENU | tr " " "\n" | fzf_search)
   

@@ -1,4 +1,3 @@
-alias cd='pushd'
 alias ..='cd ..'
 alias ~='cd ~'
 alias lsd='ls -lahF'
@@ -18,3 +17,4 @@ alias dkrmvl='docker volume rm $(docker volume ls -q)'
 
 # To clear networks:
 alias dkrmnet="docker network rm $(docker network ls | tail -n+2 | awk '{if($2 !~ /bridge|none|host/){ print $1 }}')"
+
