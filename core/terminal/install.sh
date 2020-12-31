@@ -38,6 +38,17 @@ else
     yoga_success "htop installed"
 fi
 
+# xclip 
+if which xclip &> /dev/null; then
+    yoga_success "xclip already installed"
+else
+    yoga_action "installing" "xclip"
+    
+    sudo apt install xclip
+    
+    yoga_success "xclip installed"
+fi
+
 # curl
 if which curl &> /dev/null; then
     yoga_success "curl already installed"
