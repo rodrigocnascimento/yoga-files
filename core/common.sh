@@ -34,7 +34,8 @@ function update_yoga {
    if [ $LOCAL = $REMOTE ]; then
       yoga_action "update_yoga" "Up-to-date"
    elif [ $LOCAL = $BASE ]; then
-      yoga_action "update_yoga" "Need to pull"
+      yoga_action "updating_yoga" "Need to pull"
+      yoga_warn "ROUND 2 ... UPDATING!"
       git pull --rebase
    elif [ $REMOTE = $BASE ]; then
       yoga_action "update_yoga" "Need to push"
