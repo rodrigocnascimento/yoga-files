@@ -3,6 +3,7 @@
 DIR="$(dirname "$(readlink -f "$0")")"
 
 # Carrega os arquivos de ambiente
+source $DIR/core/common.sh
 source $DIR/core/aliases.sh
 source $DIR/core/functions.sh
 
@@ -22,10 +23,10 @@ ssh_agent_run "bitbucket"
 
 export FZF_DEFAULT_OPTS='--height 40% --border --pointer=👉'
 
-export MYVIMRC=$HOME/.yoga/core/terminal/vimrc
+export MYVIMRC=$YOGA_HOME/core/terminal/vimrc
 export VIMINIT='source $MYVIMRC'
 
 # check for updates
-if [[ -d "$HOME/.yoga" ]]; then
-  yoga_warn "ROUND 2 ... UPDATING!" && update_yoga
+if [[ -d "$YOGA_HOME" ]]; then
+  update_yoga
 fi
