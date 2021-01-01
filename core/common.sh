@@ -27,9 +27,9 @@ function copy_dot_files {
 
 function update_yoga {
    local UPSTREAM=${1:-'@{u}'}
-   local LOCAL=$(git rev-parse @)
-   local REMOTE=$(git rev-parse "$UPSTREAM")
-   local BASE=$(git merge-base @ "$UPSTREAM")
+   local LOCAL=$(git -C $YOGA_HOME rev-parse @)
+   local REMOTE=$(git -C $YOGA_HOME rev-parse "$UPSTREAM")
+   local BASE=$(git -C $YOGA_HOME merge-base @ "$UPSTREAM")
 
    if [ $LOCAL = $REMOTE ]; then
       yoga_action "update_yoga" "Up-to-date"
