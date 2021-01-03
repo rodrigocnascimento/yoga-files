@@ -54,6 +54,8 @@ call plug#begin('~/.vim/plugged')
 
   Plug 'puremourning/vimspector'
 
+  Plug 'honza/vim-snippets'
+
 call plug#end()
 
 nnoremap <leader>sv :source $MYVIMRC<CR>
