@@ -45,7 +45,7 @@ function update_yoga {
 }
 
 function install_yoga {
-   git clone git@github.com:rodrigocnascimento/yoga-files.git $YOGA_HOME
+   git clone https://github.com/rodrigocnascimento/yoga-files.git $YOGA_HOME
 }
 
 function set_init_on_shell {
