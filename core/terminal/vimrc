@@ -28,11 +28,7 @@ call plug#begin('~/.vim/plugged')
 
   Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
-  Plug 'sheerun/vim-polyglot'
-
   Plug 'morhetz/gruvbox'
-
-  Plug 'joonty/vdebug'
 
   Plug 'vim-airline/vim-airline'
 
