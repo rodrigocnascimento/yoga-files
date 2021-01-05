@@ -52,6 +52,8 @@ call plug#begin('~/.vim/plugged')
 
   Plug 'honza/vim-snippets'
 
+  Plug 'yggdroot/indentline'
+
 call plug#end()
 
 nnoremap <leader>sv :source $MYVIMRC<CR>
@@ -159,3 +161,10 @@ endfunction
 
 " Highlight the symbol and its references when holding the cursor.
 autocmd CursorHold * silent call CocActionAsync('highlight')
+
+" indentLine configs
+let g:indentLine_char_list = ['|', '¦', '┆', '┊']
+
+" YAML filetype config
+autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab
+
