@@ -18,11 +18,15 @@ function workspace_install {
 }
 
 function copy_dot_files {
-   yoga_action "copying files to" $HOME
+   yoga_warn "copying dot files"
 
    cp core/git/.gitconfig ~
 
    cp core/git/.gitignore_global ~
+   
+   cp core/python/config ~/.config/yamllint/config
+   
+   cp core/terminal/vimrc ~/.vimrc
 }
 
 function update_yoga {

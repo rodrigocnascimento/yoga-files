@@ -22,9 +22,6 @@ ssh_agent_run "bitbucket"
 
 export FZF_DEFAULT_OPTS='--height 40% --border --pointer=👉'
 
-export MYVIMRC=$HOME/.yoga/core/terminal/vimrc
-export VIMINIT='source $MYVIMRC'
-
 # check for updates
 if [[ -d "$HOME/.yoga" ]]; then
    local UPSTREAM=${1:-'@{u}'}
