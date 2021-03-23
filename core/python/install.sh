@@ -28,5 +28,8 @@ else
     pip3 install --user yamllint
     mkdir -p $HOME/.config/yamllint
 
+    yoga_action "config" "yamllint"
+    cp config ~/.config/yamllint/config
+
     yoga_success "instaled yamllint"
 fi
