@@ -7,8 +7,6 @@
   clean = git-lfs clean %f
   smudge = git-lfs smudge %f
   required = true
-[url "git@github.com:rodrigocnascimento/"]
-    insteadOf = me:  
 [alias]
   aliases=!git config --list | grep alias
   update="!f() { git fetch origin -p && git rebase $(git rev-parse --abbrev-ref @{u}); }; f"
