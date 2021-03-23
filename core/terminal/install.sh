@@ -72,7 +72,7 @@ else
     curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 
     yoga_action "copying" "vim configs to ~"
-    cp vimrc ~/.vimrc
+    cp core/terminal/vimrc ~/.vimrc
 
     yoga_action "installing plugins to vim" "vim +PlugInstall"
     vim +PlugInstall +qall >/dev/null 2>&1
