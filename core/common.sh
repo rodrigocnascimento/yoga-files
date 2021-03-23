@@ -17,43 +17,12 @@ function workspace_install {
    done
 }
 
-function copy_dot_files {
-   yoga_warn "copying dot files"
-
-   cp core/git/.gitconfig ~
-
-   cp core/git/.gitignore_global ~
-   
-   cp core/python/config ~/.config/yamllint/config
-   
-   cp core/terminal/vimrc ~/.vimrc
-}
-
-function update_yoga {
-   local UPSTREAM=${1:-'@{u}'}
-   local LOCAL=$(git -C $YOGA_HOME rev-parse @)
-   local REMOTE=$(git -C $YOGA_HOME rev-parse "$UPSTREAM")
-   local BASE=$(git -C $YOGA_HOME merge-base @ "$UPSTREAM")
-
-   if [ $LOCAL = $REMOTE ]; then
-      yoga_action "update_yoga" "Up-to-date"
-   elif [ $LOCAL = $BASE ]; then
-      yoga_action "updating_yoga" "Need to pull"
-      yoga_warn "ROUND 2 ... UPDATING!"
-      git pull --rebase
-   elif [ $REMOTE = $BASE ]; then
-      yoga_action "update_yoga" "Need to push"
-   else
-      yoga_fail "Repository diverged!"
-   fi
-}
-
 function install_yoga {
    git clone https://github.com/rodrigocnascimento/yoga-files.git $YOGA_HOME
 }
 
 function set_init_on_shell {
-   if [ -z "$(grep -rw "source $YOGA_HOME/init.sh" ~/.zshrc)" ]
+   if [ ! -z "$(grep -rw "source $YOGA_HOME/init.sh" ~/.zshrc)" ]
       then
       yoga_warn "set initial bootstrap on ~/.zshrc"
       echo "\nsource $YOGA_HOME/init.sh" >> ~/.zshrc
@@ -62,7 +31,6 @@ function set_init_on_shell {
    source ~/.zshrc
 }
 
-export update_yoga
 export install_yoga
-export copy_dot_files
 export workspace_install
+export set_init_on_shell
