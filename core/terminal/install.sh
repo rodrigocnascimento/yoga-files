@@ -60,6 +60,26 @@ else
     yoga_success "curl installed"
 fi
 
+# vim
+if which vim &> /dev/null; then
+    yoga_success "vim already installed"
+else
+    yoga_action "installing" "vim ➜ https://github.com/vim/vim"
+    
+    sudo apt install vim
+
+    yoga_action "installing" "vim-plug ➜ https://github.com/junegunn/vim-plug"
+    curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+
+    yoga_action "copying" "vim configs to ~"
+    cp vimrc ~/.vimrc
+
+    yoga_action "installing plugins to vim" "vim +PlugInstall"
+    vim +PlugInstall +qall >/dev/null 2>&1
+    
+    yoga_success "vim installed and configured"
+fi
+
 if [ ! -d "$ZSH" ]; then
     yoga_action "installing" "oh-my-zsh ➜ https://github.com/ohmyzsh/ohmyzsh/"
     sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
