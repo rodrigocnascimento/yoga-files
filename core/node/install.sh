@@ -5,7 +5,7 @@ DIR="$(dirname "$(readlink -f "$0")")"
 source "$DIR/../utils.sh"
 
 # nvm
-if [ -f "$HOME/.nvm" ]; then
+if [ ! -f "$HOME/.nvm" ]; then
     yoga_action "installing" "~/.nvm"
     export NVM_DIR="$HOME/.nvm" && (
         git clone https://github.com/nvm-sh/nvm.git "$NVM_DIR"
