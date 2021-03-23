@@ -35,6 +35,8 @@ if [[ -d "$HOME/.yoga" ]]; then
       yoga_action "update_yoga" "Need to pull"
       yoga_warn "ROUND 2 ... UPDATING!"
       git pull --rebase
+
+      sh $HOME/.yoga/install.sh
    elif [ $REMOTE = $BASE ]; then
       yoga_action "update_yoga" "Need to push"
    else
