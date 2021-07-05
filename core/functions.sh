@@ -21,7 +21,7 @@ function take {
 
 # running ssh agent
 function ssh_agent_run {
-  ps -p $SSH_AGENT_PID > /dev/null || eval `ssh-agent -s`; ssh-add; ssh-add -k ~/.ssh/$@ 2> /dev/null
+  ps -eaf $SSH_AGENT_PID > /dev/null || eval `ssh-agent -s`; ssh-add; ssh-add -k ~/.ssh/$@ 2> /dev/null
 }
 
 # rerun the last command but with sudo
