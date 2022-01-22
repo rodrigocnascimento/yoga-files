@@ -1,10 +1,17 @@
 set nocompatible
-set number 
+set number " Show line numbers
+set relativenumber "show de the relative line number 
 set mouse=a
 set clipboard=unnamedplus
+set noswapfile
 
 " TextEdit might fail if hidden is not set.
 set hidden
+
+" transparent bg
+autocmd vimenter * hi Normal guibg=NONE ctermbg=NONE
+" For Vim<8, replace EndOfBuffer by NonText
+autocmd vimenter * hi EndOfBuffer guibg=NONE ctermbg=NONE
 
 set showmatch               " show matching brackets.
 set ignorecase              " case insensitive matching
@@ -14,9 +21,19 @@ set softtabstop=2           " see multiple spaces as tabstops so <BS> does the r
 set expandtab               " converts tabs to white space
 set shiftwidth=2            " width for autoindents
 set autoindent              " indent a new line the same amount as the line just typed
+set smartindent             " smart indednt 
 set wildmode=longest,list   " get bash-like tab completions
 filetype plugin indent on   " allows auto-indenting depending on file type
 syntax on                   " syntax highlighting
+
+set encoding=UTF-8
+
+set wildignore+=*node_modules/**
+
+nmap <Leader>o :CocCommand tsserver.organizeImports<CR>
+
+nmap <Leader>fa :CocCommand tsserver.findAllFileReferences<CR>
+
 
 call plug#begin('~/.vim/plugged')
   Plug 'vim-airline/vim-airline'
@@ -27,8 +44,8 @@ call plug#begin('~/.vim/plugged')
   Plug 'wakatime/vim-wakatime'
 
   Plug 'neoclide/coc.nvim', {'branch': 'release'}
-
-  Plug 'morhetz/gruvbox'
+  
+  Plug 'rafi/awesome-vim-colorschemes'
 
   Plug 'vim-airline/vim-airline'
 
@@ -54,13 +71,49 @@ call plug#begin('~/.vim/plugged')
 
   Plug 'yggdroot/indentline'
 
+  Plug 'jreybert/vimagit'
+
+  Plug 'ludovicchabant/vim-gutentags'
+
+  Plug 'preservim/nerdcommenter'
+
+  Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && yarn install'  }
+
+  Plug 'kkoomen/vim-doge', { 'do': { -> doge#install() } }
+
+  Plug 'ryanoasis/vim-devicons'
+
+  Plug 'zivyangll/git-blame.vim'
+
+  Plug 'morhetz/gruvbox'
+
 call plug#end()
 
 nnoremap <leader>sv :source $MYVIMRC<CR>
 
-" theme configs
-set background=dark 
+" js file imports
+let g:js_file_import_sort_after_insert = 1
+
+" VIMSPECTOR configs
+let g:vimspector_enable_mappings = 'VISUAL_STUDIO'
+
+" Theme
+syntax enable
 colorscheme gruvbox
+set background=dark
+set t_Co=256
+
+" set cursorline
+set cursorline
+hi CursorLine term=bold cterm=bold guibg=Grey40
+hi LineNr ctermfg=grey 
+
+" system remaps
+vnoremap <C-c> "+y
+map <C-d> "+p
+
+"vim git-blame 
+nnoremap <Leader>s :<C-u>call gitblame#echo()<CR>
 
 "fzf configs
 "remap
@@ -84,6 +137,7 @@ let g:airline_right_sep = '░▒▓'
 let g:airline_symbols.crypt = '🔒'
 let g:airline_symbols.maxlinenr = '☰'
 let g:airline_symbols.branch = '🌱'
+let g:airline_theme = 'tender'
 
 "command! FD call fzf#run(fzf#wrap({'source': 'git ls-files --exclude-standard --others --cached'}))
 "
@@ -146,6 +200,22 @@ nmap <silent> gr <Plug>(coc-references)
 nmap <silent> [g <Plug>(coc-diagnostic-prev)
 nmap <silent> ]g <Plug>(coc-diagnostic-next)
 
+" add node relativepath so coc-nvim would work
+let g:coc_node_path = '/home/rodrigo/.nvm/versions/node/v14.18.1/bin/node'
+
+" Run jest for current project
+command! -nargs=0 Jest :call  CocAction('runCommand', 'jest.projectTest')
+
+" Run jest for current file
+command! -nargs=0 JestCurrent :call  CocAction('runCommand', 'jest.fileTest', ['%'])
+
+" Run jest for current test
+nnoremap <leader>jrc :call CocAction('runCommand', 'jest.fileTest')<CR>
+nnoremap <leader>jrt :call CocAction('runCommand', 'jest.singleTest')<CR>
+
+" Init jest in current cwd, require global jest command exists
+command! JestInit :call CocAction('runCommand', 'jest.init')
+
 " Use K to show documentation in preview window.
 nnoremap <silent> K :call <SID>show_documentation()<CR>
 
@@ -167,4 +237,27 @@ let g:indentLine_char_list = ['|', '¦', '┆', '┊']
 
 " YAML filetype config
 autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab
+
+if &term =~ '^screen'
+  " tmux will send xterm-style keys when its xterm-keys option is on
+  execute "set <xUp>=\e[1;*A"
+  execute "set <xDown>=\e[1;*B"
+  execute "set <xRight>=\e[1;*C"
+  execute "set <xLeft>=\e[1;*D"
+endif
+
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+
+inoremap <silent><expr> <TAB>
+  \ pumvisible() ? coc#_select_confirm() :
+  \ coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" :
+  \ <SID>check_back_space() ? "\<TAB>" :
+  \ coc#refresh()
+
+let g:coc_snippet_next = '<tab>'
+
+
 
