@@ -70,8 +70,8 @@ else
 fi
 # vim plugin install
 yoga_action "copying" "vim configs to ~"
-if [ ! -d "$HOME/.vimrc" ]; then
-    mkdir ~/.vimrc
+if [ ! -d "$HOME/.vim" ]; then
+    mkdir ~/.vim
 fi
 cp core/terminal/vimrc ~/.vimrc
 
@@ -80,7 +80,7 @@ if [ ! -f "$HOME/.vim/autoload/plug.vim" ]; then
     curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 else
     yoga_action "installing plugins to vim" "vim +PlugInstall"
-    vim +PlugInstall +qall
+    vim +PlugInstall +qall >/dev/null 2>&1
     yoga_success "vim configured"
 fi
 
