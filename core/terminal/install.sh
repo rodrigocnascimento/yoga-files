@@ -75,7 +75,7 @@ else
     cp core/terminal/vimrc ~/.vimrc
 
     yoga_action "installing plugins to vim" "vim +PlugInstall"
-    vim +PlugInstall +qall >/dev/null 2>&1
+    vim +PlugInstall +qall
     
     yoga_success "vim installed and configured"
 fi
