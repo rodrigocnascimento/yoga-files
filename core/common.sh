@@ -26,7 +26,7 @@ function set_init_on_shell {
    if [ ! -z "$(grep -rw "source $YOGA_HOME/init.sh" ~/.zshrc)" ]
       then
       yoga_warn "set initial bootstrap on ~/.zshrc"
-      echo "\nsource $YOGA_HOME/init.sh" >> ~/.zshrc
+      echo "\nsource $HOME/init.sh" >> ~/.zshrc
    fi
 
    source ~/.zshrc
