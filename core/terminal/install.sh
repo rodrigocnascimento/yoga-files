@@ -63,16 +63,17 @@ fi
 # vim
 yoga_action "installing" "vim ➜ https://github.com/vim/vim"
 if which vim &> /dev/null; then
+    yoga_success "vim already installed"
+else
     sudo apt install vim
     yoga_success "vim installed"
-else
-    # vim plugin install
-    yoga_action "copying" "vim configs to ~"
-    if [ ! -d "$HOME/.vimrc" ]; then
-        mkdir ~/.vimrc
-    fi
-    cp core/terminal/vimrc ~/.vimrc
 fi
+# vim plugin install
+yoga_action "copying" "vim configs to ~"
+if [ ! -d "$HOME/.vimrc" ]; then
+    mkdir ~/.vimrc
+fi
+cp core/terminal/vimrc ~/.vimrc
 
 if [ ! -f "$HOME/.vim/autoload/plug.vim" ]; then
     yoga_action "installing" "vim-plug ➜ https://github.com/junegunn/vim-plug"
