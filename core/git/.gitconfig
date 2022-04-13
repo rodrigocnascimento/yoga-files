@@ -1,8 +1,7 @@
 [core]
   excludesfile = ~/.gitignore_global
-[user]
-  name = Rodrigo Nascimento
-  email = rodrigocesarnascimento@gmail.com
+[includeIf "gitdir:~/code"]
+  path = ~/code/.gitconfig
 [filter "lfs"]
   clean = git-lfs clean %f
   smudge = git-lfs smudge %f
