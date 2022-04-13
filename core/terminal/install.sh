@@ -61,28 +61,27 @@ else
 fi
 
 # vim
+yoga_action "installing" "vim ➜ https://github.com/vim/vim"
 if which vim &> /dev/null; then
-    yoga_success "vim already installed"
-else
-    yoga_action "installing" "vim ➜ https://github.com/vim/vim"
-    
     sudo apt install vim
-    
-    if [ ! -f "$HOME/.vim/autoload/plug.vim" ]; then
-        yoga_action "installing" "vim-plug ➜ https://github.com/junegunn/vim-plug"
-        curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-    fi
-    
     yoga_success "vim installed"
+else
+    # vim plugin install
+    yoga_action "copying" "vim configs to ~"
+    if [ ! -d "$HOME/.vimrc" ]; then
+        mkdir ~/.vimrc
+    fi
+    cp core/terminal/vimrc ~/.vimrc
 fi
 
-# vim plugin install
-yoga_action "copying" "vim configs to ~"
-cp core/terminal/vimrc ~/.vimrc
-
-yoga_action "installing plugins to vim" "vim +PlugInstall"
-vim +PlugInstall +qall
-yoga_success "vim installed and configured"
+if [ ! -f "$HOME/.vim/autoload/plug.vim" ]; then
+    yoga_action "installing" "vim-plug ➜ https://github.com/junegunn/vim-plug"
+    curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+else
+    yoga_action "installing plugins to vim" "vim +PlugInstall"
+    vim +PlugInstall +qall
+    yoga_success "vim configured"
+fi
 
 if [ ! -d "$ZSH" ]; then
     yoga_action "installing" "oh-my-zsh ➜ https://github.com/ohmyzsh/ohmyzsh/"
