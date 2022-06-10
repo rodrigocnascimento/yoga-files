@@ -2,6 +2,8 @@
   excludesfile = ~/.gitignore_global
 [includeIf "gitdir:~/code"]
   path = ~/code/.gitconfig
+[includeIf "gitdir:~/code/work"]
+  path = ~/code/work/.gitconfig
 [filter "lfs"]
   clean = git-lfs clean %f
   smudge = git-lfs smudge %f
