@@ -16,18 +16,7 @@ else
     yoga_success "fzf installed"
 fi
 
-# rofi
-if which rofi &> /dev/null; then
-    yoga_success "rofi already installed"
-else
-    yoga_action "installing" "rofi ➜ https://github.com/davatorium/rofi"
-    
-    sudo apt install rofi -y
-    
-    yoga_success "rofi installed"
-fi
-
-# glances
+# htop
 if which htop &> /dev/null; then
     yoga_success "htop already installed"
 else
@@ -78,6 +67,10 @@ cp core/terminal/vimrc ~/.vimrc
 if [ ! -f "$HOME/.vim/autoload/plug.vim" ]; then
     yoga_action "installing" "vim-plug ➜ https://github.com/junegunn/vim-plug"
     curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+    
+    yoga_action "installing plugins to vim" "vim +PlugInstall"
+    vim +PlugInstall +qall >/dev/null 2>&1
+    yoga_success "vim configured"
 else
     yoga_action "installing plugins to vim" "vim +PlugInstall"
     vim +PlugInstall +qall >/dev/null 2>&1
@@ -85,6 +78,9 @@ else
 fi
 
 if [ ! -d "$ZSH" ]; then
+    yoga_warning "changing to zshell" 
+    sudo chsh -s /bin/zsh
+    
     yoga_action "installing" "oh-my-zsh ➜ https://github.com/ohmyzsh/ohmyzsh/"
     sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 else
