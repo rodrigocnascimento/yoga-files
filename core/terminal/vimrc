@@ -135,6 +135,8 @@ let g:localvimrc_enable = 1
 let g:localvimrc_whitelist='$HOME/code/.*'
 
 " CocConfigs
+let g:coc_node_path = trim(system('which node'))
+
 " GoTo code navigation.
 nmap <silent> gd <Plug>(coc-definition)
 nmap <silent> gy <Plug>(coc-type-definition)

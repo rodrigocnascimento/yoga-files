@@ -10,9 +10,11 @@
   required = true
 [alias]
   aliases=!git config --list | grep alias
-  blist=branch -a -v
+  lsf=branch -a -v
+  co="!f() { git checkout ${1}; }; f"
   new="!f() { git checkout -b ${1}; }; f"
   s=status -sbu
   adog=log --abbrev-commit --decorate --pretty=oneline --graph --max-count=15 --date-order -C -M --pretty=format:'<%h> %ad [%an] %Cgreen%d%Creset %s' --date=short
   fco="!f() { git branch -a -vv --color=always --format='%(refname)' | sed "s_refs/heads/__" | sed "s_refs/remotes/__" | fzf --query="$@" --height=40% --ansi --tac --color=16 --border | awk '{print $1}' | xargs git co; }; f"
   recommit=commit --amend --no-edit
+  github-pr="!f() { git fetch origin pull/${1}/head:${2}; git co ${2}; }; f"

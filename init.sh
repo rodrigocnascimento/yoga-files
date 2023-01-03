@@ -18,7 +18,6 @@ source $DIR/core/functions.sh
 
 # yoga ssh function to connect to github
 ssh_agent_run "github"
-ssh_agent_run "bitbucket"
 
 export FZF_DEFAULT_OPTS='--height 40% --border --pointer=👉'
 
