@@ -24,10 +24,36 @@ function ssh_agent_run {
   ps -eaf $SSH_AGENT_PID > /dev/null || eval `ssh-agent -s`; ssh-add; ssh-add -k ~/.ssh/$@ 2> /dev/null
 }
 
-# rerun the last command but with sudo
+# sudo, but politely
 function please {
   sudo $(fc -ln -1)
 }
+
+# command to eliminate all docker content EVERYTHING
+function docker_nukem {
+  # Stop all containers
+  docker stop `docker ps -qa`
+
+  # Remove all containers
+  docker rm `docker ps -qa`
+
+  # Remove all images
+  docker rmi -f `docker images -qa `
+
+  # Remove all volumes
+  docker volume rm $(docker volume ls -q)
+
+  # Remove all networks
+  docker network rm `docker network ls -q`
+}
+
+
+read -r -p "It's time to kick ass and chew bubble gum. And I'm all out of gum. [Y/n]" response
+  response=${response,,}
+  if [[ $response =~ ^(yes|y| ) ]] || [[ -z $response ]]; then
+    docker_nukem 
+  fi
+
 
 # show user ip
 function echo_ip {
