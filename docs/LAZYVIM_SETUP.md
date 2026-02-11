@@ -52,3 +52,11 @@ Then open a project and ensure:
 
 - LSP attaches for TS/JS files
 - formatting works (Biome or your configured formatter)
+
+## AI Keymaps (Optional)
+
+If `yoga-ai` is installed and in PATH, yoga-files adds a few keymaps:
+
+- `<leader>ah`: AI help
+- `<leader>af`: AI fix
+- `<leader>ac`: AI code

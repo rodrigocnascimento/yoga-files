@@ -44,7 +44,7 @@ Geral: 29%
 - [x] Configurar provider/model via config.yaml (openai)
 - [ ] Melhorar prompts por modo (help/fix/cmd/explain/debug/code/learn)
 - [x] Padrao de seguranca: nao executar nada automaticamente
-- [ ] Integracao minima no Neovim (commands + docs)
+- [x] Integracao minima no Neovim (commands + docs)
 
 ---
 
@@ -52,8 +52,8 @@ Geral: 29%
 
 - [x] LazyVim com foco JS/TS (LSP, formatter, lint)
 - [x] Templates de projeto (React/Next/Node/Express/Vanilla TS)
-- [ ] Healthcheck de performance (nvim startup / node/npm)
-- [ ] Guia de troubleshooting por OS
+- [x] Healthcheck de performance (nvim startup / node/npm)
+- [x] Guia de troubleshooting por OS
 
 ---
 

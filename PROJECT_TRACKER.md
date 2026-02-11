@@ -34,14 +34,14 @@
 ### 📋 Q2 2026 - AI Layer (v2.1.0)
 
 - [x] yoga-ai terminal helper (core/ai/yoga-ai-terminal.sh)
-- [ ] Padronizar comandos AI (help/fix/cmd/explain/debug/code/learn)
+- [x] Padronizar comandos AI (help/fix/cmd/explain/debug/code/learn)
 - [x] Modo seguro: nunca executar comandos sugeridos por padrao
 - [ ] Multi-provider (OpenAI / Copilot / Claude / Gemini) via config.yaml
 
 Notas:
 
 - Provider/model via `config.yaml` ja funciona para OpenAI (outros providers ainda pendentes).
-- [ ] Integracao Neovim (plugin minimal + docs)
+- [x] Integracao Neovim (plugin minimal + docs)
 
 **Status**: 📅 em desenvolvimento
 
@@ -49,8 +49,8 @@ Notas:
 
 - [x] LazyVim: setup JS/TS opinativo (LSP, formatter, lint)
 - [x] Templates de projeto (React/Next/Node/Express)
-- [ ] Performance: healthcheck e startup profiling
-- [ ] Documentacao por modulo (ASDF, LazyVim, Git profiles, AI)
+- [x] Performance: healthcheck e startup profiling
+- [x] Documentacao por modulo (ASDF, LazyVim, Git profiles, AI)
 
 **Status**: 🔄 planejamento
 
