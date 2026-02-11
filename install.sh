@@ -255,33 +255,47 @@ install_node_stack() {
 install_asdf() {
     yoga_fogo "🔥 Instalando ASDF version manager..."
     
-    # If asdf is already installed but not yet on PATH, prefer the on-disk install.
-    if [ -d "$HOME/.asdf" ]; then
-        if [ -f "$HOME/.asdf/asdf.sh" ]; then
-            . "$HOME/.asdf/asdf.sh" 2>/dev/null || true
-        fi
+    local shell_rc="$HOME/.zshrc"
 
-        if command -v asdf >/dev/null 2>&1; then
-            yoga_agua "💧 ASDF já instalado"
-            return 0
-        fi
-
-        # ~/.asdf exists but asdf not usable yet; don't re-clone over it.
-        yoga_sol "⚠️  ~/.asdf já existe. Pulando clone e continuando."
-        return 0
-    fi
-
+    # Already installed on PATH.
     if command -v asdf >/dev/null 2>&1; then
         yoga_agua "💧 ASDF já instalado"
         return 0
+    fi
+
+    # If ~/.asdf exists, make it available (don't re-clone).
+    if [ -d "$HOME/.asdf" ]; then
+        if [ -f "$HOME/.asdf/asdf.sh" ]; then
+            # Ensure shell loads ASDF in future sessions.
+            if ! grep -q "^\. \"\$HOME/\.asdf/asdf\.sh\"" "$shell_rc" 2>/dev/null; then
+                cat >> "$shell_rc" << 'EOF'
+
+# ASDF Version Manager
+. "$HOME/.asdf/asdf.sh"
+EOF
+            fi
+
+            # Load for this installer run.
+            . "$HOME/.asdf/asdf.sh" 2>/dev/null || true
+
+            if command -v asdf >/dev/null 2>&1; then
+                yoga_agua "💧 ASDF já instalado"
+                return 0
+            fi
+
+            yoga_fogo "❌ ASDF encontrado em ~/.asdf, mas não ficou disponível no PATH"
+            yoga_agua "💧 Tente: source ~/.zshrc (ou abra um terminal novo)"
+            return 1
+        fi
+
+        yoga_fogo "❌ ~/.asdf existe mas ~/.asdf/asdf.sh não foi encontrado"
+        return 1
     fi
     
     # Clonar ASDF
     git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.14.0
     
     # Adicionar ao shell
-    local shell_rc="$HOME/.zshrc"
-
     if ! grep -q "^\. \"\$HOME/\.asdf/asdf\.sh\"" "$shell_rc" 2>/dev/null; then
         cat >> "$shell_rc" << 'EOF'
 
