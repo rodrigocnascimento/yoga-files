@@ -59,19 +59,88 @@ _yoga_ai_openai_chat() {
     local model
     model="$(_yoga_ai_model)"
 
+    local payload
+    payload="$(
+        jq -n \
+            --arg model "$model" \
+            --arg system "$system_msg" \
+            --arg user "$user_msg" \
+            --argjson temperature "$temperature" \
+            --argjson max_tokens "$max_tokens" \
+            '{
+              model: $model,
+              messages: [
+                {role: "system", content: $system},
+                {role: "user", content: $user}
+              ],
+              temperature: $temperature,
+              max_tokens: $max_tokens
+            }'
+    )"
+
     curl -fsS -X POST \
         -H "Content-Type: application/json" \
         -H "Authorization: Bearer $OPENAI_API_KEY" \
-        -d "{
-            \"model\": \"$model\",
-            \"messages\": [
-                {\"role\": \"system\", \"content\": \"$system_msg\"},
-                {\"role\": \"user\", \"content\": \"$user_msg\"}
-            ],
-            \"temperature\": $temperature,
-            \"max_tokens\": $max_tokens
-        }" \
+        -d "$payload" \
         https://api.openai.com/v1/chat/completions | jq -r '.choices[0].message.content'
+}
+
+_yoga_ai_copilot_suggest() {
+    local prompt="$1"
+    if ! command -v gh >/dev/null 2>&1; then
+        yoga_fogo "❌ gh not installed (required for copilot provider)"
+        yoga_agua "💧 Install GitHub CLI: https://cli.github.com/"
+        return 1
+    fi
+
+    # Note: `gh copilot` requires user auth in gh.
+    gh copilot suggest -t shell "$prompt"
+}
+
+_yoga_ai_copilot_explain() {
+    local prompt="$1"
+    if ! command -v gh >/dev/null 2>&1; then
+        yoga_fogo "❌ gh not installed (required for copilot provider)"
+        yoga_agua "💧 Install GitHub CLI: https://cli.github.com/"
+        return 1
+    fi
+
+    gh copilot explain "$prompt"
+}
+
+_yoga_ai_chat() {
+    local system_msg="$1"
+    local user_msg="$2"
+    local temperature="${3:-0.3}"
+    local max_tokens="${4:-800}"
+
+    local provider
+    provider="$(_yoga_ai_provider)"
+
+    case "$provider" in
+        openai)
+            if [ -z "${OPENAI_API_KEY-}" ]; then
+                yoga_fogo "❌ OPENAI_API_KEY não configurada"
+                yoga_agua "💧 Configure: export OPENAI_API_KEY='...'."
+                return 1
+            fi
+            _yoga_ai_openai_chat "$system_msg" "$user_msg" "$temperature" "$max_tokens"
+            ;;
+        copilot)
+            # Copilot doesn't take system messages; include high-level instruction.
+            _yoga_ai_copilot_suggest "$user_msg"
+            ;;
+        claude|gemini)
+            yoga_fogo "❌ Provider not implemented yet: $provider"
+            yoga_agua "💧 Use preferences.ai_provider: \"openai\" or \"copilot\""
+            return 1
+            ;;
+        *)
+            yoga_fogo "❌ Unknown provider: $provider"
+            yoga_agua "💧 Use preferences.ai_provider: \"openai\" or \"copilot\""
+            return 1
+            ;;
+    esac
 }
 
 # Função principal do assistente IA para terminal
@@ -79,20 +148,6 @@ yoga_ai_terminal() {
     local command="$1"
     shift
     local query="$*"
-
-    local provider
-    provider="$(_yoga_ai_provider)"
-    if [ "$provider" != "openai" ]; then
-        yoga_fogo "❌ AI provider not supported yet: $provider"
-        yoga_agua "💧 Supported: openai (set preferences.ai_provider: \"openai\" in config.yaml)"
-        return 1
-    fi
-
-    if [ -z "${OPENAI_API_KEY-}" ]; then
-        yoga_fogo "❌ OPENAI_API_KEY não configurada"
-        yoga_agua "💧 Configure: export OPENAI_API_KEY='...'."
-        return 1
-    fi
     
     case "$command" in
         help)
@@ -129,14 +184,14 @@ yoga_ai_terminal() {
 ai_help_command() {
     local query="$*"
     yoga_breath "🫁 Consultando IA para ajudar com comando..."
-    
+
     local prompt="Como desenvolvedor experiente, ajude a escrever o comando shell/terminal correto para: $query
     Forneça o comando exato e uma breve explicação.
     Se houver múltiplas opções, liste as melhores."
-    
+
     local response
-    response="$(_yoga_ai_openai_chat \
-        "You are an expert in macOS/Linux shell commands. Never execute commands; only suggest." \
+    response="$(_yoga_ai_chat \
+        "You are an expert in macOS/Linux shell commands. Be precise. Never execute commands; only suggest." \
         "$prompt" \
         0.3 \
         500)"
@@ -151,13 +206,13 @@ ai_help_command() {
 ai_fix_command() {
     local wrong_cmd="$*"
     yoga_agua "💧 Analisando comando para correção..."
-    
+
     local prompt="Corrija este comando shell que está errado ou com erro de digitação: '$wrong_cmd'
     Retorne APENAS o comando corrigido, sem explicação adicional."
-    
+
     local response
-    response="$(_yoga_ai_openai_chat \
-        "Fix shell commands. Output ONLY the corrected command, no explanation." \
+    response="$(_yoga_ai_chat \
+        "Fix shell commands. Output ONLY the corrected command, no explanation. Don't add backticks." \
         "$prompt" \
         0.1 \
         200)"
@@ -180,13 +235,14 @@ ai_fix_command() {
 ai_generate_command() {
     local requirement="$*"
     yoga_ar "🌬️ Gerando comando para: $requirement"
-    
+
     local prompt="Gere o comando shell/terminal exato para: $requirement
     Considere boas práticas, performance e segurança.
-    Se precisar de múltiplos comandos, use pipes ou && apropriadamente."
-    
+    Se precisar de múltiplos comandos, use pipes ou && apropriadamente.
+    Evite comandos destrutivos por padrão (rm -rf, sudo) sem avisar claramente."
+
     local response
-    response="$(_yoga_ai_openai_chat \
+    response="$(_yoga_ai_chat \
         "Generate safe shell commands for macOS/Linux. Prefer non-destructive commands." \
         "$prompt" \
         0.3 \
@@ -206,7 +262,7 @@ ai_explain_command() {
     Use linguagem clara e técnica."
     
     local response
-    response="$(_yoga_ai_openai_chat \
+    response="$(_yoga_ai_chat \
         "Explain shell commands clearly and precisely." \
         "$prompt" \
         0.5 \
@@ -229,7 +285,7 @@ ai_debug_error() {
     Erro: $error"
     
     local response
-    response="$(_yoga_ai_openai_chat \
+    response="$(_yoga_ai_chat \
         "You are a senior JS/TS debugging assistant." \
         "$prompt" \
         0.5 \
@@ -250,7 +306,7 @@ ai_optimize_code() {
     Forneça a versão otimizada e explique as melhorias."
     
     local response
-    response="$(_yoga_ai_openai_chat \
+    response="$(_yoga_ai_chat \
         "You optimize JS/TS for performance and readability." \
         "$prompt" \
         0.3 \
@@ -264,37 +320,23 @@ ai_optimize_code() {
 ai_generate_code() {
     local requirement="$*"
     yoga_fogo "🔥 Gerando código..."
-    
+
     local prompt="Gere código JavaScript/TypeScript moderno para: $requirement
     Use TypeScript, async/await, boas práticas atuais.
-    Inclua tipos e comentários explicativos."
-    
-    local response=$(curl -fsS -X POST \
-        -H "Content-Type: application/json" \
-        -H "Authorization: Bearer $OPENAI_API_KEY" \
-        -d "{
-            \"model\": \"gpt-4\",
-            \"messages\": [
-                {\"role\": \"system\", \"content\": \"Expert em JavaScript/TypeScript moderno.\"},
-                {\"role\": \"user\", \"content\": \"$prompt\"}
-            ],
-            \"temperature\": 0.5,
-            \"max_tokens\": 1500
-        }" \
-        https://api.openai.com/v1/chat/completions | jq -r '.choices[0].message.content')
+    Inclua tipos.
+    Retorne apenas o código (sem markdown)."
+
+    local response
+    response="$(_yoga_ai_chat \
+        "You are a senior TypeScript developer. Output only code." \
+        "$prompt" \
+        0.5 \
+        1500)"
     
     yoga_espirito "🧘 Código gerado:"
     echo -e "${YOGA_AGUA}$response${YOGA_RESET}"
     
-    # Opção de salvar em arquivo
-    yoga_agua "💧 Deseja salvar em arquivo? (s/N):"
-    read -r save
-    if [[ "$save" =~ ^[Ss]$ ]]; then
-        yoga_terra "🌿 Nome do arquivo:"
-        read -r filename
-        echo "$response" > "$filename"
-        yoga_fogo "🔥 Salvo em: $filename"
-    fi
+    yoga_agua "💧 Nota: por segurança, o código não é salvo automaticamente."
 }
 
 # Aprender tópico
@@ -310,19 +352,12 @@ ai_learn_topic() {
     4. Armadilhas comuns
     5. Recursos para aprofundamento"
     
-    local response=$(curl -fsS -X POST \
-        -H "Content-Type: application/json" \
-        -H "Authorization: Bearer $OPENAI_API_KEY" \
-        -d "{
-            \"model\": \"gpt-4\",
-            \"messages\": [
-                {\"role\": \"system\", \"content\": \"Professor expert em JavaScript/TypeScript.\"},
-                {\"role\": \"user\", \"content\": \"$prompt\"}
-            ],
-            \"temperature\": 0.7,
-            \"max_tokens\": 2000
-        }" \
-        https://api.openai.com/v1/chat/completions | jq -r '.choices[0].message.content')
+    local response
+    response="$(_yoga_ai_chat \
+        "You are a practical JS/TS teacher. Provide concise structure and examples." \
+        "$prompt" \
+        0.7 \
+        2000)"
     
     yoga_espirito "🧘 Material de estudo:"
     echo -e "${YOGA_TERRA}$response${YOGA_RESET}"
@@ -333,19 +368,12 @@ ai_chat_free() {
     local query="$*"
     yoga_agua "💧 Conversando com IA..."
     
-    local response=$(curl -fsS -X POST \
-        -H "Content-Type: application/json" \
-        -H "Authorization: Bearer $OPENAI_API_KEY" \
-        -d "{
-            \"model\": \"gpt-4\",
-            \"messages\": [
-                {\"role\": \"system\", \"content\": \"Assistente de desenvolvimento JavaScript/TypeScript.\"},
-                {\"role\": \"user\", \"content\": \"$query\"}
-            ],
-            \"temperature\": 0.7,
-            \"max_tokens\": 1500
-        }" \
-        https://api.openai.com/v1/chat/completions | jq -r '.choices[0].message.content')
+    local response
+    response="$(_yoga_ai_chat \
+        "You are a helpful JS/TS development assistant." \
+        "$query" \
+        0.7 \
+        1500)"
     
     yoga_espirito "🧘 Resposta:"
     echo -e "${YOGA_FOGO}$response${YOGA_RESET}"
@@ -362,19 +390,4 @@ alias aidebug='yoga_ai_terminal debug'
 alias aicode='yoga_ai_terminal code'
 alias ailearn='yoga_ai_terminal learn'
 
-# Mensagem de boas-vindas
-if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
-    yoga_espirito "🧘 Yoga AI Terminal Assistant"
-    echo "=================================="
-    yoga_fogo "🔥 Comandos disponíveis:"
-    echo "  yai help 'descrição'    - Ajuda para escrever comando"
-    echo "  yai fix 'comando'       - Corrigir comando errado"
-    echo "  yai cmd 'objetivo'      - Gerar comando complexo"
-    echo "  yai explain 'comando'   - Explicar o que faz"
-    echo "  yai debug 'erro'        - Analisar e resolver erro"
-    echo "  yai code 'requisito'    - Gerar código"
-    echo "  yai learn 'tópico'      - Aprender sobre algo"
-    echo "  yai 'pergunta livre'    - Chat livre com IA"
-    echo ""
-    yoga_agua "💧 Configure OPENAI_API_KEY para usar"
-fi
+# Note: this file is meant to be sourced.

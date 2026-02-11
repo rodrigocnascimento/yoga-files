@@ -7,11 +7,11 @@
 ## Unreleased
 
 - Docs: add missing guides under `docs/`
-- Roadmap/Tracker: align milestones and delivery plan
+- Roadmap: align milestones and delivery plan
 - Release: add `docs/RELEASE_CHECKLIST.md`
 - Installer: copy `editor/` overlays into `~/.yoga`
 - Editor: add LazyVim JS/TS + AI overlays under `editor/nvim/`
-- AI: read provider/model from `config.yaml` (OpenAI only)
+- AI: provider/model via `config.yaml` (OpenAI + Copilot)
 - Doctor: add `--full` optional checks
 
 ---

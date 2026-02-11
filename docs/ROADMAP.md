@@ -42,7 +42,7 @@ Geral: 29%
 
 - [x] Yoga AI no terminal (core/ai/yoga-ai-terminal.sh)
 - [x] Configurar provider/model via config.yaml (openai)
-- [ ] Melhorar prompts por modo (help/fix/cmd/explain/debug/code/learn)
+- [x] Melhorar prompts por modo (help/fix/cmd/explain/debug/code/learn)
 - [x] Padrao de seguranca: nao executar nada automaticamente
 - [x] Integracao minima no Neovim (commands + docs)
 
@@ -61,7 +61,7 @@ Geral: 29%
 
 - [x] Git profiles wizard integrado ao dashboard
 - [x] Comandos consistentes: `yoga-status`, `yoga-update`, `yoga-doctor`
-- [ ] Releases: changelog e checklist
+- [x] Releases: changelog e checklist
 
 ---
 
