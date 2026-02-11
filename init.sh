@@ -43,6 +43,11 @@ if [ -f "$HOME/.asdf/asdf.sh" ]; then
     . "$HOME/.asdf/asdf.sh"
 fi
 
+if [ -d "$HOME/.asdf" ] && ! command -v asdf &>/dev/null; then
+    yoga_sol "⚠️ ASDF directory exists but 'asdf' is not available in this shell."
+    yoga_agua "💧 Try: source ~/.zshrc (or reinstall ASDF)."
+fi
+
 # FZF configurações
 export FZF_DEFAULT_OPTS='--height 40% --border --pointer=👉 --color=16'
 

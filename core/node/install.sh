@@ -35,6 +35,7 @@ read_node_version_from_config() {
     in_node && /^[[:space:]]*version:[[:space:]]*/ {
       v=$0
       sub(/^[^:]*:[[:space:]]*/, "", v)
+      sub(/[[:space:]]*#.*/, "", v)
       gsub(/"/, "", v)
       gsub(/[[:space:]]+$/, "", v)
       print v
@@ -64,8 +65,22 @@ install_node() {
     version="latest:20"
   fi
 
+  if [[ "$version" == *" "* ]]; then
+    yoga_fogo "❌ Invalid node version from config: '$version'"
+    yoga_agua "💧 Fix tools.node.version in config.yaml (example: 20.11.0)"
+    return 1
+  fi
+
   yoga_action "asdf" "Installing nodejs $version"
-  asdf install nodejs "$version" || true
+  if ! asdf install nodejs "$version"; then
+    yoga_sol "⚠️  asdf install failed; checking if already installed"
+  fi
+
+  if ! asdf where nodejs "$version" >/dev/null 2>&1; then
+    yoga_fogo "❌ nodejs $version is not installed (asdf)"
+    yoga_agua "💧 Try: asdf list-all nodejs; asdf install nodejs <version>"
+    return 1
+  fi
 
   yoga_action "asdf" "Setting global nodejs $version"
   asdf global nodejs "$version"
