@@ -22,7 +22,7 @@ bash -n "$ROOT_DIR/core/version-managers/asdf/interactive.sh"
 
 echo "==> syntax: zsh"
 zsh -n "$ROOT_DIR/init.sh"
-zsh -n "$ROOT_DIR/install.sh"
+bash -n "$ROOT_DIR/install.sh"
 zsh -n "$ROOT_DIR/core/utils.sh"
 zsh -n "$ROOT_DIR/core/common.sh"
 zsh -n "$ROOT_DIR/core/aliases.sh"
@@ -32,5 +32,10 @@ zsh -n "$ROOT_DIR/core/ai/yoga-ai-terminal.sh"
 
 echo "==> source init.sh in bash"
 bash -c "export YOGA_HOME='$ROOT_DIR'; export YOGA_SILENT=1; source '$ROOT_DIR/init.sh'; type yoga_dashboard >/dev/null"
+
+echo "==> bin commands"
+bash -c "export YOGA_HOME='$ROOT_DIR'; export PATH='$ROOT_DIR/bin:'\"\$PATH\"; command -v yoga-ai >/dev/null; yoga-ai --help >/dev/null"
+bash -c "export YOGA_HOME='$ROOT_DIR'; export PATH='$ROOT_DIR/bin:'\"\$PATH\"; command -v yoga-status >/dev/null; yoga-status >/dev/null"
+bash -c "export YOGA_HOME='$ROOT_DIR'; export PATH='$ROOT_DIR/bin:'\"\$PATH\"; command -v yoga-doctor >/dev/null; yoga-doctor >/dev/null"
 
 echo "OK"

@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+YOGA_HOME="${YOGA_HOME:-$HOME/.yoga}"
+
+exec bash "$YOGA_HOME/core/git/git-wizard.sh" "$@"

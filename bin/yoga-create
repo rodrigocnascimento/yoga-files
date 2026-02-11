@@ -1,0 +1,61 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+usage() {
+  cat <<'EOF'
+Usage:
+  yoga-create <template> <project-name>
+
+Templates:
+  react | node | next | ts | express
+
+Examples:
+  yoga-create react my-app
+  yoga-create node my-api
+EOF
+}
+
+template="${1:-}"
+name="${2:-}"
+
+if [ -z "$template" ] || [ -z "$name" ] || [ "$template" = "--help" ] || [ "$template" = "-h" ]; then
+  usage
+  exit 0
+fi
+
+case "$template" in
+  react)
+    npm create vite@latest "$name" -- --template react-ts
+    ;;
+  node)
+    mkdir -p "$name"
+    cd "$name"
+    npm init -y
+    npm install -D typescript @types/node tsx nodemon
+    npx tsc --init
+    ;;
+  next)
+    npx create-next-app@latest "$name" --typescript --tailwind --app
+    ;;
+  ts)
+    mkdir -p "$name"
+    cd "$name"
+    npm init -y
+    npm install -D typescript
+    npx tsc --init
+    ;;
+  express)
+    mkdir -p "$name"
+    cd "$name"
+    npm init -y
+    npm install express
+    npm install -D typescript @types/node @types/express tsx nodemon
+    npx tsc --init
+    ;;
+  *)
+    echo "yoga-create: unknown template: $template" >&2
+    usage
+    exit 1
+    ;;
+esac

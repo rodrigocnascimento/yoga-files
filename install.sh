@@ -1,4 +1,4 @@
-#!/bin/zsh
+#!/usr/bin/env bash
 # yoga-files v2.0 - Instalador Principal
 # ASDF + LazyVim + OpenAI + Git Multi-Perfil + JavaScript/TypeScript Focus
 
@@ -6,7 +6,29 @@ set -e  # Sair em caso de erro
 
 # Detectar diretório de instalação
 YOGA_HOME="${YOGA_HOME:-$HOME/.yoga}"
-SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+
+bootstrap_install() {
+    echo "yoga-files: bootstrapping into $YOGA_HOME" >&2
+
+    if ! command -v git >/dev/null 2>&1; then
+        echo "yoga-files: missing required command: git" >&2
+        exit 1
+    fi
+
+    if [ -d "$YOGA_HOME/.git" ]; then
+        git -C "$YOGA_HOME" pull --rebase
+    else
+        mkdir -p "$(dirname "$YOGA_HOME")" 2>/dev/null || true
+        git clone https://github.com/rodrigocnascimento/yoga-files.git "$YOGA_HOME"
+    fi
+
+    exec "$YOGA_HOME/install.sh" "$@"
+}
+
+SCRIPT_DIR="$(cd "$(dirname "${0}")" 2>/dev/null && pwd || true)"
+if [ -z "$SCRIPT_DIR" ] || [ ! -f "$SCRIPT_DIR/core/utils.sh" ]; then
+    bootstrap_install "$@"
+fi
 
 # Importar funções yoga
 source "$SCRIPT_DIR/core/utils.sh"
@@ -107,7 +129,7 @@ install_dependencies() {
 create_directory_structure() {
     yoga_agua "💧 Criando estrutura de diretórios..."
     
-    mkdir -p "$YOGA_HOME"/{core,editor/nvim,docs,tests,config}
+    mkdir -p "$YOGA_HOME"/{bin,core,editor/nvim,docs,tests,config}
     mkdir -p "$YOGA_HOME"/core/{ai,version-managers,git}
     mkdir -p "$YOGA_HOME"/core/version-managers/{asdf,lazyvim}
     mkdir -p "$YOGA_HOME"/editor/nvim/{lua/plugins,lua/config}
@@ -130,6 +152,12 @@ copy_yoga_files() {
     
     # Copiar init.sh
     cp "$SCRIPT_DIR/init.sh" "$YOGA_HOME/"
+
+    # Copiar bin
+    if [ -d "$SCRIPT_DIR/bin" ]; then
+        cp -r "$SCRIPT_DIR/bin/"* "$YOGA_HOME/bin/" 2>/dev/null || true
+        chmod +x "$YOGA_HOME"/bin/* 2>/dev/null || true
+    fi
     
     yoga_terra "🌿 Arquivos copiados!"
 }

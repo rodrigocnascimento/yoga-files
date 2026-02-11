@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+YOGA_HOME="${YOGA_HOME:-$HOME/.yoga}"
+
+if [ ! -d "$YOGA_HOME/.git" ]; then
+  echo "yoga-update: not a git checkout: $YOGA_HOME" >&2
+  exit 1
+fi
+
+git -C "$YOGA_HOME" pull --rebase
+
+if command -v npm >/dev/null 2>&1; then
+  npm update -g >/dev/null 2>&1 || true
+fi
+
+if command -v asdf >/dev/null 2>&1; then
+  asdf plugin update --all >/dev/null 2>&1 || true
+fi

@@ -71,12 +71,16 @@ list_profiles() {
     echo ""
     
     if [ -f "$GIT_PROFILES_FILE" ]; then
-        # Parse YAML and show profiles
+        local in_profiles=false
         while IFS= read -r line; do
-            if [[ $line =~ ^[[:space:]]+name:[[:space:]]\"(.+)\" ]]; then
-                local profile_name="${BASH_REMATCH[1]}"
-                if [ -n "$profile_name" ]; then
-                    yoga_ar "  • $profile_name"
+            if [[ $line =~ ^profiles: ]]; then
+                in_profiles=true
+                continue
+            fi
+
+            if [ "$in_profiles" = true ]; then
+                if [[ $line =~ ^[[:space:]]{2}([A-Za-z0-9_-]+):[[:space:]]*$ ]]; then
+                    yoga_ar "  • ${BASH_REMATCH[1]}"
                 fi
             fi
         done < "$GIT_PROFILES_FILE"

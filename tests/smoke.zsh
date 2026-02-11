@@ -23,7 +23,8 @@ bash -n "$ROOT_DIR/core/version-managers/asdf/interactive.sh"
 
 print "==> syntax: zsh"
 zsh -n "$ROOT_DIR/init.sh"
-zsh -n "$ROOT_DIR/install.sh"
+print "==> syntax: bash"
+bash -n "$ROOT_DIR/install.sh"
 zsh -n "$ROOT_DIR/core/utils.sh"
 zsh -n "$ROOT_DIR/core/common.sh"
 zsh -n "$ROOT_DIR/core/aliases.sh"
@@ -33,6 +34,11 @@ zsh -n "$ROOT_DIR/core/ai/yoga-ai-terminal.sh"
 
 print "==> source init.sh"
 zsh -c "export YOGA_HOME='$ROOT_DIR'; export YOGA_SILENT=1; source '$ROOT_DIR/init.sh'; whence -w yoga_status >/dev/null; whence -w yoga_dashboard >/dev/null"
+
+print "==> bin commands"
+zsh -c "export YOGA_HOME='$ROOT_DIR'; export PATH='$ROOT_DIR/bin:'\"\$PATH\"; command -v yoga-ai >/dev/null; yoga-ai --help >/dev/null"
+zsh -c "export YOGA_HOME='$ROOT_DIR'; export PATH='$ROOT_DIR/bin:'\"\$PATH\"; command -v yoga-status >/dev/null; yoga-status >/dev/null"
+zsh -c "export YOGA_HOME='$ROOT_DIR'; export PATH='$ROOT_DIR/bin:'\"\$PATH\"; command -v yoga-doctor >/dev/null; yoga-doctor >/dev/null"
 
 print "==> git wizard (non-interactive)"
 bash -c "export YOGA_HOME='$ROOT_DIR'; bash '$ROOT_DIR/core/git/git-wizard.sh' current >/dev/null"

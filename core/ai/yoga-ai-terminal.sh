@@ -9,6 +9,12 @@ yoga_ai_terminal() {
     local command="$1"
     shift
     local query="$*"
+
+    if [ -z "${OPENAI_API_KEY-}" ]; then
+        yoga_fogo "❌ OPENAI_API_KEY não configurada"
+        yoga_agua "💧 Configure: export OPENAI_API_KEY='...'."
+        return 1
+    fi
     
     case "$command" in
         help)
@@ -50,7 +56,7 @@ ai_help_command() {
     Forneça o comando exato e uma breve explicação.
     Se houver múltiplas opções, liste as melhores."
     
-    local response=$(curl -s -X POST \
+    local response=$(curl -fsS -X POST \
         -H "Content-Type: application/json" \
         -H "Authorization: Bearer $OPENAI_API_KEY" \
         -d "{
@@ -67,13 +73,7 @@ ai_help_command() {
     yoga_fogo "🔥 Comando sugerido:"
     echo -e "${YOGA_AGUA}$response${YOGA_RESET}"
     
-    # Perguntar se quer executar
-    yoga_agua "💧 Deseja executar este comando? (s/N):"
-    read -r execute
-    if [[ "$execute" =~ ^[Ss]$ ]]; then
-        eval "$response"
-        yoga_terra "🌿 Comando executado!"
-    fi
+    yoga_agua "💧 Nota: por segurança, o comando não é executado automaticamente."
 }
 
 # Corrigir comando errado
@@ -84,7 +84,7 @@ ai_fix_command() {
     local prompt="Corrija este comando shell que está errado ou com erro de digitação: '$wrong_cmd'
     Retorne APENAS o comando corrigido, sem explicação adicional."
     
-    local response=$(curl -s -X POST \
+    local response=$(curl -fsS -X POST \
         -H "Content-Type: application/json" \
         -H "Authorization: Bearer $OPENAI_API_KEY" \
         -d "{
@@ -121,7 +121,7 @@ ai_generate_command() {
     Considere boas práticas, performance e segurança.
     Se precisar de múltiplos comandos, use pipes ou && apropriadamente."
     
-    local response=$(curl -s -X POST \
+    local response=$(curl -fsS -X POST \
         -H "Content-Type: application/json" \
         -H "Authorization: Bearer $OPENAI_API_KEY" \
         -d "{
@@ -148,7 +148,7 @@ ai_explain_command() {
     Quebre cada parte e explique os parâmetros.
     Use linguagem clara e técnica."
     
-    local response=$(curl -s -X POST \
+    local response=$(curl -fsS -X POST \
         -H "Content-Type: application/json" \
         -H "Authorization: Bearer $OPENAI_API_KEY" \
         -d "{
@@ -177,7 +177,7 @@ ai_debug_error() {
     
     Erro: $error"
     
-    local response=$(curl -s -X POST \
+    local response=$(curl -fsS -X POST \
         -H "Content-Type: application/json" \
         -H "Authorization: Bearer $OPENAI_API_KEY" \
         -d "{
@@ -205,7 +205,7 @@ ai_optimize_code() {
     
     Forneça a versão otimizada e explique as melhorias."
     
-    local response=$(curl -s -X POST \
+    local response=$(curl -fsS -X POST \
         -H "Content-Type: application/json" \
         -H "Authorization: Bearer $OPENAI_API_KEY" \
         -d "{
@@ -232,7 +232,7 @@ ai_generate_code() {
     Use TypeScript, async/await, boas práticas atuais.
     Inclua tipos e comentários explicativos."
     
-    local response=$(curl -s -X POST \
+    local response=$(curl -fsS -X POST \
         -H "Content-Type: application/json" \
         -H "Authorization: Bearer $OPENAI_API_KEY" \
         -d "{
@@ -273,7 +273,7 @@ ai_learn_topic() {
     4. Armadilhas comuns
     5. Recursos para aprofundamento"
     
-    local response=$(curl -s -X POST \
+    local response=$(curl -fsS -X POST \
         -H "Content-Type: application/json" \
         -H "Authorization: Bearer $OPENAI_API_KEY" \
         -d "{
@@ -296,7 +296,7 @@ ai_chat_free() {
     local query="$*"
     yoga_agua "💧 Conversando com IA..."
     
-    local response=$(curl -s -X POST \
+    local response=$(curl -fsS -X POST \
         -H "Content-Type: application/json" \
         -H "Authorization: Bearer $OPENAI_API_KEY" \
         -d "{

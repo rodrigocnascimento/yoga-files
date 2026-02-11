@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+YOGA_HOME="${YOGA_HOME:-$HOME/.yoga}"
+
+if [ ! -f "$YOGA_HOME/core/utils.sh" ]; then
+  echo "yoga-status: missing: $YOGA_HOME/core/utils.sh" >&2
+  exit 1
+fi
+
+# shellcheck disable=SC1090
+source "$YOGA_HOME/core/utils.sh"
+
+if command -v yoga_status >/dev/null 2>&1; then
+  yoga_status
+  exit 0
+fi
+
+echo "yoga-status: yoga_status not available" >&2
+exit 1

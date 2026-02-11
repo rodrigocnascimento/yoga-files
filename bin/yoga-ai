@@ -1,0 +1,46 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+YOGA_HOME="${YOGA_HOME:-$HOME/.yoga}"
+
+usage() {
+  cat <<'EOF'
+Usage:
+  yoga-ai --help
+  yoga-ai <mode> <query...>
+
+Modes:
+  help | fix | cmd | explain | debug | optimize | code | learn
+
+Examples:
+  yoga-ai help "how to list modified files"
+  yoga-ai fix "git comit -m 'msg'"
+  yoga-ai "freeform question"
+EOF
+}
+
+if [ "${1:-}" = "--help" ] || [ "${1:-}" = "-h" ] || [ $# -eq 0 ]; then
+  usage
+  exit 0
+fi
+
+if [ ! -d "$YOGA_HOME" ]; then
+  echo "yoga-ai: YOGA_HOME not found: $YOGA_HOME" >&2
+  exit 1
+fi
+
+if [ ! -f "$YOGA_HOME/core/ai/yoga-ai-terminal.sh" ]; then
+  echo "yoga-ai: missing: $YOGA_HOME/core/ai/yoga-ai-terminal.sh" >&2
+  exit 1
+fi
+
+# shellcheck disable=SC1090
+source "$YOGA_HOME/core/ai/yoga-ai-terminal.sh"
+
+if ! command -v yoga_ai_terminal >/dev/null 2>&1; then
+  echo "yoga-ai: failed to load yoga_ai_terminal" >&2
+  exit 1
+fi
+
+yoga_ai_terminal "$@"

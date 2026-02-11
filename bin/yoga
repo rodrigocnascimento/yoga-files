@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+YOGA_HOME="${YOGA_HOME:-$HOME/.yoga}"
+
+if [ ! -f "$YOGA_HOME/init.sh" ]; then
+  echo "yoga: missing: $YOGA_HOME/init.sh" >&2
+  exit 1
+fi
+
+# If not attached to a TTY, don't launch the interactive dashboard.
+if [ ! -t 1 ]; then
+  "$YOGA_HOME/bin/yoga-status" || true
+  exit 0
+fi
+
+if command -v zsh >/dev/null 2>&1; then
+  exec zsh -ic "export YOGA_HOME='$YOGA_HOME'; source '$YOGA_HOME/init.sh'; yoga_dashboard"
+fi
+
+"$YOGA_HOME/bin/yoga-status" || true
