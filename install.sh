@@ -255,6 +255,22 @@ install_node_stack() {
 install_asdf() {
     yoga_fogo "🔥 Instalando ASDF version manager..."
     
+    # If asdf is already installed but not yet on PATH, prefer the on-disk install.
+    if [ -d "$HOME/.asdf" ]; then
+        if [ -f "$HOME/.asdf/asdf.sh" ]; then
+            . "$HOME/.asdf/asdf.sh" 2>/dev/null || true
+        fi
+
+        if command -v asdf >/dev/null 2>&1; then
+            yoga_agua "💧 ASDF já instalado"
+            return 0
+        fi
+
+        # ~/.asdf exists but asdf not usable yet; don't re-clone over it.
+        yoga_sol "⚠️  ~/.asdf já existe. Pulando clone e continuando."
+        return 0
+    fi
+
     if command -v asdf >/dev/null 2>&1; then
         yoga_agua "💧 ASDF já instalado"
         return 0
@@ -265,12 +281,14 @@ install_asdf() {
     
     # Adicionar ao shell
     local shell_rc="$HOME/.zshrc"
-    
-    cat >> "$shell_rc" << 'EOF'
+
+    if ! grep -q "^\. \"\$HOME/\.asdf/asdf\.sh\"" "$shell_rc" 2>/dev/null; then
+        cat >> "$shell_rc" << 'EOF'
 
 # ASDF Version Manager
 . "$HOME/.asdf/asdf.sh"
 EOF
+    fi
     
     # Carregar ASDF imediatamente
     . "$HOME/.asdf/asdf.sh"
