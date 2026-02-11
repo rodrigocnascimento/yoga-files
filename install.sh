@@ -173,6 +173,17 @@ create_directory_structure() {
 # Copiar arquivos do yoga
 copy_yoga_files() {
     yoga_ar "🌬️ Copiando arquivos yoga..."
+
+    # Avoid copying files onto themselves when running from inside $YOGA_HOME.
+    local src_root dest_root
+    src_root="${SCRIPT_DIR:A}"
+    dest_root="${YOGA_HOME:A}"
+    if [ "$src_root" = "$dest_root" ]; then
+        chmod +x "$YOGA_HOME"/bin/* 2>/dev/null || true
+        yoga_agua "💧 Instalador rodando dentro de $YOGA_HOME; pulando auto-copia."
+        yoga_terra "🌿 Arquivos já estão no lugar!"
+        return 0
+    fi
     
     # Copiar core
     cp -r "$SCRIPT_DIR/core/"* "$YOGA_HOME/core/" 2>/dev/null || true
