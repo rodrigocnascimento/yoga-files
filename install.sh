@@ -373,7 +373,13 @@ setup_lazyvim() {
     # Backup configuração existente
     if [ -d "$HOME/.config/nvim" ]; then
         yoga_agua "💧 Fazendo backup da configuração existente..."
-        mv "$HOME/.config/nvim" "$HOME/.config/nvim.backup.$(date +%Y%m%d)"
+        local backup_base backup_path
+        backup_base="$HOME/.config/nvim.backup.$(date +%Y%m%d-%H%M%S)"
+        backup_path="$backup_base"
+        while [ -e "$backup_path" ]; do
+            backup_path="$backup_base.$RANDOM"
+        done
+        mv "$HOME/.config/nvim" "$backup_path"
     fi
     
     # Clonar LazyVim starter
