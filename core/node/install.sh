@@ -1,6 +1,6 @@
 #!/bin/zsh
 
-DIR="$(dirname "$(readlink -f "$0")")"
+DIR="$(cd "$(dirname "$0")" && pwd)"
 
 source "$DIR/../utils.sh"
 

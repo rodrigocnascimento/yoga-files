@@ -1,4 +1,15 @@
-DIR="$(dirname "$(readlink -f "$0")")"
+#!/bin/zsh
+
+_yoga_functions_path=""
+if [ -n "${ZSH_VERSION-}" ]; then
+  _yoga_functions_path="${(%):-%N}"
+elif [ -n "${BASH_VERSION-}" ]; then
+  _yoga_functions_path="${BASH_SOURCE[0]}"
+else
+  _yoga_functions_path="$0"
+fi
+
+DIR="$(cd "$(dirname "$_yoga_functions_path")" && pwd)"
 
 source "$DIR/utils.sh"
 
@@ -9,14 +20,16 @@ function pid_port {
 
 # kill a process based on a port
 function kill_port {
-  if [[ $(pid_port $1) -ne "" ]]; then
-    kill -9 $(pid_port "$1")
-  fi
+  local pid
+  pid="$(pid_port "$1")"
+  [ -n "$pid" ] && kill -9 "$pid"
 }
 
 # create a directory and enter it
 function take {
-  mkdir -p $@ && cd ${@:$#}
+  local last
+  last="${@: -1}"
+  mkdir -p "$@" && cd "$last"
 }
 
 # running ssh agent
@@ -47,17 +60,27 @@ function docker_nukem {
   docker network rm `docker network ls -q`
 }
 
-
-read -r -p "It's time to kick ass and chew bubble gum. And I'm all out of gum. [Y/n]" response
-  response=${response,,}
-  if [[ $response =~ ^(yes|y| ) ]] || [[ -z $response ]]; then
-    docker_nukem 
+# Destructive helper with explicit confirmation.
+function docker_nukem_confirm {
+  echo "This will stop/remove ALL docker containers/images/volumes/networks."
+  local response=""
+  if [ -n "${ZSH_VERSION-}" ]; then
+    read -r "response?Type 'NUKE' to proceed: "
+  else
+    printf "%s" "Type 'NUKE' to proceed: "
+    read -r response
   fi
+  if [ "$response" = "NUKE" ]; then
+    docker_nukem
+  else
+    yoga_warn "Cancelled"
+  fi
+}
 
 
 # show user ip
 function echo_ip {
-  print_f("%s", curl http://ipecho.net/plain)
+  curl -fsSL "https://ipecho.net/plain"
 }
 
 # dim the monitor brightness
@@ -99,9 +122,7 @@ function gotodir {
 function goto {
   yoga_warn "Choose an option:"
   
-  MENU=("projects" "gotodir")
-
-  option=$(echo $MENU | tr " " "\n" | fzf_search)
+  option=$(printf "%s\n" "projects" "gotodir" | fzf_search)
   
   echo -e "\ngoto ➜ $option"
 

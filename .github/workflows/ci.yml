@@ -1,0 +1,51 @@
+name: Yoga Files CI
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  lint-and-smoke:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install deps (ubuntu)
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y zsh jq
+
+      - name: Install deps (macos)
+        if: runner.os == 'macOS'
+        run: |
+          brew update
+          brew install jq
+
+      - name: Smoke
+        run: |
+          chmod +x tests/smoke.zsh
+          zsh ./tests/smoke.zsh
+          chmod +x tests/smoke.bash
+          bash ./tests/smoke.bash
+        
+  build-docs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Generate Documentation
+        run: |
+          echo "Building documentation..."
+
+      - name: Deploy Documentation
+        run: |
+          echo "Deploy to GitHub Pages..."

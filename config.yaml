@@ -1,0 +1,147 @@
+# yoga-files v2.0 - Configuração Central
+# ASDF + LazyVim + OpenAI + Git Multi-Perfil
+
+# Informações do usuário
+user:
+  name: "Yogi Developer"
+  email: "yogi@example.com"
+  github: "yogi-dev"
+  company: ""
+  role: "Full Stack Developer"
+
+# Preferências gerais
+preferences:
+  theme: "yoga_elements"  # yoga_elements | dark | light | auto
+  ai_provider: "openai"   # openai | copilot | claude | gemini
+  auto_save: true
+  auto_format: true
+  git_signing: false
+  
+# Ferramentas JavaScript/TypeScript
+tools:
+  javascript:
+    package_manager: "npm"  # npm | yarn | pnpm
+    linter: "biome"         # biome | eslint
+    formatter: "biome"      # biome | prettier
+    test_runner: "vitest"   # vitest | jest
+    bundler: "vite"         # vite | webpack | esbuild
+    
+  typescript:
+    strict: true
+    target: "ES2022"
+    module: "ESNext"
+    jsx: "react-jsx"
+    
+  node:
+    version: "20.11.0"      # Gerenciado via ASDF
+    experimental_features: false
+    
+  editor:
+    name: "lazyvim"
+    font_family: "JetBrains Mono"
+    font_size: 14
+    line_numbers: true
+    relative_line_numbers: true
+    tab_size: 2
+    use_tabs: false
+    
+  ai:
+    model: "gpt-4"
+    max_tokens: 2000
+    temperature: 0.7
+    context_window: 10
+    auto_suggestions: true
+    
+# Configurações de ambiente
+environment:
+  projects_dir: "~/code"
+  backup_dir: "~/.yoga/backups"
+  logs_dir: "~/.yoga/logs"
+  cache_dir: "~/.cache/yoga"
+  
+# Git multi-perfil
+git:
+  default_profile: "personal"
+  profiles:
+    personal:
+      name: "Your Name"
+      email: "personal@example.com"
+      signing_key: ""
+    work:
+      name: "Your Work Name"
+      email: "work@company.com"
+      signing_key: ""
+      
+# Integrações
+integrations:
+  openai:
+    enabled: true
+    api_key: "${OPENAI_API_KEY}"
+    organization: ""
+    
+  github_copilot:
+    enabled: true
+    auto_suggestions: true
+    
+  opencode:
+    enabled: false
+    api_key: ""
+    
+# Aliases customizados
+aliases:
+  # Desenvolvimento
+  dev: "npm run dev"
+  build: "npm run build"
+  test: "npm run test"
+  
+  # Git
+  gs: "git status"
+  gc: "git commit"
+  gp: "git push"
+  gl: "git pull"
+  
+  # Yoga
+  yogi: "yoga"
+  flow: "yoga-flow"
+  breathe: "yoga-breath"
+  
+# Funções customizadas
+functions:
+  # Adicione suas funções personalizadas aqui
+  custom_function_1: ""
+  custom_function_2: ""
+  
+# Temas de cores Yoga
+colors:
+  fire: "#c8a09c"     # Fogo - Vermelho energia
+  water: "#7aa89f"    # Água - Ciano fluído
+  earth: "#76946a"    # Terra - Verde natureza
+  air: "#7e9cd8"      # Ar - Azul céu
+  spirit: "#938aa9"   # Espírito - Roxo transcendência
+  
+# Performance
+performance:
+  lazy_loading: true
+  cache_enabled: true
+  parallel_install: true
+  auto_cleanup: true
+  
+# Segurança
+security:
+  auto_update: true
+  check_vulnerabilities: true
+  secure_shell: true
+  encrypt_backups: false
+  
+# Notificações
+notifications:
+  enabled: true
+  sound: false
+  desktop: true
+  terminal: true
+  
+# Debug
+debug:
+  enabled: false
+  verbose: false
+  log_level: "info"  # debug | info | warn | error
