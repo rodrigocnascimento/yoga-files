@@ -429,10 +429,10 @@ setup_openai() {
     yoga_ar "🌬️ Configurando integração OpenAI..."
     
     # Verificar se existe API key
-    if [ -z "$OPENAI_API_KEY" ]; then
+    if [ -z "${OPENAI_API_KEY-}" ]; then
         yoga_agua "💧 Para usar recursos de IA, configure sua OPENAI_API_KEY:"
         echo "   export OPENAI_API_KEY='sua-chave-aqui'"
-        echo "   Adicione ao seu ~/.zshrc ou ~/.bashrc"
+        echo "   Adicione ao seu ~/.zshrc"
     else
         yoga_terra "🌿 OpenAI API key detectada!"
     fi
