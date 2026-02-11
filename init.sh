@@ -9,7 +9,7 @@ export YOGA_HOME="${YOGA_HOME:-$HOME/.yoga}"
 # Verificar se YOGA está instalado
 if [ ! -d "$YOGA_HOME" ]; then
     echo "🔥 YOGA FILES não está instalado!"
-    echo "Execute: curl -fsSL https://raw.githubusercontent.com/rodrigocnascimento/yoga-files/main/install.sh | bash"
+    echo "Execute: curl -fsSL https://raw.githubusercontent.com/rodrigocnascimento/yoga-files/main/install.sh | zsh"
     return 1
 fi
 

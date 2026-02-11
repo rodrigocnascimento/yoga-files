@@ -13,6 +13,7 @@
 - Editor: add LazyVim JS/TS + AI overlays under `editor/nvim/`
 - AI: provider/model via `config.yaml` (OpenAI + Copilot)
 - Doctor: add `--full` optional checks
+- Docs: add `docs/USAGE_GUIDE.md`
 
 ---
 

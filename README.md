@@ -83,6 +83,7 @@ O instalador irá:
 ## 📚 **Documentação**
 
 - **[📖 Guia Completo](docs/SETUP_GUIDE.md)**: Instalação passo a passo detalhada
+- **[🧭 Guia de Uso](docs/USAGE_GUIDE.md)**: Do zero ao uso de cada ferramenta
 - **[🎨 Configuração LazyVim](docs/LAZYVIM_SETUP.md)**: Personalização completa do editor
 - **[🛠️ ASDF Guide](docs/ASDF_GUIDE.md)**: Gerenciamento de versões
 - **[🤖 AI Integration](docs/AI_INTEGRATION.md)**: Configuração de ferramentas IA

@@ -11,7 +11,7 @@ This doc explains the current AI integration shipped in yoga-files.
 Optional:
 
 - GitHub CLI (`gh`) if you want to use `preferences.ai_provider: "copilot"`
-- `preferences.ai_provider` in `config.yaml` (currently only `openai` is supported)
+  
 
 Example (zsh):
 
