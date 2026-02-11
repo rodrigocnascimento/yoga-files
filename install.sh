@@ -1,33 +1,66 @@
-#!/usr/bin/env bash
+#!/usr/bin/env zsh
+#!/usr/bin/env zsh
 # yoga-files v2.0 - Instalador Principal
 # ASDF + LazyVim + OpenAI + Git Multi-Perfil + JavaScript/TypeScript Focus
 
-set -e  # Sair em caso de erro
+# NOTE: This project is zsh-first. If you run this file using bash (e.g. `curl ... | bash`),
+# the zsh-only syntax will fail. This guard prints a clear warning early.
+if [ -z "${ZSH_VERSION-}" ]; then
+  echo "yoga-files: zsh is required." >&2
+  echo "Install zsh and re-run with: curl -fsSL <url>/install.sh | zsh" >&2
+  echo "" >&2
+
+  if command -v zsh >/dev/null 2>&1; then
+    echo "zsh is installed. Re-run using zsh." >&2
+    exit 1
+  fi
+
+  case "$(uname -s 2>/dev/null)" in
+    Darwin)
+      echo "macOS: install with Homebrew: brew install zsh" >&2
+      ;;
+    Linux)
+      echo "Linux: install with your package manager:" >&2
+      echo "  Debian/Ubuntu: sudo apt-get install -y zsh" >&2
+      echo "  Fedora/RHEL:   sudo dnf install -y zsh" >&2
+      echo "  Arch:          sudo pacman -S zsh" >&2
+      ;;
+    *)
+      echo "Install zsh for your OS, then re-run with zsh." >&2
+      ;;
+  esac
+
+  exit 1
+fi
+
+emulate -L zsh
+set -euo pipefail
 
 # Detectar diretório de instalação
-YOGA_HOME="${YOGA_HOME:-$HOME/.yoga}"
+export YOGA_HOME="${YOGA_HOME:-$HOME/.yoga}"
 
 bootstrap_install() {
-    echo "yoga-files: bootstrapping into $YOGA_HOME" >&2
+  echo "yoga-files: bootstrapping into $YOGA_HOME" >&2
 
-    if ! command -v git >/dev/null 2>&1; then
-        echo "yoga-files: missing required command: git" >&2
-        exit 1
-    fi
+  if ! command -v git >/dev/null 2>&1; then
+    echo "yoga-files: missing required command: git" >&2
+    exit 1
+  fi
 
-    if [ -d "$YOGA_HOME/.git" ]; then
-        git -C "$YOGA_HOME" pull --rebase
-    else
-        mkdir -p "$(dirname "$YOGA_HOME")" 2>/dev/null || true
-        git clone https://github.com/rodrigocnascimento/yoga-files.git "$YOGA_HOME"
-    fi
+  if [ -d "$YOGA_HOME/.git" ]; then
+    git -C "$YOGA_HOME" pull --rebase
+  else
+    mkdir -p "${YOGA_HOME:h}" 2>/dev/null || true
+    git clone https://github.com/rodrigocnascimento/yoga-files.git "$YOGA_HOME"
+  fi
 
-    exec "$YOGA_HOME/install.sh" "$@"
+  exec zsh "$YOGA_HOME/install.sh" "$@"
 }
 
-SCRIPT_DIR="$(cd "$(dirname "${0}")" 2>/dev/null && pwd || true)"
-if [ -z "$SCRIPT_DIR" ] || [ ! -f "$SCRIPT_DIR/core/utils.sh" ]; then
-    bootstrap_install "$@"
+SCRIPT_DIR="${0:A:h}"
+if [ ! -f "$SCRIPT_DIR/core/utils.sh" ]; then
+  # Likely running via `curl ... | zsh` (no on-disk script path).
+  bootstrap_install "$@"
 fi
 
 # Importar funções yoga
@@ -165,9 +198,9 @@ copy_yoga_files() {
 # Configurar shell (zsh/bash)
 setup_shell_integration() {
     yoga_agua "💧 Configurando integração com shell..."
-    
+
     local shell_rc="$HOME/.zshrc"
-    [ "$SHELL" = "/bin/bash" ] && shell_rc="$HOME/.bashrc"
+    [ -f "$shell_rc" ] || touch "$shell_rc"
     
     # Adicionar yoga ao PATH e source init.sh
     if ! grep -q "source $YOGA_HOME/init.sh" "$shell_rc" 2>/dev/null; then
@@ -184,6 +217,17 @@ EOF
     fi
 }
 
+install_node_stack() {
+    yoga_fogo "🔥 Installing Node.js (ASDF)"
+
+    if [ ! -f "$YOGA_HOME/core/node/install.sh" ]; then
+        yoga_fogo "❌ Missing: $YOGA_HOME/core/node/install.sh"
+        return 1
+    fi
+
+    zsh "$YOGA_HOME/core/node/install.sh"
+}
+
 # Instalar ASDF
 install_asdf() {
     yoga_fogo "🔥 Instalando ASDF version manager..."
@@ -198,7 +242,6 @@ install_asdf() {
     
     # Adicionar ao shell
     local shell_rc="$HOME/.zshrc"
-    [ "$SHELL" = "/bin/bash" ] && shell_rc="$HOME/.bashrc"
     
     cat >> "$shell_rc" << 'EOF'
 
@@ -215,10 +258,7 @@ EOF
 # Instalar plugins ASDF
 install_asdf_plugins() {
     yoga_ar "🌬️ Instalando plugins ASDF..."
-    
-    # Plugin Node.js
-    asdf plugin-add nodejs https://github.com/asdf-vm/asdf-nodejs.git 2>/dev/null || true
-    
+
     # Plugin Python
     asdf plugin-add python https://github.com/danhper/asdf-python.git 2>/dev/null || true
     
@@ -231,11 +271,7 @@ install_asdf_plugins() {
 # Instalar versões padrão
 install_default_versions() {
     yoga_agua "💧 Instalando versões padrão..."
-    
-    # Node.js LTS
-    asdf install nodejs latest:20
-    asdf global nodejs latest:20
-    
+
     # Python 3
     asdf install python latest:3.11
     asdf global python latest:3.11
@@ -301,39 +337,36 @@ setup_lazyvim() {
 
 # Instalar ferramentas JavaScript/TypeScript
 install_javascript_tools() {
-    yoga_fogo "🔥 Instalando ferramentas JavaScript/TypeScript..."
-    
-    # Biome (linter/formatter)
-    npm install -g @biomejs/biome
-    
-    # TypeScript
-    npm install -g typescript tsx
-    
-    # Ferramentas de desenvolvimento
-    npm install -g nodemon concurrently
-    
-    yoga_terra "🌿 Ferramentas JS/TS instaladas!"
+    # Installed as part of the ASDF Node setup (core/node/install.sh).
+    yoga_agua "💧 JS/TS tools are handled by core/node/install.sh"
 }
 
 # Configurar Git multi-perfil
 setup_git_profiles() {
     yoga_agua "💧 Configurando sistema de perfis Git..."
-    
-    mkdir -p "$YOGA_HOME/git/profiles"
-    
-    # Criar perfil padrão se não existir
-    if [ ! -f "$YOGA_HOME/git/profiles/default.json" ]; then
-        cat > "$YOGA_HOME/git/profiles/default.json" << 'EOF'
-{
-  "name": "Yogi Developer",
-  "email": "yogi@example.com",
-  "github": "yogi-dev",
-  "signing": false
-}
+
+    local profiles_file="$YOGA_HOME/config/git-profiles.yaml"
+    mkdir -p "${profiles_file:h}"
+
+    if [ ! -f "$profiles_file" ]; then
+        cat > "$profiles_file" << 'EOF'
+# Git Profiles Configuration
+# Managed by yoga-files git wizard
+profiles:
+  personal:
+    name: ""
+    email: ""
+    signingkey: ""
+    default: true
+  work:
+    name: ""
+    email: ""
+    signingkey: ""
+    default: false
 EOF
     fi
-    
-    yoga_terra "🌿 Sistema de perfis Git configurado!"
+
+    yoga_terra "🌿 Git profiles ready: $profiles_file"
 }
 
 # Configurar OpenAI
@@ -376,6 +409,9 @@ main() {
     install_asdf
     install_asdf_plugins
     install_default_versions
+
+    # 6b. Node.js via ASDF module
+    install_node_stack
     
     # 7. Instalar Neovim
     install_neovim

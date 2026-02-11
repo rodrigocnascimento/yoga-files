@@ -33,8 +33,8 @@ Geral: 29%
 - [x] install.sh e init.sh reestruturados
 - [x] Cores/mensagens Yoga (core/utils.sh)
 - [x] Dashboard interativo (core/dashboard.sh)
-- [ ] Hardening do installer (quoting, checks, idempotencia)
-- [ ] CI com smoke tests (macos + ubuntu)
+- [x] Hardening do installer (quoting, checks, idempotencia)
+- [x] CI com smoke tests (macos + ubuntu)
 
 ---
 
@@ -43,7 +43,7 @@ Geral: 29%
 - [x] Yoga AI no terminal (core/ai/yoga-ai-terminal.sh)
 - [ ] Configurar providers via config.yaml
 - [ ] Melhorar prompts por modo (help/fix/cmd/explain/debug/code/learn)
-- [ ] Padrao de seguranca: nao executar nada automaticamente
+- [x] Padrao de seguranca: nao executar nada automaticamente
 - [ ] Integracao minima no Neovim (commands + docs)
 
 ---
@@ -59,8 +59,8 @@ Geral: 29%
 
 ## 📅 Q4 2026 - v2.3.0 Workflow Automation
 
-- [ ] Git profiles wizard integrado ao dashboard
-- [ ] Comandos consistentes: `yoga-status`, `yoga-update`, `yoga-doctor`
+- [x] Git profiles wizard integrado ao dashboard
+- [x] Comandos consistentes: `yoga-status`, `yoga-update`, `yoga-doctor`
 - [ ] Releases: changelog e checklist
 
 ---

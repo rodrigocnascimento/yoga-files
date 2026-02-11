@@ -40,20 +40,19 @@ command -v jq || echo "❌ jq é recomendado (para IA)"
 
 ## 🚀 **Passo 1: Download e Instalação**
 
+> Requisito: `zsh` (yoga-files e o installer são zsh-first).
+
 ### Clone do Repositório
 ```bash
-# Clone Git (recomendado)
-git clone https://github.com/rodrigocnascimento/yoga-files.git ~/.yoga
-cd ~/.yoga
-
-# Tornar executável
-chmod +x install.sh
+# Install (zsh)
+curl -fsSL https://raw.githubusercontent.com/rodrigocnascimento/yoga-files/main/install.sh | zsh
 ```
 
 ### Instalação Principal
 ```bash
-# Executar instalador interativo
-./install.sh
+# If you cloned the repo instead:
+cd ~/.yoga
+zsh ./install.sh
 ```
 
 O instalador irá:

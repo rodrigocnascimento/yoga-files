@@ -1,5 +1,6 @@
-#!/usr/bin/env bash
+#!/usr/bin/env zsh
 
+emulate -L zsh
 set -euo pipefail
 
 YOGA_HOME="${YOGA_HOME:-$HOME/.yoga}"
@@ -15,8 +16,4 @@ if [ ! -t 1 ]; then
   exit 0
 fi
 
-if command -v zsh >/dev/null 2>&1; then
-  exec zsh -ic "export YOGA_HOME='$YOGA_HOME'; source '$YOGA_HOME/init.sh'; yoga_dashboard"
-fi
-
-"$YOGA_HOME/bin/yoga-status" || true
+exec zsh -ic "export YOGA_HOME='$YOGA_HOME'; source '$YOGA_HOME/init.sh'; yoga_dashboard"

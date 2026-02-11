@@ -5,8 +5,12 @@
 alias ..='cd ..'
 alias ...='cd ../..'
 alias ....='cd ../../..'
-alias ~='cd ~'
-alias -- -='cd -'
+
+# bash does not support some alias names (like '~' or '-')
+if [ -n "${ZSH_VERSION-}" ]; then
+  alias ~='cd ~'
+  alias -- -='cd -'
+fi
 
 # Listagem aprimorada
 alias l='ls -lah'

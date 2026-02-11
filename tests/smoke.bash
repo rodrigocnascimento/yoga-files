@@ -14,7 +14,7 @@ need_cmd() {
 }
 
 need_cmd bash
-need_cmd zsh
+  need_cmd zsh
 
 echo "==> syntax: bash"
 bash -n "$ROOT_DIR/core/git/git-wizard.sh"
@@ -22,7 +22,7 @@ bash -n "$ROOT_DIR/core/version-managers/asdf/interactive.sh"
 
 echo "==> syntax: zsh"
 zsh -n "$ROOT_DIR/init.sh"
-bash -n "$ROOT_DIR/install.sh"
+  zsh -n "$ROOT_DIR/install.sh"
 zsh -n "$ROOT_DIR/core/utils.sh"
 zsh -n "$ROOT_DIR/core/common.sh"
 zsh -n "$ROOT_DIR/core/aliases.sh"

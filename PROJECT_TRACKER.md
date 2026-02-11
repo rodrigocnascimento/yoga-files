@@ -27,7 +27,7 @@
 - [x] Dashboard (core/dashboard.sh)
 - [x] Config base (config.yaml)
 - [x] Suite minima de smoke tests (tests/smoke.zsh + CI)
-- [ ] Hardening de shell scripts (quoting, compatibilidade macOS/Linux) (parcial)
+- [x] Hardening de shell scripts (quoting, compatibilidade macOS/Linux)
 
 **Status**: 🎯 em progresso
 
@@ -35,7 +35,7 @@
 
 - [x] yoga-ai terminal helper (core/ai/yoga-ai-terminal.sh)
 - [ ] Padronizar comandos AI (help/fix/cmd/explain/debug/code/learn)
-- [ ] Modo seguro: nunca executar comandos sugeridos por padrao
+- [x] Modo seguro: nunca executar comandos sugeridos por padrao
 - [ ] Multi-provider (OpenAI / Copilot / Claude / Gemini) via config.yaml
 - [ ] Integracao Neovim (plugin minimal + docs)
 
@@ -52,9 +52,9 @@
 
 ### 📋 Q4 2026 - Workflow Automation (v2.3.0)
 
-- [ ] Comandos de update/doctor/status consistentes
-- [ ] Git profiles wizard: fluxo completo + integracao com dashboard
-- [ ] CI: instalacao + smoke tests em macos/ubuntu
+- [x] Comandos de update/doctor/status consistentes
+- [x] Git profiles wizard: fluxo completo + integracao com dashboard
+- [x] CI: instalacao + smoke tests em macos/ubuntu
 - [ ] Release checklist + changelog
 
 **Status**: 📋 especificacao

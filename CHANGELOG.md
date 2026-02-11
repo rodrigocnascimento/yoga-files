@@ -8,6 +8,7 @@
 
 - Docs: add missing guides under `docs/`
 - Roadmap/Tracker: align milestones and delivery plan
+- Release: add `docs/RELEASE_CHECKLIST.md`
 
 ---
 

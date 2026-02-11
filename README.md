@@ -66,11 +66,8 @@
 
 ### Instalação com um comando
 ```bash
-# Clone e instalação
-git clone https://github.com/rodrigocnascimento/yoga-files.git ~/.yoga
-cd ~/.yoga
-chmod +x install.sh
-./install.sh
+# Requer zsh
+curl -fsSL https://raw.githubusercontent.com/rodrigocnascimento/yoga-files/main/install.sh | zsh
 ```
 
 O instalador irá:

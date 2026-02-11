@@ -4,6 +4,8 @@
 # Definir YOGA_HOME
 export YOGA_HOME="${YOGA_HOME:-$HOME/.yoga}"
 
+# zsh-only setup: no shell preference file.
+
 # Verificar se YOGA está instalado
 if [ ! -d "$YOGA_HOME" ]; then
     echo "🔥 YOGA FILES não está instalado!"

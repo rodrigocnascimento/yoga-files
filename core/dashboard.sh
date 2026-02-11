@@ -75,14 +75,14 @@ yoga_dashboard() {
     # Menu de Opções
     echo -e "${YOGA_AGUA}💧 AÇÕES RÁPIDAS${YOGA_RESET}"
     echo -e "${YOGA_AGUA}━━━━━━━━━━━━━━━${YOGA_RESET}"
-    echo "  1. 🚀 Criar novo projeto JavaScript/TypeScript"
-    echo "  2. 🤖 Chat com OpenAI"
-    echo "  3. 📦 Gerenciar versões (ASDF)"
-    echo "  4. 🔗 Configurar perfis Git"
+    echo "  1. 🚀 Criar novo projeto (yoga-create)"
+    echo "  2. 🤖 IA no terminal (yoga-ai)"
+    echo "  3. 📦 Gerenciar versões (asdf-menu)"
+    echo "  4. 🔗 Git profiles (git-wizard)"
     echo "  5. 🎨 Abrir Neovim"
     echo "  6. 🧘 Entrar em Flow State"
-    echo "  7. 📊 Performance Check"
-    echo "  8. 🔄 Atualizar Yoga Files"
+    echo "  7. 🩺 Doctor (yoga-doctor)"
+    echo "  8. 🔄 Atualizar Yoga Files (yoga-update)"
     echo "  9. 📖 Ver documentação"
     echo "  0. 🚪 Sair"
     echo ""
@@ -95,7 +95,7 @@ yoga_dashboard() {
             yoga_create_project
             ;;
         2)
-            yoga_ai_chat
+            yoga_ai_menu
             ;;
         3)
             yoga_asdf_menu
@@ -110,7 +110,7 @@ yoga_dashboard() {
             yoga_flow_state
             ;;
         7)
-            yoga_performance_check
+            yoga_doctor
             ;;
         8)
             yoga_update
@@ -156,144 +156,87 @@ yoga_create_project() {
     echo -en "${YOGA_AGUA}Nome do projeto: ${YOGA_RESET}"
     read project_name
     
+    local template=""
     case $project_type in
-        1)
-            yoga_agua "Criando projeto React + TypeScript..."
-            npm create vite@latest "$project_name" -- --template react-ts
-            cd "$project_name"
-            npm install
-            yoga_terra "✅ Projeto React criado!"
-            ;;
-        2)
-            yoga_agua "Criando projeto Node.js + TypeScript..."
-            mkdir "$project_name" && cd "$project_name"
-            npm init -y
-            npm install -D typescript @types/node tsx nodemon
-            npx tsc --init
-            yoga_terra "✅ Projeto Node.js criado!"
-            ;;
-        3)
-            yoga_agua "Criando projeto Next.js + TypeScript..."
-            npx create-next-app@latest "$project_name" --typescript --tailwind --app
-            cd "$project_name"
-            yoga_terra "✅ Projeto Next.js criado!"
-            ;;
-        4)
-            yoga_agua "Criando projeto Vanilla TypeScript..."
-            mkdir "$project_name" && cd "$project_name"
-            npm init -y
-            npm install -D typescript
-            npx tsc --init
-            yoga_terra "✅ Projeto TypeScript criado!"
-            ;;
-        5)
-            yoga_agua "Criando projeto Express + TypeScript..."
-            mkdir "$project_name" && cd "$project_name"
-            npm init -y
-            npm install express
-            npm install -D typescript @types/node @types/express tsx nodemon
-            npx tsc --init
-            yoga_terra "✅ Projeto Express criado!"
-            ;;
-        *)
-            yoga_fogo "❌ Tipo inválido!"
-            ;;
+        1) template="react" ;;
+        2) template="node" ;;
+        3) template="next" ;;
+        4) template="ts" ;;
+        5) template="express" ;;
+        *) yoga_fogo "❌ Tipo inválido!" ; return 1 ;;
     esac
-}
 
-# Chat com AI
-yoga_ai_chat() {
-    clear
-    yoga_espirito "🤖 CHAT COM OPENAI"
-    echo ""
-    
-    if [ -z "$OPENAI_API_KEY" ]; then
-        yoga_fogo "❌ OPENAI_API_KEY não configurada!"
-        echo "Configure em ~/.zshrc: export OPENAI_API_KEY='sua-chave'"
-        return 1
-    fi
-    
-    echo -e "${YOGA_AGUA}Digite sua pergunta (ou 'sair' para voltar):${YOGA_RESET}"
-    echo -en "${YOGA_AR}> ${YOGA_RESET}"
-    read query
-    
-    if [ "$query" = "sair" ]; then
+    if command -v yoga-create >/dev/null 2>&1; then
+        yoga_agua "Criando projeto ($template)..."
+        yoga-create "$template" "$project_name"
+        yoga_terra "✅ Projeto criado!"
         return 0
     fi
-    
-    yoga_breath "Consultando IA..."
-    
-    # Fazer chamada para OpenAI
-    response=$(curl -s -X POST \
-        -H "Content-Type: application/json" \
-        -H "Authorization: Bearer $OPENAI_API_KEY" \
-        -d "{
-            \"model\": \"gpt-4\",
-            \"messages\": [{\"role\": \"user\", \"content\": \"$query\"}],
-            \"temperature\": 0.7,
-            \"max_tokens\": 1000
-        }" \
-        https://api.openai.com/v1/chat/completions | jq -r '.choices[0].message.content')
-    
+
+    yoga_fogo "❌ yoga-create not found in PATH (add $YOGA_HOME/bin to PATH)"
+}
+
+# IA menu (delegates to yoga-ai)
+yoga_ai_menu() {
+    clear
+    yoga_espirito "🤖 YOGA AI"
     echo ""
-    echo -e "${YOGA_ESPIRITO}🤖 Resposta:${YOGA_RESET}"
-    echo -e "${YOGA_TERRA}$response${YOGA_RESET}"
-    echo ""
-    
-    echo -en "${YOGA_AGUA}Fazer outra pergunta? (s/n): ${YOGA_RESET}"
-    read continue
-    
-    if [ "$continue" = "s" ]; then
-        yoga_ai_chat
+    if ! command -v yoga-ai >/dev/null 2>&1; then
+        yoga_fogo "❌ yoga-ai not found in PATH (add $YOGA_HOME/bin to PATH)"
+        return 1
     fi
+
+    echo "1) Mode (help/fix/cmd/explain/debug/code/learn)"
+    echo "2) Freeform question"
+    echo ""
+    echo -en "${YOGA_AGUA}Choose (1-2): ${YOGA_RESET}"
+    read -r kind
+
+    case "$kind" in
+        1)
+            echo -en "${YOGA_AGUA}Mode: ${YOGA_RESET}"
+            read -r mode
+            echo -en "${YOGA_AGUA}Query: ${YOGA_RESET}"
+            read -r query
+            [ -z "$mode" ] && return 0
+            yoga-ai "$mode" "$query"
+            ;;
+        2)
+            echo -en "${YOGA_AGUA}Question: ${YOGA_RESET}"
+            read -r query
+            [ -z "$query" ] && return 0
+            yoga-ai "$query"
+            ;;
+        *)
+            return 0
+            ;;
+    esac
 }
 
 # Menu ASDF
 yoga_asdf_menu() {
     clear
-    yoga_ar "🌬️ GERENCIADOR DE VERSÕES ASDF"
+    yoga_ar "🌬️ ASDF"
     echo ""
-    
-    echo "Opções:"
-    echo "  1. Listar plugins instalados"
-    echo "  2. Instalar novo plugin"
-    echo "  3. Listar versões de Node.js"
-    echo "  4. Instalar versão de Node.js"
-    echo "  5. Definir versão global"
-    echo "  6. Voltar"
+    if command -v asdf-menu >/dev/null 2>&1; then
+        asdf-menu
+        return $?
+    fi
+    yoga_fogo "❌ asdf-menu not found in PATH (add $YOGA_HOME/bin to PATH)"
+    return 1
+}
+
+# Git profiles
+yoga_git_profiles() {
+    clear
+    yoga_ar "🔗 GIT PROFILES"
     echo ""
-    
-    echo -en "${YOGA_AGUA}Escolha: ${YOGA_RESET}"
-    read asdf_choice
-    
-    case $asdf_choice in
-        1)
-            asdf plugin list
-            ;;
-        2)
-            echo -en "${YOGA_AGUA}Nome do plugin: ${YOGA_RESET}"
-            read plugin_name
-            asdf plugin add "$plugin_name"
-            ;;
-        3)
-            asdf list nodejs
-            ;;
-        4)
-            echo -en "${YOGA_AGUA}Versão do Node.js: ${YOGA_RESET}"
-            read node_version
-            asdf install nodejs "$node_version"
-            ;;
-        5)
-            echo -en "${YOGA_AGUA}Plugin: ${YOGA_RESET}"
-            read plugin
-            echo -en "${YOGA_AGUA}Versão: ${YOGA_RESET}"
-            read version
-            asdf global "$plugin" "$version"
-            ;;
-        6)
-            return 0
-            ;;
-    esac
+    if command -v git-wizard >/dev/null 2>&1; then
+        git-wizard
+        return $?
+    fi
+    yoga_fogo "❌ git-wizard not found in PATH (add $YOGA_HOME/bin to PATH)"
+    return 1
 }
 
 # Flow State
@@ -360,18 +303,26 @@ yoga_update() {
     yoga_agua "🔄 ATUALIZANDO YOGA FILES"
     echo ""
     
+    if command -v yoga-update >/dev/null 2>&1; then
+        yoga-update
+        yoga_terra "✅ Atualização completa!"
+        return 0
+    fi
+
     cd "$YOGA_HOME"
-    
     yoga_ar "Baixando atualizações..."
     git pull origin main
-    
-    yoga_ar "Atualizando dependências..."
-    npm update -g
-    
-    yoga_ar "Atualizando plugins ASDF..."
-    asdf plugin update --all
-    
     yoga_terra "✅ Atualização completa!"
+}
+
+yoga_doctor() {
+    clear
+    if command -v yoga-doctor >/dev/null 2>&1; then
+        yoga-doctor
+        return $?
+    fi
+    yoga_fogo "❌ yoga-doctor not found in PATH (add $YOGA_HOME/bin to PATH)"
+    return 1
 }
 
 # Documentação
@@ -414,7 +365,4 @@ yoga_docs() {
 alias yoga='yoga_dashboard'
 alias yoga-dash='yoga_dashboard'
 
-# Executar dashboard se chamado diretamente
-if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
-    yoga_dashboard
-fi
+# Note: do not auto-run the dashboard on source.
