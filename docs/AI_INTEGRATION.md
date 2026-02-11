@@ -7,6 +7,7 @@ This doc explains the current AI integration shipped in yoga-files.
 - `curl`
 - `jq`
 - `OPENAI_API_KEY` in your environment
+- `preferences.ai_provider` in `config.yaml` (currently only `openai` is supported)
 
 Example (zsh):
 
@@ -30,6 +31,13 @@ yai code "TypeScript function to ..."
 yai learn "topic"
 yai "freeform question"
 ```
+
+## Config
+
+The model and provider are read from `config.yaml` when present:
+
+- `preferences.ai_provider` (supported: `openai`)
+- `tools.ai.model` (default: `gpt-4`)
 
 ## Safety Notes
 

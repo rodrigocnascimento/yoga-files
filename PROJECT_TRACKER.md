@@ -37,14 +37,18 @@
 - [ ] Padronizar comandos AI (help/fix/cmd/explain/debug/code/learn)
 - [x] Modo seguro: nunca executar comandos sugeridos por padrao
 - [ ] Multi-provider (OpenAI / Copilot / Claude / Gemini) via config.yaml
+
+Notas:
+
+- Provider/model via `config.yaml` ja funciona para OpenAI (outros providers ainda pendentes).
 - [ ] Integracao Neovim (plugin minimal + docs)
 
 **Status**: 📅 em desenvolvimento
 
 ### 📋 Q3 2026 - Editor + Stack (v2.2.0)
 
-- [ ] LazyVim: setup JS/TS opinativo (LSP, formatter, lint)
-- [ ] Templates de projeto (React/Next/Node/Express)
+- [x] LazyVim: setup JS/TS opinativo (LSP, formatter, lint)
+- [x] Templates de projeto (React/Next/Node/Express)
 - [ ] Performance: healthcheck e startup profiling
 - [ ] Documentacao por modulo (ASDF, LazyVim, Git profiles, AI)
 

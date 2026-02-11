@@ -69,6 +69,7 @@ alias namaste='echo "🧘 Namastê, yogi!"'
 
 # AI commands
 alias ai='yoga-ai'
+alias yai='yoga-ai'
 alias ai-chat='yoga-ai chat'
 alias ai-code='yoga-ai code'
 alias ai-help='yoga-ai help'

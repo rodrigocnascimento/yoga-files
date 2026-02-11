@@ -4,6 +4,11 @@ set -euo pipefail
 
 YOGA_HOME="${YOGA_HOME:-$HOME/.yoga}"
 
+full=0
+if [ "${1:-}" = "--full" ]; then
+  full=1
+fi
+
 if [ ! -f "$YOGA_HOME/core/utils.sh" ]; then
   echo "yoga-doctor: missing: $YOGA_HOME/core/utils.sh" >&2
   exit 1
@@ -56,6 +61,15 @@ if [ -n "${OPENAI_API_KEY-}" ]; then
   yoga_agua "OPENAI_API_KEY: set"
 else
   yoga_sol "OPENAI_API_KEY: not set (AI commands disabled)"
+fi
+
+if [ "$full" -eq 1 ]; then
+  echo ""
+  yoga_espirito "Full checks"
+  if command -v nvim >/dev/null 2>&1; then
+    yoga_agua "nvim: headless start"
+    nvim --headless +qall >/dev/null 2>&1 || true
+  fi
 fi
 
 echo ""

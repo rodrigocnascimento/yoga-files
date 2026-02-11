@@ -41,7 +41,7 @@ Geral: 29%
 ## 📅 Q2 2026 - v2.1.0 AI Layer
 
 - [x] Yoga AI no terminal (core/ai/yoga-ai-terminal.sh)
-- [ ] Configurar providers via config.yaml
+- [x] Configurar provider/model via config.yaml (openai)
 - [ ] Melhorar prompts por modo (help/fix/cmd/explain/debug/code/learn)
 - [x] Padrao de seguranca: nao executar nada automaticamente
 - [ ] Integracao minima no Neovim (commands + docs)
@@ -50,8 +50,8 @@ Geral: 29%
 
 ## 📅 Q3 2026 - v2.2.0 Editor + Templates
 
-- [ ] LazyVim com foco JS/TS (LSP, formatter, lint, test)
-- [ ] Templates de projeto (React/Next/Node/Express/Vanilla TS)
+- [x] LazyVim com foco JS/TS (LSP, formatter, lint)
+- [x] Templates de projeto (React/Next/Node/Express/Vanilla TS)
 - [ ] Healthcheck de performance (nvim startup / node/npm)
 - [ ] Guia de troubleshooting por OS
 

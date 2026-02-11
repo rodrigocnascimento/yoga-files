@@ -191,6 +191,12 @@ copy_yoga_files() {
         cp -r "$SCRIPT_DIR/bin/"* "$YOGA_HOME/bin/" 2>/dev/null || true
         chmod +x "$YOGA_HOME"/bin/* 2>/dev/null || true
     fi
+
+    # Copiar editor config (LazyVim overlays)
+    if [ -d "$SCRIPT_DIR/editor" ]; then
+        mkdir -p "$YOGA_HOME/editor"
+        cp -r "$SCRIPT_DIR/editor/"* "$YOGA_HOME/editor/" 2>/dev/null || true
+    fi
     
     yoga_terra "🌿 Arquivos copiados!"
 }

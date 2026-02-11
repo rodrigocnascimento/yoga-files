@@ -7,6 +7,7 @@ This guide describes how yoga-files expects Neovim/LazyVim to be installed and c
 - LazyVim starter-based Neovim config
 - Fast startup via lazy-loading
 - A good baseline for JavaScript/TypeScript editing
+- yoga-files overlays under `~/.yoga/editor/nvim/` (copied into `~/.config/nvim/`)
 
 ## Install Notes
 
@@ -14,6 +15,7 @@ The installer may:
 
 - Backup an existing config from `~/.config/nvim`
 - Clone the LazyVim starter into `~/.config/nvim`
+- Copy overlays from `~/.yoga/editor/nvim/` into `~/.config/nvim/`
 
 Verify:
 
