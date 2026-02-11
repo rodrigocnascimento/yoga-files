@@ -162,7 +162,7 @@ install_dependencies() {
 create_directory_structure() {
     yoga_agua "💧 Criando estrutura de diretórios..."
     
-    mkdir -p "$YOGA_HOME"/{bin,core,editor/nvim,docs,tests,config}
+    mkdir -p "$YOGA_HOME"/{bin,core,editor/nvim,docs,tests,config,plugins,templates}
     mkdir -p "$YOGA_HOME"/core/{ai,version-managers,git}
     mkdir -p "$YOGA_HOME"/core/version-managers/{asdf,lazyvim}
     mkdir -p "$YOGA_HOME"/editor/nvim/{lua/plugins,lua/config}
@@ -196,6 +196,12 @@ copy_yoga_files() {
     if [ -d "$SCRIPT_DIR/editor" ]; then
         mkdir -p "$YOGA_HOME/editor"
         cp -r "$SCRIPT_DIR/editor/"* "$YOGA_HOME/editor/" 2>/dev/null || true
+    fi
+
+    # Copiar templates
+    if [ -d "$SCRIPT_DIR/templates" ]; then
+        mkdir -p "$YOGA_HOME/templates"
+        cp -r "$SCRIPT_DIR/templates/"* "$YOGA_HOME/templates/" 2>/dev/null || true
     fi
     
     yoga_terra "🌿 Arquivos copiados!"

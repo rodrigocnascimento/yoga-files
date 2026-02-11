@@ -1,0 +1,235 @@
+#!/usr/bin/env zsh
+
+emulate -L zsh
+set -euo pipefail
+
+YOGA_HOME="${YOGA_HOME:-$HOME/.yoga}"
+
+usage() {
+  cat <<'EOF'
+Usage:
+  yoga-plugin list
+  yoga-plugin enable <name>
+  yoga-plugin disable <name>
+  yoga-plugin install <name> <git-url>
+
+Notes:
+  Plugins live under ~/.yoga/plugins/<name>/plugin.zsh
+  Enabled plugins are listed in config.yaml under plugins.enabled
+
+Requirements:
+  - zsh
+  - git (for install)
+EOF
+}
+
+cfg_file() {
+  if [ -f "$YOGA_HOME/config/config.yaml" ]; then
+    echo "$YOGA_HOME/config/config.yaml"
+    return 0
+  fi
+  if [ -f "$YOGA_HOME/config.yaml" ]; then
+    echo "$YOGA_HOME/config.yaml"
+    return 0
+  fi
+  echo ""
+}
+
+ensure_cfg() {
+  local cfg
+  cfg="$(cfg_file)"
+  if [ -z "$cfg" ]; then
+    mkdir -p "$YOGA_HOME/config"
+    cp "$YOGA_HOME/config.yaml" "$YOGA_HOME/config/config.yaml" 2>/dev/null || true
+  fi
+}
+
+list_plugins() {
+  echo "Installed plugins:"
+  if [ -d "$YOGA_HOME/plugins" ]; then
+    ls -1 "$YOGA_HOME/plugins" 2>/dev/null || true
+  fi
+  echo ""
+  echo "Enabled plugins:"
+  awk '
+    /^[[:space:]]*plugins:[[:space:]]*$/ {in_plugins=1; next}
+    in_plugins && /^[[:space:]]*enabled:[[:space:]]*$/ {in_enabled=1; next}
+    in_enabled && /^[[:space:]]*-[[:space:]]*/ {
+      v=$0
+      sub(/^[[:space:]]*-[[:space:]]*/, "", v)
+      gsub(/"/, "", v)
+      gsub(/[[:space:]]+$/, "", v)
+      print v
+      next
+    }
+    in_plugins && !/^[[:space:]]/ {in_plugins=0; in_enabled=0}
+  ' "$(cfg_file)" 2>/dev/null || true
+}
+
+enable_plugin() {
+  local name="$1"
+  local cfg
+  cfg="$(cfg_file)"
+
+  if [ -z "$cfg" ]; then
+    echo "yoga-plugin: config.yaml not found" >&2
+    exit 1
+  fi
+
+  if grep -q "^[[:space:]]*-[[:space:]]*$name[[:space:]]*$" "$cfg" 2>/dev/null; then
+    echo "Already enabled: $name"
+    return 0
+  fi
+
+  if ! grep -q "^[[:space:]]*plugins:[[:space:]]*$" "$cfg" 2>/dev/null; then
+    cat >> "$cfg" <<EOF
+
+plugins:
+  enabled:
+    - $name
+EOF
+    echo "Enabled: $name"
+    return 0
+  fi
+
+  local tmp
+  tmp="${cfg}.tmp.$$"
+
+  awk -v name="$name" '
+    BEGIN { in_plugins=0; saw_plugins=0; in_enabled=0; saw_enabled=0; inserted=0 }
+    function insert_enabled_block() {
+      if (inserted) return
+      print "  enabled:"
+      print "    - " name
+      inserted=1
+    }
+    function insert_enabled_item() {
+      if (inserted) return
+      print "    - " name
+      inserted=1
+    }
+    /^[[:space:]]*plugins:[[:space:]]*$/ {
+      saw_plugins=1
+      in_plugins=1
+      in_enabled=0
+      print
+      next
+    }
+    in_plugins && /^[^[:space:]]/ {
+      # leaving plugins block
+      if (!saw_enabled) insert_enabled_block()
+      in_plugins=0
+      in_enabled=0
+      print
+      next
+    }
+    in_plugins && /^[[:space:]]*enabled:[[:space:]]*$/ {
+      saw_enabled=1
+      in_enabled=1
+      print
+      next
+    }
+    in_enabled && /^[[:space:]]*-[[:space:]]*/ {
+      # first list item: insert ours before existing list
+      insert_enabled_item()
+      print
+      next
+    }
+    in_enabled && !/^[[:space:]]/ {
+      # leaving enabled (and plugins) block
+      if (!inserted) insert_enabled_item()
+      in_enabled=0
+      in_plugins=0
+      print
+      next
+    }
+    { print }
+    END {
+      if (!saw_plugins) {
+        print ""
+        print "plugins:"
+        print "  enabled:"
+        print "    - " name
+      } else if (saw_plugins && !saw_enabled && !inserted) {
+        # plugins block ended at EOF
+        insert_enabled_block()
+      } else if (saw_enabled && !inserted) {
+        # enabled block ended at EOF
+        insert_enabled_item()
+      }
+    }
+  ' "$cfg" > "$tmp"
+
+  mv "$tmp" "$cfg"
+  echo "Enabled: $name"
+}
+
+disable_plugin() {
+  local name="$1"
+  local cfg
+  cfg="$(cfg_file)"
+  [ -n "$cfg" ] || { echo "yoga-plugin: config.yaml not found" >&2; exit 1; }
+
+  local tmp
+  tmp="${cfg}.tmp.$$"
+  awk -v name="$name" '
+    BEGIN { in_plugins=0; in_enabled=0 }
+    /^[[:space:]]*plugins:[[:space:]]*$/ { in_plugins=1; in_enabled=0; print; next }
+    in_plugins && /^[^[:space:]]/ { in_plugins=0; in_enabled=0; print; next }
+    in_plugins && /^[[:space:]]*enabled:[[:space:]]*$/ { in_enabled=1; print; next }
+    in_enabled && /^[[:space:]]*-[[:space:]]*/ {
+      v=$0
+      sub(/^[[:space:]]*-[[:space:]]*/, "", v)
+      gsub(/"/, "", v)
+      gsub(/[[:space:]]+$/, "", v)
+      if (v == name) next
+      print
+      next
+    }
+    { print }
+  ' "$cfg" > "$tmp"
+  mv "$tmp" "$cfg"
+  echo "Disabled: $name"
+}
+
+install_plugin() {
+  local name="$1"
+  local url="$2"
+  mkdir -p "$YOGA_HOME/plugins"
+  if [ -d "$YOGA_HOME/plugins/$name/.git" ]; then
+    git -C "$YOGA_HOME/plugins/$name" pull --rebase
+    echo "Updated: $name"
+    return 0
+  fi
+  git clone "$url" "$YOGA_HOME/plugins/$name"
+  echo "Installed: $name"
+}
+
+cmd="${1:-}"
+case "$cmd" in
+  list)
+    list_plugins
+    ;;
+  enable)
+    ensure_cfg
+    [ -n "${2:-}" ] || { usage; exit 1; }
+    enable_plugin "$2"
+    ;;
+  disable)
+    ensure_cfg
+    [ -n "${2:-}" ] || { usage; exit 1; }
+    disable_plugin "$2"
+    ;;
+  install)
+    [ -n "${2:-}" ] && [ -n "${3:-}" ] || { usage; exit 1; }
+    install_plugin "$2" "$3"
+    ;;
+  -h|--help|help|"")
+    usage
+    ;;
+  *)
+    echo "Unknown command: $cmd" >&2
+    usage
+    exit 1
+    ;;
+esac

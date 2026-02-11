@@ -1,0 +1,13 @@
+# Community templates (curated)
+
+templates:
+  react-vite:
+    description: "React + TypeScript (Vite)"
+    type: "git"
+    url: "https://github.com/vitejs/vite.git"
+    note: "Uses npm create vite@latest in yoga-create; git URL is informational."
+
+  nextjs:
+    description: "Next.js + TypeScript"
+    type: "command"
+    command: "npx create-next-app@latest"

@@ -9,6 +9,11 @@ if [ "${1:-}" = "--full" ]; then
   full=1
 fi
 
+report=0
+if [ "${1:-}" = "--report" ]; then
+  report=1
+fi
+
 if [ ! -f "$YOGA_HOME/core/utils.sh" ]; then
   echo "yoga-doctor: missing: $YOGA_HOME/core/utils.sh" >&2
   exit 1
@@ -77,6 +82,22 @@ echo ""
 if [ "$missing_required" -ne 0 ]; then
   yoga_fogo "Doctor result: FAIL"
   exit 1
+fi
+
+if [ "$report" -eq 1 ]; then
+  echo ""
+  yoga_espirito "Report"
+
+  echo "os=$(uname -s 2>/dev/null || true)"
+  echo "arch=$(uname -m 2>/dev/null || true)"
+  echo "shell=${SHELL-}"
+  echo "zsh=$(command -v zsh >/dev/null 2>&1 && zsh --version | head -1 || echo missing)"
+  echo "git=$(command -v git >/dev/null 2>&1 && git --version || echo missing)"
+  echo "asdf=$(command -v asdf >/dev/null 2>&1 && asdf --version || echo missing)"
+  echo "node=$(command -v node >/dev/null 2>&1 && node -v || echo missing)"
+  echo "npm=$(command -v npm >/dev/null 2>&1 && npm -v || echo missing)"
+  echo "nvim=$(command -v nvim >/dev/null 2>&1 && nvim --version | head -1 || echo missing)"
+  echo "openai_api_key=$([ -n "${OPENAI_API_KEY-}" ] && echo set || echo not-set)"
 fi
 
 yoga_terra "Doctor result: OK"

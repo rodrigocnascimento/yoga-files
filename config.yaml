@@ -16,6 +16,10 @@ preferences:
   auto_save: true
   auto_format: true
   git_signing: false
+
+# Plugin system
+plugins:
+  enabled: []
   
 # Ferramentas JavaScript/TypeScript
 tools:
@@ -125,6 +129,10 @@ performance:
   cache_enabled: true
   parallel_install: true
   auto_cleanup: true
+
+# Observability (opt-in)
+observability:
+  enabled: false
   
 # Segurança
 security:

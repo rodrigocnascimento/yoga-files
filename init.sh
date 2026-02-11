@@ -15,9 +15,16 @@ fi
 
 # Carregar configurações e funções
 source "$YOGA_HOME/core/utils.sh"
+source "$YOGA_HOME/core/observability/logger.sh" 2>/dev/null || true
 source "$YOGA_HOME/core/aliases.sh"
 source "$YOGA_HOME/core/functions.sh"
 source "$YOGA_HOME/core/dashboard.sh" 2>/dev/null
+
+# Plugins (optional)
+if [ -f "$YOGA_HOME/core/plugins/loader.sh" ]; then
+    source "$YOGA_HOME/core/plugins/loader.sh"
+    yoga_plugins_load || true
+fi
 
 # Carregar ferramentas AI se disponível
 [ -f "$YOGA_HOME/core/ai/yoga-ai-terminal.sh" ] && source "$YOGA_HOME/core/ai/yoga-ai-terminal.sh"

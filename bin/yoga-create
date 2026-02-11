@@ -6,13 +6,18 @@ usage() {
   cat <<'EOF'
 Usage:
   yoga-create <template> <project-name>
+  yoga-create community <community-template> <project-name>
 
 Templates:
   react | node | next | ts | express
 
+Community:
+  Use `yoga-templates list` to see curated names.
+
 Examples:
   yoga-create react my-app
   yoga-create node my-api
+  yoga-create community nextjs my-site
 EOF
 }
 
@@ -25,6 +30,36 @@ if [ -z "$template" ] || [ -z "$name" ] || [ "$template" = "--help" ] || [ "$tem
 fi
 
 case "$template" in
+  community)
+    comm_name="${2:-}"
+    proj_name="${3:-}"
+    if [ -z "$comm_name" ] || [ -z "$proj_name" ]; then
+      usage
+      exit 1
+    fi
+
+    YOGA_HOME="${YOGA_HOME:-$HOME/.yoga}"
+    index_file="$YOGA_HOME/templates/community/index.yaml"
+    if [ ! -f "$index_file" ]; then
+      echo "yoga-create: missing community index: $index_file" >&2
+      exit 1
+    fi
+
+    # Special-cases for known curated templates.
+    case "$comm_name" in
+      nextjs)
+        npx create-next-app@latest "$proj_name" --typescript --tailwind --app
+        ;;
+      react-vite)
+        npm create vite@latest "$proj_name" -- --template react-ts
+        ;;
+      *)
+        echo "yoga-create: unknown community template: $comm_name" >&2
+        echo "Run: yoga-templates list" >&2
+        exit 1
+        ;;
+    esac
+    ;;
   react)
     npm create vite@latest "$name" -- --template react-ts
     ;;

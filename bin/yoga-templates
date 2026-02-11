@@ -1,0 +1,52 @@
+#!/usr/bin/env zsh
+
+emulate -L zsh
+set -euo pipefail
+
+YOGA_HOME="${YOGA_HOME:-$HOME/.yoga}"
+
+usage() {
+  cat <<'EOF'
+Usage:
+  yoga-templates list
+  yoga-templates show <name>
+
+Notes:
+  Curated templates live under ~/.yoga/templates/community/index.yaml
+EOF
+}
+
+index_file="$YOGA_HOME/templates/community/index.yaml"
+
+cmd="${1:-}"
+case "$cmd" in
+  list)
+    if [ ! -f "$index_file" ]; then
+      echo "No index: $index_file" >&2
+      exit 1
+    fi
+    awk '/^[[:space:]]{2}[A-Za-z0-9_.-]+:[[:space:]]*$/ {gsub(":", "", $1); print $1}' "$index_file" | sort
+    ;;
+  show)
+    name="${2:-}"
+    [ -n "$name" ] || { usage; exit 1; }
+    if [ ! -f "$index_file" ]; then
+      echo "No index: $index_file" >&2
+      exit 1
+    fi
+    awk -v name="$name" '
+      BEGIN { in=0 }
+      $0 ~ "^[[:space:]]{2}" name ":[[:space:]]*$" { in=1; print; next }
+      in && /^[[:space:]]{2}[A-Za-z0-9_.-]+:[[:space:]]*$/ { exit }
+      in { print }
+    ' "$index_file"
+    ;;
+  -h|--help|help|"")
+    usage
+    ;;
+  *)
+    echo "Unknown command: $cmd" >&2
+    usage
+    exit 1
+    ;;
+esac
