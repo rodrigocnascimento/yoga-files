@@ -1,0 +1,1156 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>LazyVim + tmux - Treino Interativo</title>
+    <style>
+      :root {
+        --bg0: #0f1115;
+        --bg1: #151924;
+        --bg2: #1c2130;
+        --fg0: #e7e7e7;
+        --fg1: #b7bcc8;
+        --muted: #8b92a3;
+        --accent: #89b4fa;
+        --good: #a6e3a1;
+        --warn: #f9e2af;
+        --bad: #f38ba8;
+        --card: rgba(255, 255, 255, 0.06);
+        --border: rgba(255, 255, 255, 0.10);
+        --shadow: 0 12px 40px rgba(0, 0, 0, 0.45);
+
+        --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+        --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+        --radius: 16px;
+      }
+
+      * { box-sizing: border-box; }
+      html, body { height: 100%; }
+      body {
+        margin: 0;
+        color: var(--fg0);
+        font-family: var(--sans);
+        background:
+          radial-gradient(1200px 700px at 20% -10%, rgba(137, 180, 250, 0.18), transparent 60%),
+          radial-gradient(1100px 700px at 90% 10%, rgba(166, 227, 161, 0.10), transparent 60%),
+          linear-gradient(180deg, var(--bg0), var(--bg1));
+      }
+
+      a { color: var(--accent); text-decoration: none; }
+      a:hover { text-decoration: underline; }
+
+      .wrap {
+        max-width: 1080px;
+        margin: 0 auto;
+        padding: 28px 18px 56px;
+      }
+
+      header {
+        display: grid;
+        grid-template-columns: 1.2fr 0.8fr;
+        gap: 16px;
+        align-items: stretch;
+        margin-bottom: 18px;
+      }
+
+      .hero {
+        border: 1px solid var(--border);
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.03));
+        border-radius: var(--radius);
+        padding: 18px 18px 16px;
+        box-shadow: var(--shadow);
+      }
+
+      .hero h1 {
+        margin: 0 0 6px;
+        font-size: 20px;
+        letter-spacing: 0.2px;
+      }
+      .hero p {
+        margin: 0;
+        color: var(--fg1);
+        line-height: 1.45;
+        font-size: 13.5px;
+      }
+
+      .controls {
+        border: 1px solid var(--border);
+        background: rgba(255, 255, 255, 0.04);
+        border-radius: var(--radius);
+        padding: 14px;
+        box-shadow: var(--shadow);
+        display: grid;
+        gap: 10px;
+      }
+
+      .row {
+        display: grid;
+        gap: 10px;
+      }
+      @media (min-width: 840px) {
+        .row { grid-template-columns: 1fr 1fr; }
+      }
+
+      .field label {
+        display: block;
+        font-size: 12px;
+        color: var(--muted);
+        margin-bottom: 6px;
+      }
+      .field input, .field select {
+        width: 100%;
+        padding: 10px 10px;
+        border-radius: 12px;
+        border: 1px solid var(--border);
+        background: rgba(0, 0, 0, 0.25);
+        color: var(--fg0);
+        outline: none;
+        font-family: var(--mono);
+        font-size: 12.5px;
+      }
+      .field input::placeholder { color: rgba(231, 231, 231, 0.35); }
+      .field input:focus, .field select:focus { border-color: rgba(137, 180, 250, 0.55); }
+
+      .pillbar {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+      .pill {
+        border: 1px solid var(--border);
+        background: rgba(255, 255, 255, 0.04);
+        border-radius: 999px;
+        padding: 7px 10px;
+        font-size: 12px;
+        color: var(--fg1);
+      }
+      .pill code { font-family: var(--mono); font-size: 12px; color: var(--fg0); }
+
+      .tabs {
+        display: flex;
+        gap: 10px;
+        margin: 14px 0 10px;
+      }
+      .tab {
+        flex: 1;
+        padding: 10px 12px;
+        border-radius: 12px;
+        border: 1px solid var(--border);
+        background: rgba(255, 255, 255, 0.04);
+        cursor: pointer;
+        color: var(--fg1);
+        font-weight: 600;
+        font-size: 13px;
+        text-align: center;
+      }
+      .tab[aria-selected="true"] {
+        background: rgba(137, 180, 250, 0.12);
+        border-color: rgba(137, 180, 250, 0.40);
+        color: var(--fg0);
+      }
+
+      .grid {
+        display: grid;
+        gap: 12px;
+      }
+      @media (min-width: 840px) {
+        .grid { grid-template-columns: 1fr 1fr; }
+      }
+
+      .card {
+        border: 1px solid var(--border);
+        background: var(--card);
+        border-radius: var(--radius);
+        padding: 14px;
+        box-shadow: var(--shadow);
+      }
+      .card h2 {
+        margin: 0 0 10px;
+        font-size: 14px;
+        letter-spacing: 0.15px;
+      }
+      .card p {
+        margin: 0 0 10px;
+        color: var(--fg1);
+        line-height: 1.45;
+        font-size: 13px;
+      }
+
+      .k {
+        display: inline-flex;
+        gap: 6px;
+        align-items: baseline;
+        flex-wrap: wrap;
+      }
+      .k code {
+        font-family: var(--mono);
+        font-size: 12.5px;
+        padding: 4px 7px;
+        border-radius: 10px;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        background: rgba(0, 0, 0, 0.22);
+        color: var(--fg0);
+      }
+
+      .list {
+        display: grid;
+        gap: 8px;
+      }
+      .item {
+        padding: 10px;
+        border-radius: 14px;
+        border: 1px solid rgba(255, 255, 255, 0.10);
+        background: rgba(0, 0, 0, 0.20);
+      }
+      .item .t {
+        display: flex;
+        justify-content: space-between;
+        gap: 10px;
+        align-items: baseline;
+      }
+      .item .t strong { font-size: 13px; }
+      .item .t span { color: var(--muted); font-size: 12px; }
+      .item .d { margin-top: 6px; color: var(--fg1); font-size: 12.8px; line-height: 1.45; }
+
+      .trainer {
+        display: grid;
+        gap: 10px;
+      }
+      .prompt {
+        border: 1px dashed rgba(255, 255, 255, 0.18);
+        background: rgba(0, 0, 0, 0.22);
+        border-radius: 14px;
+        padding: 12px;
+      }
+      .prompt .q {
+        margin: 0;
+        font-size: 13px;
+        line-height: 1.45;
+      }
+      .prompt .meta {
+        margin-top: 8px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        align-items: center;
+      }
+      .badge {
+        font-family: var(--mono);
+        font-size: 12px;
+        color: var(--fg0);
+        padding: 4px 7px;
+        border-radius: 999px;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        background: rgba(255, 255, 255, 0.04);
+      }
+      .badge.good { border-color: rgba(166, 227, 161, 0.45); background: rgba(166, 227, 161, 0.08); }
+      .badge.warn { border-color: rgba(249, 226, 175, 0.45); background: rgba(249, 226, 175, 0.08); }
+      .badge.bad { border-color: rgba(243, 139, 168, 0.50); background: rgba(243, 139, 168, 0.08); }
+
+      .answer {
+        display: grid;
+        gap: 10px;
+      }
+
+      .btnbar { display: flex; gap: 10px; flex-wrap: wrap; }
+      button {
+        appearance: none;
+        border: 1px solid var(--border);
+        background: rgba(255, 255, 255, 0.05);
+        color: var(--fg0);
+        padding: 9px 11px;
+        border-radius: 12px;
+        cursor: pointer;
+        font-weight: 700;
+        font-size: 12.5px;
+      }
+      button:hover { background: rgba(255, 255, 255, 0.08); }
+      button:active { transform: translateY(1px); }
+
+      .hint {
+        display: none;
+        padding: 10px;
+        border-radius: 14px;
+        border: 1px solid rgba(255, 255, 255, 0.10);
+        background: rgba(0, 0, 0, 0.18);
+      }
+      .hint[data-open="true"] { display: block; }
+      .hint p { margin: 0; color: var(--fg1); font-size: 12.8px; line-height: 1.45; }
+
+      .kbdinput {
+        display: grid;
+        gap: 8px;
+      }
+      .kbdinput input {
+        font-family: var(--mono);
+      }
+      .status {
+        min-height: 18px;
+        color: var(--muted);
+        font-size: 12px;
+      }
+
+      footer {
+        margin-top: 14px;
+        color: var(--muted);
+        font-size: 12px;
+        line-height: 1.45;
+      }
+
+      .tiny { font-size: 12px; color: var(--muted); }
+      .mono { font-family: var(--mono); }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <header>
+        <div class="hero">
+          <h1>Treino interativo: LazyVim + tmux</h1>
+          <p>
+            Objetivo: aprender por repeticao curta. Escolha a ferramenta, siga os desafios e digite a sequencia de teclas.
+            O progresso fica salvo neste navegador.
+          </p>
+          <div class="pillbar" style="margin-top: 12px">
+            <div class="pill">LazyVim leader: <code id="leaderPill">Space</code></div>
+            <div class="pill">tmux prefix: <code id="prefixPill">Ctrl-b</code></div>
+            <div class="pill">Dica: no Neovim, <code>Space</code> so e atalho em Normal/Visual</div>
+          </div>
+        </div>
+
+        <div class="controls">
+          <div class="row">
+            <div class="field">
+              <label for="leader">Leader do LazyVim</label>
+              <select id="leader">
+                <option value="space" selected>Space</option>
+                <option value=",">, (virgula)</option>
+                <option value="\\">\\ (barra)</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="prefix">Prefix do tmux</label>
+              <select id="prefix">
+                <option value="C-b" selected>Ctrl-b</option>
+                <option value="C-a">Ctrl-a</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="field">
+              <label for="difficulty">Modo de treino</label>
+              <select id="difficulty">
+                <option value="assistido" selected>Assistido (mostra dica)</option>
+                <option value="normal">Normal</option>
+                <option value="hard">Hard (sem dica, mais rapido)</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="search">Filtrar (nome/acao)</label>
+              <input id="search" placeholder="ex: diff, salvar, split" />
+            </div>
+          </div>
+
+          <div class="btnbar">
+            <button id="resetProgress" type="button">Resetar progresso</button>
+            <button id="random" type="button">Desafio aleatorio</button>
+          </div>
+          <div class="tiny" id="progressLine"></div>
+        </div>
+      </header>
+
+      <div class="tabs" role="tablist" aria-label="Ferramentas">
+        <button class="tab" id="tabLazy" role="tab" aria-selected="true" aria-controls="panelLazy" type="button">LazyVim</button>
+        <button class="tab" id="tabTmux" role="tab" aria-selected="false" aria-controls="panelTmux" type="button">tmux</button>
+      </div>
+
+      <main class="grid">
+        <section class="card" id="panelLazy" role="tabpanel" aria-labelledby="tabLazy">
+          <h2>Cheat sheet (LazyVim)</h2>
+          <div class="list" id="lazyList"></div>
+          <footer>
+            Pro tip: aperte <span class="mono">Space</span> no modo Normal e espere o Which-Key listar os atalhos.
+          </footer>
+        </section>
+
+        <section class="card" id="panelTmux" role="tabpanel" aria-labelledby="tabTmux" hidden>
+          <h2>Cheat sheet (tmux)</h2>
+          <div class="list" id="tmuxList"></div>
+          <footer>
+            Regra mental: <span class="mono">prefix + tecla</span>. No padrao, prefix e <span class="mono">Ctrl-b</span>.
+          </footer>
+        </section>
+
+        <section class="card">
+          <h2>Treino</h2>
+          <p>
+            Digite a resposta no formato que voce preferir (ex: "Space g d", "<leader>gd", "Ctrl-b %", "C-b %").
+          </p>
+
+          <div class="trainer" id="trainer">
+            <div class="prompt">
+              <p class="q" id="question">Carregando desafio...</p>
+              <div class="meta">
+                <span class="badge" id="toolBadge">LazyVim</span>
+                <span class="badge warn" id="modeBadge">Assistido</span>
+                <span class="badge" id="streakBadge">streak: 0</span>
+              </div>
+            </div>
+
+            <div class="answer">
+              <div class="kbdinput">
+                <input id="input" autocomplete="off" spellcheck="false" placeholder="digite a sequencia..." />
+                <div class="status" id="status">Dica: use "Space" como leader.</div>
+              </div>
+
+              <div class="btnbar">
+                <button id="check" type="button">Checar</button>
+                <button id="show" type="button">Mostrar resposta</button>
+                <button id="next" type="button">Proximo</button>
+              </div>
+
+              <div class="hint" id="hint">
+                <p id="hintText"></p>
+              </div>
+            </div>
+          </div>
+
+          <footer>
+            Sugestao: faca 10 desafios por dia (2 minutos). Quando errar, repita o mesmo desafio 2x.
+          </footer>
+        </section>
+
+        <section class="card">
+          <h2>Rotinas (o que treinar primeiro)</h2>
+          <div class="list" id="routines"></div>
+          <footer>
+            Se algo nao bater com seu setup: no Neovim rode <span class="mono">:map</span> (ou use Which-Key) e ajuste.
+          </footer>
+        </section>
+      </main>
+    </div>
+
+    <script>
+      // ASCII-only text on purpose (portable / simple).
+      // This page is a small local trainer; no network calls.
+
+      const $ = (id) => document.getElementById(id);
+
+      const state = {
+        tool: "lazy",
+        leader: "space",
+        prefix: "C-b",
+        difficulty: "assistido",
+        search: "",
+        current: null,
+        streak: 0,
+        stats: {},
+      };
+
+      const STORAGE_KEY = "lazyvim_tmux_trainer_v1";
+
+      function load() {
+        try {
+          const raw = localStorage.getItem(STORAGE_KEY);
+          if (!raw) return;
+          const data = JSON.parse(raw);
+          if (!data || typeof data !== "object") return;
+          Object.assign(state, data);
+        } catch (_) {}
+      }
+
+      function save() {
+        const data = {
+          tool: state.tool,
+          leader: state.leader,
+          prefix: state.prefix,
+          difficulty: state.difficulty,
+          search: state.search,
+          streak: state.streak,
+          stats: state.stats,
+        };
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+      }
+
+      function leaderLabel() {
+        if (state.leader === "space") return "Space";
+        return state.leader;
+      }
+
+      function prefixLabel() {
+        return state.prefix === "C-a" ? "Ctrl-a" : "Ctrl-b";
+      }
+
+      function fmtKeysLazy(keys) {
+        // keys is an array of tokens like ["<leader>", "g", "d"]
+        const out = [];
+        for (const k of keys) {
+          if (k === "<leader>") out.push(leaderLabel());
+          else out.push(k);
+        }
+        return out;
+      }
+
+      function fmtKeysTmux(keys) {
+        // keys like ["prefix", "%"]
+        const out = [];
+        for (const k of keys) {
+          if (k === "prefix") out.push(prefixLabel());
+          else out.push(k);
+        }
+        return out;
+      }
+
+      const LAZY = [
+        {
+          id: "lazy.whichkey",
+          title: "Ver atalhos (Which-Key)",
+          action: "Abrir o menu de atalhos no modo Normal.",
+          keys: ["<leader>"],
+          alt: ["Space"],
+          hint: "No LazyVim, leader costuma ser Space. Aperte e espere aparecer o menu.",
+          tags: ["help", "which-key", "menu"],
+        },
+        {
+          id: "lazy.save",
+          title: "Salvar arquivo",
+          action: "Salvar o arquivo atual.",
+          keys: [":w"],
+          alt: ["<leader>", "f", "s"],
+          hint: "O universal e :w. Em muitos LazyVim, Space f s tambem salva.",
+          tags: ["file", "save"],
+        },
+        {
+          id: "lazy.findfile",
+          title: "Abrir arquivo (finder)",
+          action: "Buscar e abrir arquivo pelo nome.",
+          keys: ["<leader>", "f", "f"],
+          alt: [":Telescope find_files"],
+          hint: "Pense: Space -> files -> find.",
+          tags: ["file", "open", "search"],
+        },
+        {
+          id: "lazy.grep",
+          title: "Buscar texto no projeto",
+          action: "Buscar texto no projeto (live grep).",
+          keys: ["<leader>", "/"],
+          alt: ["<leader>", "s", "g"],
+          hint: "Em muitos LazyVim, Space / abre live grep.",
+          tags: ["search", "grep"],
+        },
+        {
+          id: "lazy.buffers.close",
+          title: "Fechar buffer",
+          action: "Fechar o arquivo (buffer) atual.",
+          keys: ["<leader>", "b", "d"],
+          alt: [":bd"],
+          hint: "Space b d = buffer delete.",
+          tags: ["buffer"],
+        },
+        {
+          id: "lazy.lsp.definition",
+          title: "Ir para definicao",
+          action: "Ir para a definicao do simbolo.",
+          keys: ["g", "d"],
+          alt: ["<leader>", "c", "d"],
+          hint: "Atalho classico do LSP: gd.",
+          tags: ["lsp", "nav"],
+        },
+        {
+          id: "lazy.lsp.references",
+          title: "Ver referencias",
+          action: "Listar referencias (onde e usado).",
+          keys: ["g", "r"],
+          alt: ["<leader>", "c", "R"],
+          hint: "gr = references.",
+          tags: ["lsp", "nav"],
+        },
+        {
+          id: "lazy.lsp.rename",
+          title: "Renomear simbolo",
+          action: "Renomear simbolo (refactor).",
+          keys: ["<leader>", "c", "r"],
+          alt: [":LspRename"],
+          hint: "Space c r = code rename.",
+          tags: ["lsp", "refactor"],
+        },
+        {
+          id: "lazy.lsp.codeaction",
+          title: "Code actions",
+          action: "Abrir code actions (imports, quick fixes).",
+          keys: ["<leader>", "c", "a"],
+          alt: [":LspCodeAction"],
+          hint: "Space c a = code action.",
+          tags: ["lsp", "fix"],
+        },
+        {
+          id: "lazy.lsp.format",
+          title: "Formatar",
+          action: "Formatar o arquivo.",
+          keys: ["<leader>", "c", "f"],
+          alt: [":Format"],
+          hint: "Space c f = code format.",
+          tags: ["format"],
+        },
+        {
+          id: "lazy.diffview.open",
+          title: "Diffview: abrir review",
+          action: "Abrir review do diff local.",
+          keys: ["<leader>", "g", "d"],
+          alt: [":DiffviewOpen"],
+          hint: "Configurado no seu setup: Space g d.",
+          tags: ["git", "diff", "review"],
+        },
+        {
+          id: "lazy.diffview.close",
+          title: "Diffview: fechar",
+          action: "Fechar o Diffview.",
+          keys: ["<leader>", "g", "D"],
+          alt: [":DiffviewClose"],
+          hint: "Configurado no seu setup: Space g D.",
+          tags: ["git", "diff"],
+        },
+        {
+          id: "lazy.diffview.history",
+          title: "Diffview: historico do arquivo",
+          action: "Abrir historico do arquivo atual.",
+          keys: ["<leader>", "g", "h"],
+          alt: [":DiffviewFileHistory %"],
+          hint: "Configurado no seu setup: Space g h.",
+          tags: ["git", "history"],
+        },
+        {
+          id: "lazy.yoga.help",
+          title: "yoga-ai: help",
+          action: "Abrir terminal com yoga-ai help.",
+          keys: ["<leader>", "a", "h"],
+          alt: ["yoga-ai help"],
+          hint: "No seu setup existe yoga-ai em Space a h / a f / a c.",
+          tags: ["ai", "terminal"],
+        },
+      ];
+
+      const TMUX = [
+        {
+          id: "tmux.split.v",
+          title: "Split vertical",
+          action: "Criar split vertical (pane ao lado).",
+          keys: ["prefix", "%"],
+          alt: ["split-window -h"],
+          hint: "Pense: % parece uma divisao vertical.",
+          tags: ["split", "pane"],
+        },
+        {
+          id: "tmux.split.h",
+          title: "Split horizontal",
+          action: "Criar split horizontal (pane embaixo).",
+          keys: ["prefix", '"'],
+          alt: ["split-window -v"],
+          hint: "Aspas lembram uma divisao horizontal.",
+          tags: ["split", "pane"],
+        },
+        {
+          id: "tmux.pane.close",
+          title: "Fechar pane",
+          action: "Fechar o pane atual.",
+          keys: ["prefix", "x"],
+          alt: ["kill-pane"],
+          hint: "tmux pede confirmacao.",
+          tags: ["pane"],
+        },
+        {
+          id: "tmux.window.new",
+          title: "Nova janela",
+          action: "Criar uma nova janela.",
+          keys: ["prefix", "c"],
+          alt: ["new-window"],
+          hint: "c = create.",
+          tags: ["window"],
+        },
+        {
+          id: "tmux.window.next",
+          title: "Proxima janela",
+          action: "Ir para a proxima janela.",
+          keys: ["prefix", "n"],
+          alt: ["next-window"],
+          hint: "n = next.",
+          tags: ["window"],
+        },
+        {
+          id: "tmux.window.prev",
+          title: "Janela anterior",
+          action: "Ir para a janela anterior.",
+          keys: ["prefix", "p"],
+          alt: ["previous-window"],
+          hint: "p = previous.",
+          tags: ["window"],
+        },
+        {
+          id: "tmux.sessions",
+          title: "Listar sessoes",
+          action: "Abrir lista de sessoes e trocar.",
+          keys: ["prefix", "s"],
+          alt: ["choose-tree"],
+          hint: "s = sessions.",
+          tags: ["session"],
+        },
+        {
+          id: "tmux.copy",
+          title: "Copy mode",
+          action: "Entrar no copy mode.",
+          keys: ["prefix", "["],
+          alt: ["copy-mode"],
+          hint: "Depois use q para sair.",
+          tags: ["copy"],
+        },
+      ];
+
+      const ROUTINES = [
+        {
+          title: "Rotina (LazyVim): abrir -> editar -> salvar",
+          detail:
+            "1) Space f f (abre arquivo)  2) edite  3) :w (salva)  4) Space b d (fecha buffer)",
+        },
+        {
+          title: "Rotina (LazyVim): navegar codigo",
+          detail: "1) gd (definicao)  2) gr (referencias)  3) Space c r (rename)",
+        },
+        {
+          title: "Rotina (Git): revisar antes de commit",
+          detail: "1) Space g d (DiffviewOpen)  2) revise hunks  3) Space g D (close)",
+        },
+        {
+          title: "Rotina (tmux): projeto com 2 panes",
+          detail: "1) prefix + % (split)  2) um pane com nvim  3) outro pane com testes/terminal",
+        },
+      ];
+
+      function renderList(list, el, kind) {
+        const q = state.search.trim().toLowerCase();
+        const filtered = list.filter((x) => {
+          if (!q) return true;
+          const hay = (x.title + " " + x.action + " " + (x.tags || []).join(" ")).toLowerCase();
+          return hay.includes(q);
+        });
+
+        el.innerHTML = "";
+        for (const it of filtered) {
+          const div = document.createElement("div");
+          div.className = "item";
+
+          const k = kind === "lazy" ? fmtKeysLazy(it.keys) : fmtKeysTmux(it.keys);
+          const alt = it.alt ? it.alt : [];
+          const khtml = k.map((t) => `<code>${escapeHtml(t)}</code>`).join(" ");
+          const ahtml = alt.length ? `<div class="tiny" style="margin-top:6px">Alt: <span class="mono">${escapeHtml(alt.join(" "))}</span></div>` : "";
+
+          div.innerHTML = `
+            <div class="t">
+              <strong>${escapeHtml(it.title)}</strong>
+              <span class="k">${khtml}</span>
+            </div>
+            <div class="d">${escapeHtml(it.action)}</div>
+            ${ahtml}
+          `;
+
+          div.addEventListener("click", () => {
+            startChallenge(kind, it.id);
+            window.scrollTo({ top: 0, behavior: "smooth" });
+          });
+          el.appendChild(div);
+        }
+      }
+
+      function renderRoutines() {
+        const el = $("routines");
+        el.innerHTML = "";
+        for (const r of ROUTINES) {
+          const div = document.createElement("div");
+          div.className = "item";
+          div.innerHTML = `
+            <div class="t">
+              <strong>${escapeHtml(r.title)}</strong>
+              <span></span>
+            </div>
+            <div class="d">${escapeHtml(r.detail)}</div>
+          `;
+          el.appendChild(div);
+        }
+      }
+
+      function escapeHtml(s) {
+        return String(s)
+          .replaceAll("&", "&amp;")
+          .replaceAll("<", "&lt;")
+          .replaceAll(">", "&gt;")
+          .replaceAll('"', "&quot;");
+      }
+
+      function pickById(kind, id) {
+        const list = kind === "lazy" ? LAZY : TMUX;
+        return list.find((x) => x.id === id) || null;
+      }
+
+      function pickRandom() {
+        const list = state.tool === "lazy" ? LAZY : TMUX;
+        const q = state.search.trim().toLowerCase();
+        const filtered = list.filter((x) => {
+          if (!q) return true;
+          const hay = (x.title + " " + x.action + " " + (x.tags || []).join(" ")).toLowerCase();
+          return hay.includes(q);
+        });
+        const pool = filtered.length ? filtered : list;
+        return pool[Math.floor(Math.random() * pool.length)];
+      }
+
+      function startChallenge(kind, id) {
+        state.tool = kind;
+        const it = pickById(kind, id) || pickRandom();
+        state.current = { kind, id: it.id };
+        $("question").textContent = it.action;
+        $("toolBadge").textContent = kind === "lazy" ? "LazyVim" : "tmux";
+        $("modeBadge").textContent = state.difficulty;
+        $("modeBadge").className = "badge " + (state.difficulty === "hard" ? "bad" : state.difficulty === "normal" ? "warn" : "good");
+        $("streakBadge").textContent = "streak: " + state.streak;
+        $("input").value = "";
+        $("hint").dataset.open = "false";
+
+        const hint = buildHint(it, kind);
+        $("hintText").textContent = hint;
+
+        if (state.difficulty === "assistido") {
+          $("status").textContent = "Dica: " + buildShortHint(it, kind);
+        } else {
+          $("status").textContent = "";
+        }
+
+        save();
+        updateUI();
+        $("input").focus();
+      }
+
+      function buildHint(it, kind) {
+        const keys = kind === "lazy" ? fmtKeysLazy(it.keys) : fmtKeysTmux(it.keys);
+        return `Resposta: ${keys.join(" ")}. ${it.hint || ""}`.trim();
+      }
+
+      function buildShortHint(it, kind) {
+        const keys = kind === "lazy" ? fmtKeysLazy(it.keys) : fmtKeysTmux(it.keys);
+        if (keys.length === 1 && keys[0] === leaderLabel()) return "aperte o leader e espere o menu";
+        return `comece com ${keys.slice(0, Math.min(2, keys.length)).join(" ")}`;
+      }
+
+      function normalizeInput(s) {
+        return String(s)
+          .trim()
+          .toLowerCase()
+          .replaceAll("<leader>", "leader")
+          .replaceAll("\\s+", " ")
+          .replaceAll("ctrl", "c")
+          .replaceAll("control", "c")
+          .replaceAll("-", "-")
+          .replaceAll("  ", " ");
+      }
+
+      function normalizeTokens(s) {
+        // Turn strings into tokens we can compare, accepting many variants.
+        // Examples:
+        // - "Space g d" -> ["leader", "g", "d"] if leader is Space
+        // - "<leader>gd" -> ["leader", "g", "d"]
+        // - "C-b %" -> ["prefix", "%"]
+        // - "Ctrl-b%" -> ["prefix", "%"]
+        const raw = String(s).trim();
+        if (!raw) return [];
+
+        // split on spaces first, then further split compact forms
+        const parts = raw.split(/\s+/g).filter(Boolean);
+        const out = [];
+
+        const isLeaderSpace = state.leader === "space";
+        const leaderTok = leaderLabel().toLowerCase();
+
+        function pushToken(t) {
+          if (!t) return;
+          out.push(t);
+        }
+
+        for (let p of parts) {
+          const pl = p.toLowerCase();
+
+          // leader
+          if (pl === "<leader>" || pl === "leader" || (isLeaderSpace && pl === "space") || pl === leaderTok) {
+            pushToken("leader");
+            continue;
+          }
+
+          // tmux prefix variants
+          if (pl === "prefix") {
+            pushToken("prefix");
+            continue;
+          }
+
+          // ctrl-b / c-b
+          if (pl === "c-b" || pl === "ctrl-b" || pl === "control-b" || pl === "^b") {
+            pushToken("prefix");
+            continue;
+          }
+          if (pl === "c-a" || pl === "ctrl-a" || pl === "control-a" || pl === "^a") {
+            pushToken("prefix");
+            continue;
+          }
+
+          // allow :w
+          if (pl === ":w" || pl === "w" || pl === "write") {
+            pushToken(":w");
+            continue;
+          }
+
+          // compact forms like <leader>gd or spacegd
+          if (pl.startsWith("<leader>")) {
+            pushToken("leader");
+            const rest = pl.slice("<leader>".length);
+            for (const ch of rest) pushToken(ch);
+            continue;
+          }
+
+          if (isLeaderSpace && pl.startsWith("space") && pl.length > 5) {
+            pushToken("leader");
+            const rest = pl.slice(5);
+            for (const ch of rest) pushToken(ch);
+            continue;
+          }
+
+          if ((pl.startsWith("c-b") || pl.startsWith("ctrl-b")) && pl.includes("%")) {
+            pushToken("prefix");
+            pushToken("%");
+            continue;
+          }
+
+          // default: break into single chars for things like gd
+          if (pl.length <= 2) {
+            for (const ch of pl) pushToken(ch);
+          } else {
+            // keep longer tokens as-is (e.g. % or [ or ")
+            pushToken(pl);
+          }
+        }
+
+        return out;
+      }
+
+      function expectedTokens(it, kind) {
+        if (kind === "lazy") {
+          // keys can include ":w" which should be accepted
+          const tokens = [];
+          for (const k of it.keys) {
+            if (k === "<leader>") tokens.push("leader");
+            else if (k === ":w") tokens.push(":w");
+            else tokens.push(k.toLowerCase());
+          }
+          return tokens;
+        }
+        const tokens = [];
+        for (const k of it.keys) {
+          if (k === "prefix") tokens.push("prefix");
+          else tokens.push(k.toLowerCase());
+        }
+        return tokens;
+      }
+
+      function matchesAnswer(user, it, kind) {
+        const got = normalizeTokens(user);
+        const exp = expectedTokens(it, kind);
+
+        // accept alt keys too
+        const alts = [];
+        if (it.alt && Array.isArray(it.alt)) {
+          for (const a of it.alt) {
+            if (typeof a === "string" && a.startsWith(":")) {
+              alts.push([a.toLowerCase()]);
+            }
+          }
+        }
+
+        const candidates = [exp, ...alts];
+        return candidates.some((cand) => arrayEq(got, cand));
+      }
+
+      function arrayEq(a, b) {
+        if (a.length !== b.length) return false;
+        for (let i = 0; i < a.length; i++) {
+          if (a[i] !== b[i]) return false;
+        }
+        return true;
+      }
+
+      function markResult(ok, it) {
+        const st = state.stats[it.id] || { ok: 0, fail: 0 };
+        if (ok) st.ok += 1;
+        else st.fail += 1;
+        state.stats[it.id] = st;
+        save();
+      }
+
+      function updateProgressLine() {
+        const list = state.tool === "lazy" ? LAZY : TMUX;
+        let totalOk = 0;
+        let totalFail = 0;
+        for (const it of list) {
+          const st = state.stats[it.id];
+          if (!st) continue;
+          totalOk += st.ok || 0;
+          totalFail += st.fail || 0;
+        }
+        $("progressLine").textContent = `Progresso (${state.tool === "lazy" ? "LazyVim" : "tmux"}): acertos ${totalOk}, erros ${totalFail}.`;
+      }
+
+      function updateUI() {
+        $("leaderPill").textContent = leaderLabel();
+        $("prefixPill").textContent = prefixLabel();
+        updateProgressLine();
+
+        // sync controls
+        $("leader").value = state.leader;
+        $("prefix").value = state.prefix;
+        $("difficulty").value = state.difficulty;
+        $("search").value = state.search;
+
+        // tabs
+        const lazySelected = state.tool === "lazy";
+        $("tabLazy").setAttribute("aria-selected", lazySelected ? "true" : "false");
+        $("tabTmux").setAttribute("aria-selected", !lazySelected ? "true" : "false");
+        $("panelLazy").hidden = !lazySelected;
+        $("panelTmux").hidden = lazySelected;
+
+        renderList(LAZY, $("lazyList"), "lazy");
+        renderList(TMUX, $("tmuxList"), "tmux");
+      }
+
+      function currentItem() {
+        if (!state.current) return null;
+        const it = pickById(state.current.kind, state.current.id);
+        return it;
+      }
+
+      function checkAnswer() {
+        const it = currentItem();
+        if (!it) return;
+        const kind = state.current.kind;
+        const user = $("input").value;
+        const ok = matchesAnswer(user, it, kind);
+
+        if (ok) {
+          state.streak = Math.max(0, state.streak) + 1;
+          $("status").textContent = "OK. Bom.";
+          $("status").style.color = "var(--good)";
+          markResult(true, it);
+          $("streakBadge").textContent = "streak: " + state.streak;
+          if (state.difficulty === "hard") {
+            setTimeout(() => nextChallenge(), 400);
+          }
+        } else {
+          state.streak = 0;
+          $("status").textContent = "Nao. Clique em Mostrar resposta e tente de novo.";
+          $("status").style.color = "var(--bad)";
+          markResult(false, it);
+          $("streakBadge").textContent = "streak: " + state.streak;
+          if (state.difficulty === "assistido") {
+            $("hint").dataset.open = "true";
+          }
+        }
+
+        save();
+        updateProgressLine();
+      }
+
+      function showAnswer() {
+        $("hint").dataset.open = "true";
+      }
+
+      function nextChallenge() {
+        const it = pickRandom();
+        startChallenge(state.tool, it.id);
+      }
+
+      function resetProgress() {
+        state.streak = 0;
+        state.stats = {};
+        save();
+        $("status").textContent = "Progresso resetado.";
+        $("status").style.color = "var(--muted)";
+        updateUI();
+      }
+
+      function bind() {
+        $("tabLazy").addEventListener("click", () => {
+          state.tool = "lazy";
+          save();
+          updateUI();
+          nextChallenge();
+        });
+        $("tabTmux").addEventListener("click", () => {
+          state.tool = "tmux";
+          save();
+          updateUI();
+          nextChallenge();
+        });
+
+        $("leader").addEventListener("change", (e) => {
+          state.leader = e.target.value;
+          save();
+          updateUI();
+          if (currentItem()) startChallenge(state.current.kind, state.current.id);
+        });
+        $("prefix").addEventListener("change", (e) => {
+          state.prefix = e.target.value;
+          save();
+          updateUI();
+          if (currentItem()) startChallenge(state.current.kind, state.current.id);
+        });
+        $("difficulty").addEventListener("change", (e) => {
+          state.difficulty = e.target.value;
+          save();
+          if (currentItem()) startChallenge(state.current.kind, state.current.id);
+        });
+        $("search").addEventListener("input", (e) => {
+          state.search = e.target.value;
+          save();
+          updateUI();
+        });
+
+        $("check").addEventListener("click", checkAnswer);
+        $("show").addEventListener("click", showAnswer);
+        $("next").addEventListener("click", nextChallenge);
+        $("random").addEventListener("click", nextChallenge);
+        $("resetProgress").addEventListener("click", resetProgress);
+
+        $("input").addEventListener("keydown", (e) => {
+          if (e.key === "Enter") {
+            e.preventDefault();
+            checkAnswer();
+          }
+          if (e.key === "Escape") {
+            $("input").value = "";
+            $("hint").dataset.open = "false";
+            $("status").textContent = "";
+            $("status").style.color = "var(--muted)";
+          }
+        });
+      }
+
+      function boot() {
+        load();
+        bind();
+        renderRoutines();
+        updateUI();
+        if (!state.current) {
+          nextChallenge();
+        } else {
+          startChallenge(state.current.kind, state.current.id);
+        }
+      }
+
+      boot();
+    </script>
+  </body>
+</html>
