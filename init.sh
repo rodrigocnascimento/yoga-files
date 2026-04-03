@@ -1,5 +1,5 @@
 #!/bin/zsh
-# yoga-files v2.0 - Initialization Script
+# yoga-files v2.1.0 - Initialization Script
 
 # Definir YOGA_HOME
 export YOGA_HOME="${YOGA_HOME:-$HOME/.yoga}"
@@ -82,7 +82,7 @@ if [ -z "$YOGA_SILENT" ]; then
     if [ -z "$YOGA_WELCOMED" ]; then
         export YOGA_WELCOMED=1
         echo ""
-        yoga_espirito "🧘 Yoga Files v2.0 carregado!"
+        yoga_espirito "🧘 Yoga Files v2.1.0 carregado!"
         echo -e "${YOGA_AGUA}Digite 'yoga' para abrir o dashboard${YOGA_RESET}"
         echo ""
         

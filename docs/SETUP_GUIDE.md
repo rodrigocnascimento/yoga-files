@@ -6,7 +6,7 @@
 
 ## 🎯 **Visão Geral do Setup**
 
-Este guia levará você através da instalação completa do yoga-files v2.0, incluindo:
+Este guia levará você através da instalação completa do yoga-files v2.1.0, incluindo:
 
 - 🛠️ **ASDF** - Version manager universal
 - 🎨 **LazyVim** - Editor moderno com plugins JavaScript/TypeScript
@@ -29,6 +29,7 @@ Este guia levará você através da instalação completa do yoga-files v2.0, in
 command -v git || echo "❌ Git é obrigatório"
 command -v curl || echo "❌ Curl é obrigatório"
 command -v jq || echo "❌ jq é recomendado (para IA)"
+command -v gum || echo "💡 gum é recomendado (para Menus Interativos). Instale via brew (Mac) ou gerenciador de pacotes do Linux."
 ```
 
 ### Hardware Recomendado

@@ -1,6 +1,6 @@
 #!/usr/bin/env zsh
 #!/usr/bin/env zsh
-# yoga-files v2.0 - Instalador Principal
+# yoga-files v2.1.0 - Instalador Principal
 # ASDF + LazyVim + OpenAI + Git Multi-Perfil + JavaScript/TypeScript Focus
 
 # NOTE: This project is zsh-first. If you run this file using bash (e.g. `curl ... | bash`),
@@ -71,7 +71,7 @@ source "$SCRIPT_DIR/core/common.sh"
 show_yoga_banner() {
     clear 2>/dev/null || true
     echo ""
-    echo "    🧘 YOGA FILES v2.0 INSTALLER 🧘"
+    echo "    🧘 YOGA FILES v2.1.0 INSTALLER 🧘"
     echo "    ================================"
     echo "    ASDF + LazyVim + OpenAI Integration"
     echo "    JavaScript/TypeScript Focused"
@@ -457,7 +457,7 @@ setup_openai() {
 main() {
     show_yoga_banner
     
-    yoga_warn "🧘 INICIANDO INSTALAÇÃO DO YOGA FILES v2.0"
+    yoga_warn "🧘 INICIANDO INSTALAÇÃO DO YOGA FILES v2.1.0"
     echo ""
     
     # 1. Detectar sistema
@@ -497,7 +497,7 @@ main() {
     setup_openai
     
     echo ""
-    yoga_success "⭐⭐⭐ YOGA FILES v2.0 INSTALADO! ⭐⭐⭐"
+    yoga_success "⭐⭐⭐ YOGA FILES v2.1.0 INSTALADO! ⭐⭐⭐"
     echo ""
     yoga_espirito "🧘 Para começar a usar:"
     echo "   1. Recarregue seu shell: source ~/.zshrc"
