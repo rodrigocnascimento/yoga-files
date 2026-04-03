@@ -66,6 +66,7 @@ alias flow='yoga_flow'
 alias breathe='yoga_breath'
 alias pose='yoga_pose'
 alias namaste='echo "🧘 Namastê, yogi!"'
+alias cheatsheet='bat ~/.yoga/docs/CHEATSHEET.md 2>/dev/null || cat ~/.yoga/docs/CHEATSHEET.md'
 
 # AI commands
 alias ai='yoga-ai'
