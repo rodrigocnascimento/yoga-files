@@ -70,7 +70,8 @@ function please {
   local last_cmd
   last_cmd=$(fc -ln -1)
   # Basic safety check - don't allow empty or obviously dangerous commands
-  if [[ -z "$last_cmd" || "$last_cmd" =~ ^(rm|dd|mkfs|>:) ]]; then
+  local danger_pattern="^(rm|dd|mkfs|>:)"
+  if [[ -z "$last_cmd" || "$last_cmd" =~ $danger_pattern ]]; then
     echo "⚠️ Refusing to run potentially dangerous command with sudo: $last_cmd"
     return 1
   fi
