@@ -325,13 +325,22 @@ install_asdf_plugins() {
 
 # Instalar versões padrão
 install_default_versions() {
-    yoga_agua "💧 Instalando versões padrão..."
+    yoga_agua "💧 Configuração de versões padrão..."
 
-    # Python 3
-    asdf install python latest:3.11
-    asdf global python latest:3.11
+    if command -v python3 >/dev/null 2>&1; then
+        yoga_terra "🌿 Python detectado no sistema: $(python3 --version 2>&1)"
+        yoga_agua "💧 Pulando compilação extra via ASDF para acelerar a instalação."
+    elif command -v python >/dev/null 2>&1; then
+        yoga_terra "🌿 Python detectado no sistema: $(python --version 2>&1)"
+        yoga_agua "💧 Pulando compilação extra via ASDF para acelerar a instalação."
+    else
+        yoga_ar "🌬️ Python não encontrado no sistema."
+        yoga_agua "💧 Pulando a compilação inicial (processo demorado)."
+        yoga_agua "💧 Se precisar do Python via ASDF depois, basta rodar:"
+        echo "   asdf install python latest:3.11 && asdf global python latest:3.11"
+    fi
     
-    yoga_terra "🌿 Versões padrão instaladas!"
+    yoga_terra "🌿 Configuração base concluída!"
 }
 
 # Instalar Neovim
