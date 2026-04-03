@@ -59,6 +59,13 @@ check_optional asdf
 check_optional node
 check_optional npm
 check_optional nvim
+check_optional fzf
+check_optional gum
+
+if ! command -v gum >/dev/null 2>&1; then
+  echo ""
+  yoga_sol "💡 Dica: Instale o 'gum' (brew install gum ou github.com/charmbracelet/gum) para ter menus interativos mais bonitos!"
+fi
 
 echo ""
 

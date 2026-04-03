@@ -1,5 +1,5 @@
 #!/bin/zsh
-# yoga-files v2.0 - Dashboard Principal
+# yoga-files v2.1.0 - Dashboard Principal
 
 YOGA_HOME="${YOGA_HOME:-$HOME/.yoga}"
 source "$YOGA_HOME/core/utils.sh"
@@ -75,56 +75,59 @@ yoga_dashboard() {
     # Menu de Opções
     echo -e "${YOGA_AGUA}💧 AÇÕES RÁPIDAS${YOGA_RESET}"
     echo -e "${YOGA_AGUA}━━━━━━━━━━━━━━━${YOGA_RESET}"
-    echo "  1. 🚀 Criar novo projeto (yoga-create)"
-    echo "  2. 🤖 IA no terminal (yoga-ai)"
-    echo "  3. 📦 Gerenciar versões (asdf-menu)"
-    echo "  4. 🔗 Git profiles (git-wizard)"
-    echo "  5. 🎨 Abrir Neovim"
-    echo "  6. 🧘 Entrar em Flow State"
-    echo "  7. 🩺 Doctor (yoga-doctor)"
-    echo "  8. 🔄 Atualizar Yoga Files (yoga-update)"
-    echo "  9. 📖 Ver documentação"
-    echo "  0. 🚪 Sair"
-    echo ""
     
-    echo -en "${YOGA_AR}🌬️ Escolha uma opção: ${YOGA_RESET}"
-    read choice
+    local options=(
+        "🚀 Criar novo projeto (yoga-create)"
+        "🤖 IA no terminal (yoga-ai)"
+        "📦 Gerenciar versões (asdf-menu)"
+        "🔗 Git profiles (git-wizard)"
+        "🎨 Abrir Neovim"
+        "🧘 Entrar em Flow State"
+        "🩺 Doctor (yoga-doctor)"
+        "🔄 Atualizar Yoga Files (yoga-update)"
+        "📖 Ver documentação"
+        "🚪 Sair"
+    )
     
-    case $choice in
-        1)
+    local choice=$(yoga_interactive_menu "" "${options[@]}")
+    
+    case "$choice" in
+        "🚀 Criar novo projeto (yoga-create)")
             yoga_create_project
             ;;
-        2)
+        "🤖 IA no terminal (yoga-ai)")
             yoga_ai_menu
             ;;
-        3)
+        "📦 Gerenciar versões (asdf-menu)")
             yoga_asdf_menu
             ;;
-        4)
+        "🔗 Git profiles (git-wizard)")
             yoga_git_profiles
             ;;
-        5)
+        "🎨 Abrir Neovim")
             nvim
             ;;
-        6)
+        "🧘 Entrar em Flow State")
             yoga_flow_state
             ;;
-        7)
+        "🩺 Doctor (yoga-doctor)")
             yoga_doctor
             ;;
-        8)
+        "🔄 Atualizar Yoga Files (yoga-update)")
             yoga_update
             ;;
-        9)
+        "📖 Ver documentação")
             yoga_docs
             ;;
-        0)
+        "🚪 Sair")
             yoga_espirito "🧘 Namastê! Até logo!"
             return 0
             ;;
         *)
-            yoga_fogo "❌ Opção inválida!"
-            sleep 2
+            if [ -n "$choice" ]; then
+                yoga_fogo "❌ Opção inválida!"
+                sleep 2
+            fi
             yoga_dashboard
             ;;
     esac
@@ -142,27 +145,30 @@ yoga_create_project() {
     yoga_fogo "🔥 CRIAR NOVO PROJETO"
     echo ""
     
-    echo "Tipos de projeto disponíveis:"
-    echo "  1. React + TypeScript"
-    echo "  2. Node.js + TypeScript (API)"
-    echo "  3. Next.js + TypeScript"
-    echo "  4. Vanilla TypeScript"
-    echo "  5. Express + TypeScript"
-    echo ""
+    local options=(
+        "React + TypeScript"
+        "Node.js + TypeScript (API)"
+        "Next.js + TypeScript"
+        "Vanilla TypeScript"
+        "Express + TypeScript"
+    )
     
-    echo -en "${YOGA_AGUA}Escolha o tipo: ${YOGA_RESET}"
-    read project_type
+    local project_type=$(yoga_interactive_menu "Tipos de projeto disponíveis:" "${options[@]}")
+    
+    if [ -z "$project_type" ]; then
+        return 1
+    fi
     
     echo -en "${YOGA_AGUA}Nome do projeto: ${YOGA_RESET}"
     read project_name
     
     local template=""
-    case $project_type in
-        1) template="react" ;;
-        2) template="node" ;;
-        3) template="next" ;;
-        4) template="ts" ;;
-        5) template="express" ;;
+    case "$project_type" in
+        "React + TypeScript") template="react" ;;
+        "Node.js + TypeScript (API)") template="node" ;;
+        "Next.js + TypeScript") template="next" ;;
+        "Vanilla TypeScript") template="ts" ;;
+        "Express + TypeScript") template="express" ;;
         *) yoga_fogo "❌ Tipo inválido!" ; return 1 ;;
     esac
 
@@ -186,14 +192,15 @@ yoga_ai_menu() {
         return 1
     fi
 
-    echo "1) Mode (help/fix/cmd/explain/debug/code/learn)"
-    echo "2) Freeform question"
-    echo ""
-    echo -en "${YOGA_AGUA}Choose (1-2): ${YOGA_RESET}"
-    read -r kind
+    local options=(
+        "Mode (help/fix/cmd/explain/debug/code/learn)"
+        "Freeform question"
+    )
+    
+    local kind=$(yoga_interactive_menu "Choose interaction type:" "${options[@]}")
 
     case "$kind" in
-        1)
+        "Mode (help/fix/cmd/explain/debug/code/learn)")
             echo -en "${YOGA_AGUA}Mode: ${YOGA_RESET}"
             read -r mode
             echo -en "${YOGA_AGUA}Query: ${YOGA_RESET}"
@@ -201,7 +208,7 @@ yoga_ai_menu() {
             [ -z "$mode" ] && return 0
             yoga-ai "$mode" "$query"
             ;;
-        2)
+        "Freeform question")
             echo -en "${YOGA_AGUA}Question: ${YOGA_RESET}"
             read -r query
             [ -z "$query" ] && return 0
@@ -331,31 +338,30 @@ yoga_docs() {
     yoga_espirito "📖 DOCUMENTAÇÃO"
     echo ""
     
-    echo "Recursos disponíveis:"
-    echo "  1. README principal"
-    echo "  2. Guia de instalação"
-    echo "  3. Roadmap do projeto"
-    echo "  4. Guia de contribuição"
-    echo "  5. Changelog"
-    echo ""
+    local options=(
+        "README principal"
+        "Guia de instalação"
+        "Roadmap do projeto"
+        "Guia de contribuição"
+        "Changelog"
+    )
     
-    echo -en "${YOGA_AGUA}Escolha o documento: ${YOGA_RESET}"
-    read doc_choice
+    local doc_choice=$(yoga_interactive_menu "Recursos disponíveis:" "${options[@]}")
     
-    case $doc_choice in
-        1)
+    case "$doc_choice" in
+        "README principal")
             less "$HOME/.yoga/README.md"
             ;;
-        2)
+        "Guia de instalação")
             less "$YOGA_HOME/docs/SETUP_GUIDE.md"
             ;;
-        3)
+        "Roadmap do projeto")
             less "$YOGA_HOME/docs/ROADMAP.md"
             ;;
-        4)
+        "Guia de contribuição")
             less "$YOGA_HOME/CONTRIBUTING.md"
             ;;
-        5)
+        "Changelog")
             less "$YOGA_HOME/CHANGELOG.md"
             ;;
     esac
