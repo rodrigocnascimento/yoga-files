@@ -108,6 +108,48 @@ _yoga_ai_copilot_explain() {
     gh copilot explain "$prompt"
 }
 
+_yoga_ai_gemini_chat() {
+    local system_msg="$1"
+    local user_msg="$2"
+    local temperature="${3:-0.3}"
+    local max_tokens="${4:-800}"
+
+    local model
+    model="$(_yoga_ai_model)"
+
+    # Gemini API expects a different format
+    local payload
+    payload="$(
+        jq -n \
+            --arg model "$model" \
+            --arg system "$system_msg" \
+            --arg user "$user_msg" \
+            --argjson temperature "$temperature" \
+            --argjson max_tokens "$max_tokens" \
+            '{
+                model: $model,
+                system_instruction: {
+                    parts: [{ text: $system }]
+                },
+                contents: [{
+                    role: "user",
+                    parts: [{ text: $user }]
+                }],
+                generationConfig: {
+                    temperature: $temperature,
+                    maxOutputTokens: $max_tokens
+                }
+            }'
+    )"
+
+    curl -fsS -X POST \
+        -H "Content-Type: application/json" \
+        -H "Authorization: Bearer $GEMINI_API_KEY" \
+        -d "$payload" \
+        https://generativelanguage.googleapis.com/v1beta/models/$model:generateContent | \
+        jq -r '.candidates[0].content.parts[0].text // empty'
+}
+
 _yoga_ai_chat() {
     local system_msg="$1"
     local user_msg="$2"
@@ -126,18 +168,26 @@ _yoga_ai_chat() {
             fi
             _yoga_ai_openai_chat "$system_msg" "$user_msg" "$temperature" "$max_tokens"
             ;;
+        gemini)
+            if [ -z "${GEMINI_API_KEY-}" ]; then
+                yoga_fogo "❌ GEMINI_API_KEY não configurada"
+                yoga_agua "💧 Configure: export GEMINI_API_KEY='...'."
+                return 1
+            fi
+            _yoga_ai_gemini_chat "$system_msg" "$user_msg" "$temperature" "$max_tokens"
+            ;;
         copilot)
             # Copilot doesn't take system messages; include high-level instruction.
             _yoga_ai_copilot_suggest "$user_msg"
             ;;
-        claude|gemini)
+        claude)
             yoga_fogo "❌ Provider not implemented yet: $provider"
-            yoga_agua "💧 Use preferences.ai_provider: \"openai\" or \"copilot\""
+            yoga_agua "💧 Use preferences.ai_provider: \"openai\", \"gemini\" or \"copilot\""
             return 1
             ;;
         *)
             yoga_fogo "❌ Unknown provider: $provider"
-            yoga_agua "💧 Use preferences.ai_provider: \"openai\" or \"copilot\""
+            yoga_agua "💧 Use preferences.ai_provider: \"openai\", \"gemini\" or \"copilot\""
             return 1
             ;;
     esac
