@@ -3,7 +3,7 @@
 ![🧘 Yoga Development Environment](assets/yoga-files.png)
 
 > **Seu ambiente de desenvolvimento com essência YOGA + inteligência artificial**  
-> *ASDF + LazyVim + OpenAI + GitHub Copilot + JavaScript/TypeScript Focus*
+> *ASDF + LazyVim + IA Multi-provider + JavaScript/TypeScript Focus*
 
 ---
 
@@ -82,14 +82,14 @@ O instalador irá:
 
 ## 📚 **Documentação**
 
-- **[📖 Guia Completo](docs/SETUP_GUIDE.md)**: Instalação passo a passo detalhada
-- **[🧭 Guia de Uso](docs/USAGE_GUIDE.md)**: Do zero ao uso de cada ferramenta
-- **[🎨 Configuração LazyVim](docs/LAZYVIM_SETUP.md)**: Personalização completa do editor
-- **[🛠️ ASDF Guide](docs/ASDF_GUIDE.md)**: Gerenciamento de versões
-- **[🤖 AI Integration](docs/AI_INTEGRATION.md)**: Configuração de ferramentas IA
-- **[🔗 Git Profiles](docs/GIT_PROFILES.md)**: Sistema de perfis Git
-- **[🎮 JavaScript Stack](docs/JAVASCRIPT_STACK.md)**: Ferramentas e boas práticas
-- **[🛠️ Troubleshooting](docs/TROUBLESHOOTING.md)**: Problemas comuns e soluções
+- **[📖 Guia Completo](SETUP_GUIDE.md)**: Instalação passo a passo detalhada
+- **[🧭 Guia de Uso](USAGE_GUIDE.md)**: Do zero ao uso de cada ferramenta
+- **[🎨 Configuração LazyVim](LAZYVIM_SETUP.md)**: Personalização completa do editor
+- **[🛠️ ASDF Guide](ASDF_GUIDE.md)**: Gerenciamento de versões
+- **[🤖 AI Integration](AI_INTEGRATION.md)**: Configuração de ferramentas IA
+- **[🔗 Git Profiles](GIT_PROFILES.md)**: Sistema de perfis Git
+- **[🎮 JavaScript Stack](JAVASCRIPT_STACK.md)**: Ferramentas e boas práticas
+- **[🛠️ Troubleshooting](TROUBLESHOOTING.md)**: Problemas comuns e soluções
 
 ---
 
@@ -402,10 +402,10 @@ MIT License - Use como quiser, modifique como precisar, mas mantenha os crédito
 ## 🔗 **Links Importantes**
 
 - **Repositório Principal**: https://github.com/rodrigocnascimento/yoga-files
-- **Documentação**: https://yoga-files.dev/docs
+- **Documentação**: ./docs/
 - **Issues e Bugs**: https://github.com/rodrigocnascimento/yoga-files/issues
 - **Discord Community**: https://discord.gg/yoga-files
-- **Roadmap Público**: https://github.com/rodrigocnascimento/yoga-files/projects/1
+- **Roadmap Público**: Consulte o arquivo ROADMAP.md no diretório docs/
 
 ---
 
@@ -464,4 +464,4 @@ yoga
 
 ---
 
-**Este README está sempre sendo atualizado. Confira a documentação mais recente em [yoga-files.dev/docs](https://yoga-files.dev/docs)**
+**Este README está sempre sendo atualizado. Confira a documentação mais recente em ./docs/**

@@ -198,8 +198,8 @@ Contribuidores notáveis receberão:
 
 - **Issues**: https://github.com/rodrigocnascimento/yoga-files/issues
 - **Discord**: https://discord.gg/yoga-files
-- **Wiki**: https://yoga-files.dev/docs
-- **Roadmap**: https://github.com/rodrigocnascimento/yoga-files/projects/1
+- **Documentação**: ./docs/
+- **Roadmap**: Consulte o arquivo ROADMAP.md no diretório docs/
 
 ---
 
