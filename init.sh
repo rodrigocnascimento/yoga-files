@@ -58,6 +58,24 @@ export FZF_DEFAULT_OPTS='--height 40% --border --pointer=👉 --color=16'
 [ -f ~/.custom.aliases ] && source ~/.custom.aliases
 [ -f ~/.custom.functions ] && source ~/.custom.functions
 
+# Dependency checks for external tools
+_yoga_check_dependencies() {
+    local missing_deps=()
+    
+    # Check for essential tools
+    for cmd in lsof xrandr docker ps fzf fd eza bat; do
+        if ! command -v $cmd &>/dev/null; then
+            missing_deps+=($cmd)
+        fi
+    done
+    
+    # Warn about missing dependencies (non-fatal)
+    if [ ${#missing_deps[@]} -gt 0 ]; then
+        yoga_sol "⚠️ Some optional dependencies are missing: ${missing_deps[*]}"
+        yoga_agua "💧 Install them for full functionality"
+    fi
+}
+
 # Mensagem de boas-vindas
 if [ -z "$YOGA_SILENT" ]; then
     # Mostrar apenas na primeira vez
@@ -67,6 +85,9 @@ if [ -z "$YOGA_SILENT" ]; then
         yoga_espirito "🧘 Yoga Files v2.0 carregado!"
         echo -e "${YOGA_AGUA}Digite 'yoga' para abrir o dashboard${YOGA_RESET}"
         echo ""
+        
+        # Run dependency check
+        _yoga_check_dependencies
     fi
 fi
 
