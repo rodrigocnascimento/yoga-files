@@ -15,6 +15,10 @@
 - Doctor: add `--full` optional checks
 - Docs: add `docs/USAGE_GUIDE.md`
 
+## Versao 2.0.1 *(Abril 2026)*
+
+- Docs: add AGENTS.md guidelines for AI coding agents
+
 ---
 
 ## [2.1.0] - 2026-04-03
