@@ -1,6 +1,6 @@
 #!/usr/bin/env zsh
 #!/usr/bin/env zsh
-# yoga-files v2.0 - Instalador Principal
+# yoga-files v2.1.0 - Instalador Principal
 # ASDF + LazyVim + OpenAI + Git Multi-Perfil + JavaScript/TypeScript Focus
 
 # NOTE: This project is zsh-first. If you run this file using bash (e.g. `curl ... | bash`),
@@ -71,7 +71,7 @@ source "$SCRIPT_DIR/core/common.sh"
 show_yoga_banner() {
     clear 2>/dev/null || true
     echo ""
-    echo "    🧘 YOGA FILES v2.0 INSTALLER 🧘"
+    echo "    🧘 YOGA FILES v2.1.0 INSTALLER 🧘"
     echo "    ================================"
     echo "    ASDF + LazyVim + OpenAI Integration"
     echo "    JavaScript/TypeScript Focused"
@@ -325,13 +325,22 @@ install_asdf_plugins() {
 
 # Instalar versões padrão
 install_default_versions() {
-    yoga_agua "💧 Instalando versões padrão..."
+    yoga_agua "💧 Configuração de versões padrão..."
 
-    # Python 3
-    asdf install python latest:3.11
-    asdf global python latest:3.11
+    if command -v python3 >/dev/null 2>&1; then
+        yoga_terra "🌿 Python detectado no sistema: $(python3 --version 2>&1)"
+        yoga_agua "💧 Pulando compilação extra via ASDF para acelerar a instalação."
+    elif command -v python >/dev/null 2>&1; then
+        yoga_terra "🌿 Python detectado no sistema: $(python --version 2>&1)"
+        yoga_agua "💧 Pulando compilação extra via ASDF para acelerar a instalação."
+    else
+        yoga_ar "🌬️ Python não encontrado no sistema."
+        yoga_agua "💧 Pulando a compilação inicial (processo demorado)."
+        yoga_agua "💧 Se precisar do Python via ASDF depois, basta rodar:"
+        echo "   asdf install python latest:3.11 && asdf global python latest:3.11"
+    fi
     
-    yoga_terra "🌿 Versões padrão instaladas!"
+    yoga_terra "🌿 Configuração base concluída!"
 }
 
 # Instalar Neovim
@@ -448,7 +457,7 @@ setup_openai() {
 main() {
     show_yoga_banner
     
-    yoga_warn "🧘 INICIANDO INSTALAÇÃO DO YOGA FILES v2.0"
+    yoga_warn "🧘 INICIANDO INSTALAÇÃO DO YOGA FILES v2.1.0"
     echo ""
     
     # 1. Detectar sistema
@@ -488,7 +497,7 @@ main() {
     setup_openai
     
     echo ""
-    yoga_success "⭐⭐⭐ YOGA FILES v2.0 INSTALADO! ⭐⭐⭐"
+    yoga_success "⭐⭐⭐ YOGA FILES v2.1.0 INSTALADO! ⭐⭐⭐"
     echo ""
     yoga_espirito "🧘 Para começar a usar:"
     echo "   1. Recarregue seu shell: source ~/.zshrc"

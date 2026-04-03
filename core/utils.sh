@@ -1,5 +1,5 @@
 #!/bin/zsh
-# yoga-files v2.0 - Sistema de Cores e Funções Yoga
+# yoga-files v2.1.0 - Sistema de Cores e Funções Yoga
 
 ##################
 # Code # Colors  #
@@ -169,6 +169,54 @@ function yoga_status {
     echo ""
 }
 
+# ---------------------------------------------------------
+# YOGA INTERACTIVE MENU
+# ---------------------------------------------------------
+# Usage: result=$(yoga_interactive_menu "Title" "Option 1" "Option 2" "Option 3")
+# Returns the string of the selected option
+function yoga_interactive_menu {
+    local title="$1"
+    shift
+    local options=("$@")
+    local selected=""
+
+    if command -v gum &>/dev/null; then
+        # Use gum for a beautiful TUI
+        if [ -n "$title" ]; then
+            echo -e "${YOGA_AGUA}${YOGA_AGUA_ICON} ${title}${YOGA_RESET}"
+        fi
+        selected=$(printf "%s\n" "${options[@]}" | gum choose --cursor="🧘 " --cursor.foreground="35" --item.foreground="36" --selected.foreground="32")
+    elif command -v fzf &>/dev/null; then
+        # Fallback to fzf
+        local fzf_prompt="> "
+        if [ -n "$title" ]; then
+            fzf_prompt="${title} > "
+        fi
+        selected=$(printf "%s\n" "${options[@]}" | fzf --prompt="${fzf_prompt}" --height=~50% --layout=reverse --border=rounded)
+    else
+        # Graceful fallback to read
+        if [ -n "$title" ]; then
+            echo -e "${YOGA_AGUA}${YOGA_AGUA_ICON} ${title}${YOGA_RESET}"
+        fi
+        local i=1
+        for opt in "${options[@]}"; do
+            echo "  ${i}. ${opt}"
+            ((i++))
+        done
+        echo ""
+        echo -en "${YOGA_AR}🌬️ Escolha uma opção (1-$((${#options[@]}))): ${YOGA_RESET}"
+        local choice
+        read choice
+        
+        # Validate input
+        if [[ "$choice" =~ ^[0-9]+$ ]] && [ "$choice" -ge 1 ] && [ "$choice" -le "${#options[@]}" ]; then
+            selected="${options[$((choice-1))]}"
+        fi
+    fi
+
+    echo "$selected"
+}
+
 # Exportar funcoes apenas quando suportado (bash).
 if [ -n "${BASH_VERSION-}" ]; then
   export -f yoga_fogo
@@ -190,4 +238,5 @@ if [ -n "${BASH_VERSION-}" ]; then
   export -f yoga_meditation
   export -f yoga_progress
   export -f yoga_status
+  export -f yoga_interactive_menu
 fi

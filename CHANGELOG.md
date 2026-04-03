@@ -17,6 +17,19 @@
 
 ---
 
+## [2.1.0] - 2026-04-03
+
+### Added
+- Interactive TUI menus using `gum` and `fzf` as fallbacks for all dashboard workflows
+- Reusable `yoga_interactive_menu` TUI wrapper in `core/utils.sh`
+
+### Changed
+- Refactored `yoga_create_project`, `yoga_ai_menu`, and `yoga_docs` to use the interactive TUI instead of numeric prompts
+- Updated `yoga-doctor` to include checks for `fzf` and `gum`
+- Updated Setup Guide documentation mentioning new TUI menu capabilities
+
+---
+
 ## Versao 2.0.0 *(Fevereiro 2026)*
 
 ### Principais mudancas

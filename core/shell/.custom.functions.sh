@@ -57,10 +57,10 @@ aliases() {
 
   selected=$(
     (alias | sed 's/^alias //'; functions | grep '()') \
-    | fzf \
-      --prompt="Aliases & Functions > " \
-      --preview='echo {}' \
-      --preview-window=down:3:wrap
+      | fzf \
+        --prompt="Aliases & Functions > " \
+        --preview='echo {}' \
+        --preview-window=down:3:wrap
   )
 
   [[ -z "$selected" ]] && return
@@ -69,7 +69,13 @@ aliases() {
   name="${name%%()*}"
 
   echo "➡️ Executando: $name"
-  eval "$name"
+  
+  # Safe execution without eval
+  if [[ "$(type -t "$name")" == "function" ]] || [[ "$(type -t "$name")" == "alias" ]]; then
+    "$name"
+  else
+    echo "❌ '$name' is not a valid function or alias"
+  fi
 }
 
 cc() {
@@ -109,9 +115,15 @@ cc() {
       # Se for o enter ou tecla vazia
       if [[ -n "$cmd" ]]; then
         echo "🚀 Executando: $cmd"
-        # Se for um alias de 'cd', o eval roda no subshell da função, 
-        # para funcionar no SEU shell atual, a função cc precisa ser um alias ou source.
-        eval "$cmd"
+        # Safe execution without eval - check if it's a known safe command
+        if [[ "$cmd" =~ ^[a-zA-Z0-9_.-/]+$ ]] && [ -x "$(command -v "$cmd" 2>/dev/null)" ]; then
+          "$cmd"
+        elif [[ "$cmd" =~ ^[a-zA-Z0-9_]+$ ]] && [[ "$(type -t "$cmd")" == "function" ]] || [[ "$(type -t "$cmd")" == "builtin" ]]; then
+          "$cmd"
+        else
+          echo "⚠️ Command '$cmd' appears unsafe and was not executed for security reasons"
+          echo "   To execute it anyway, use: eval \"$cmd\""
+        fi
       fi
       ;;
   esac
@@ -132,7 +144,7 @@ cc_data() {
     cmd="${line#*=}"
     cmd="${cmd#\'}"
     cmd="${cmd%\'}"
-
+    
     [[ -n "$name" && -n "$cmd" ]] && echo "ALIAS|$name|$cmd"
   done
 
@@ -204,7 +216,15 @@ cc_action() {
       chmod +x "$cmd" && "$cmd"
       ;;
     *)
-      eval "$cmd"
+      # Safe execution without eval
+      if [[ "$cmd" =~ ^[a-zA-Z0-9_.-/]+$ ]] && [ -x "$(command -v "$cmd" 2>/dev/null)" ]; then
+        "$cmd"
+      elif [[ "$cmd" =~ ^[a-zA-Z0-9_]+$ ]] && [[ "$(type -t "$cmd")" == "function" ]] || [[ "$(type -t "$cmd")" == "builtin" ]]; then
+        "$cmd"
+      else
+        echo "⚠️ Command '$cmd' appears unsafe and was not executed for security reasons"
+        echo "   To execute it anyway, use: eval \"$cmd\""
+      fi
       ;;
   esac
 }
@@ -225,4 +245,3 @@ ccp() {
 
   tmux switch-client -t "$name"
 }
-
