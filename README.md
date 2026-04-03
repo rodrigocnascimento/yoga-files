@@ -1,6 +1,6 @@
 # yoga-files
 
-![🧘 Yoga Development Environment](https://raw.githubusercontent.com/yoga-files/brand/main/yoga-logo-banner.png)
+![🧘 Yoga Development Environment](assets/yoga-files.png)
 
 > **Seu ambiente de desenvolvimento com essência YOGA + inteligência artificial**  
 > *ASDF + LazyVim + OpenAI + GitHub Copilot + JavaScript/TypeScript Focus*
