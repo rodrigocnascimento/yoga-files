@@ -142,6 +142,16 @@ asdf-remove go
 
 O comando pede confirmacao antes de prosseguir.
 
+Quando ha multiplas versoes instaladas, voce pode escolher uma especifica ou
+digitar **`all`** para remover tudo (versoes + plugin + entrada no `.tool-versions`)
+de uma vez.
+
+Se o plugin existir mas nenhuma versao estiver instalada (ghost state), o
+comando oferece remover o plugin diretamente em vez de apenas sair.
+
+Apos desinstalar a ultima versao restante, `yoga remove` oferece automaticamente
+a remocao completa do plugin.
+
 ### `git-wizard`
 
 Wizard de perfis Git (personal/work). Configura e alterna identidade global/local.

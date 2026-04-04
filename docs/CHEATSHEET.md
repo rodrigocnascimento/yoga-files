@@ -52,7 +52,7 @@ Um guia rápido com todos os comandos, aliases e atalhos disponíveis no seu amb
 - **`asdf-update`** : Atualiza o ASDF e todos os plugins instalados.
 - **`asdf-menu`** : Abre o menu interativo para gerenciar versões.
 - **`yoga asdf`** : Wrapper para o menu interativo ASDF (equivalente a `asdf-menu`).
-- **`yoga remove <lang>`** : Desinstala um runtime gerenciado pelo ASDF (ex: `yoga remove go`). Remove plugin, versões e entradas do `.tool-versions`.
+- **`yoga remove <lang>`** : Desinstala um runtime gerenciado pelo ASDF (ex: `yoga remove go`). Remove plugin, versoes e entradas do `.tool-versions`. Suporta opcao `all` para remover tudo de uma vez.
 - **`asdf-remove <lang>`** : Alias para `yoga remove`.
 
 ---
