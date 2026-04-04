@@ -46,6 +46,11 @@ git status
 #### **Estrutura de Arquivos**
 ```
 yoga-files/
+├── bin/
+│   ├── yoga                  # Entrypoint principal
+│   ├── yoga-remove           # Desinstalar runtimes ASDF
+│   ├── yoga-asdf             # Wrapper ASDF interativo
+│   └── opencode-compile      # Compilador .opencode/ → AGENTS.md
 ├── core/
 │   ├── sua-feature/
 │   │   ├── install.sh
@@ -53,6 +58,8 @@ yoga-files/
 │   │   └── functions.sh
 │   └── tests/
 │       └── test-sua-feature.sh
+├── specs/
+│   └── tdd-sua-feature.md    # TDD obrigatório antes de implementar
 ├── docs/
 │   └── sua-feature-guide.md
 └── tests/
@@ -82,6 +89,16 @@ yoga_sua_feature() {
 # Smoke tests (zsh)
 zsh ./tests/smoke.zsh
 ```
+
+### 🔧 **3.1 Recompilar Configuração do Agente**
+
+Se suas alterações incluírem qualquer arquivo dentro de `.opencode/` (regras, comandos, skills), você **deve** recompilar o `AGENTS.md`:
+
+```bash
+bin/opencode-compile
+```
+
+Isso garante que as instruções do agente de IA estejam sempre sincronizadas. Não pule este passo.
 
 ### 📋 **4. Documente sua Contribuição**
 

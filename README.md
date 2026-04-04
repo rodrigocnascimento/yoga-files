@@ -188,6 +188,9 @@ git-commit             # Commit assistido por IA
 ```bash
 # ASDF e Version Management
 asdf-menu             # Interface ASDF interativa
+yoga asdf              # Wrapper para o menu interativo ASDF
+yoga remove <lang>     # Desinstalar runtime gerenciado pelo ASDF (ex: go, python)
+asdf-remove <lang>     # Alias para yoga remove
 node-version            # Gerenciar versões Node.js
 npm-version             # Gerenciar versões npm
 typescript-version       # Gerenciar versões TypeScript
@@ -291,9 +294,16 @@ yoga-ai "criar TODO list para amanhã baseado nos commits"
 ```
 yoga-files/
 ├── 📄 README.md                    # Este arquivo
+├── 📄 package.json                 # Versão oficial do projeto (semver)
 ├── 🚀 install.sh                  # Instalador principal
 ├── 🔄 init.sh                     # Bootloader do ambiente
 ├── 📋 config.yaml                  # Configurações centrais
+├── bin/                            # Executáveis yoga
+│   ├── yoga                      # Entrypoint principal (subcommand routing)
+│   ├── yoga-remove               # Desinstalar runtimes ASDF
+│   ├── yoga-asdf                 # Wrapper para menu interativo ASDF
+│   └── opencode-compile          # Compilador de regras .opencode/ → AGENTS.md
+├── specs/                          # Technical Design Documents (TDDs)
 ├── core/                          # Módulos principais
 │   ├── utils.sh                  # Funções yoga_* ❤️
 │   ├── aliases.sh                # Aliases principais

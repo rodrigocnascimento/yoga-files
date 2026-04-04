@@ -65,6 +65,17 @@ Geral: 29%
 
 ---
 
+## 📅 v0.2.0 - ASDF Package Management & Tooling
+
+- [x] `yoga remove` - Desinstalacao completa de runtimes ASDF
+- [x] `yoga asdf` - Wrapper para menu interativo ASDF
+- [x] `bin/opencode-compile` - Compilador de regras .opencode/ para AGENTS.md
+- [x] Subcommand routing no `bin/yoga` (yoga <sub> delega para bin/yoga-<sub>)
+- [x] Aliases ASDF no config.yaml (asdf-list, asdf-install, asdf-remove)
+- [x] package.json como fonte oficial de versao
+
+---
+
 ## 🔮 2027 - v3.0.0 Ecosystem Expansion
 
 - [ ] Plugin system (modulos independentes)

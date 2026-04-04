@@ -9,9 +9,11 @@ This checklist is meant to keep yoga-files releases consistent.
 - [ ] `README.md` install command is correct (`curl ... | zsh`)
 - [ ] `docs/SETUP_GUIDE.md` matches the installer behavior
 - [ ] No secrets committed (API keys, tokens)
+- [ ] `bin/opencode-compile` has been run (AGENTS.md is up to date with `.opencode/`)
 
 ## Versioning
 
+- [ ] Update version in `package.json` (official version source)
 - [ ] Update `CHANGELOG.md` (move items from Unreleased into a version section)
 - [ ] Tag the release (semver): `vMAJOR.MINOR.PATCH`
 
