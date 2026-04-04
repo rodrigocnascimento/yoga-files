@@ -4,6 +4,18 @@
 
 ---
 
+## [0.2.1] - 2026-04-03
+
+### Fixed
+- `yoga-remove` now fully uninstalls ASDF plugin after removing all versions
+- `yoga-remove` cleans stale entries from `~/.tool-versions` automatically
+- `yoga-remove` handles ghost state when plugin exists but no versions are installed
+
+### Added
+- "all" option in `yoga-remove` to remove every version + plugin in one step
+
+---
+
 ## [0.2.0] - 2026-04-03
 
 ### Added

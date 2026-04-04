@@ -24,6 +24,43 @@ else
     exit 1
 fi
 
+# --- Helper functions ---
+
+cleanup_tool_versions() {
+    local lang=$1
+    local tvfile="$HOME/.tool-versions"
+    if [ -f "$tvfile" ] && grep -q "^${lang} " "$tvfile"; then
+        sed -i.bak "/^${lang} /d" "$tvfile"
+        rm -f "${tvfile}.bak"
+        yoga_terra "Cleaned '$lang' from ~/.tool-versions"
+    fi
+}
+
+remove_plugin() {
+    local lang=$1
+    if asdf plugin remove "$lang" 2>/dev/null; then
+        yoga_terra "Plugin '$lang' removed"
+    else
+        yoga_fogo "Failed to remove plugin '$lang'"
+    fi
+    cleanup_tool_versions "$lang"
+}
+
+offer_plugin_removal() {
+    local lang=$1
+    echo ""
+    yoga_agua "No versions left for '$lang'."
+    echo -n "$(yoga_ar 'Remove plugin entirely? (y/n): ')"
+    read -r confirm
+    if [[ "$confirm" =~ ^[Yy] ]]; then
+        remove_plugin "$lang"
+    else
+        yoga_agua "Plugin kept. You can remove it later with: yoga remove $lang"
+    fi
+}
+
+# --- Main ---
+
 language="${1:-}"
 version="${2:-}"
 
@@ -41,7 +78,7 @@ if [ -z "$language" ]; then
             if [ -n "$vers" ]; then
                 yoga_terra "  $p: $vers"
             else
-                yoga_agua "  $p: (no versions)"
+                yoga_agua "  $p: (no versions installed)"
             fi
         done <<< "$plugins"
     fi
@@ -60,9 +97,18 @@ fi
 # Get installed versions (trimmed)
 local installed=$(asdf list "$language" 2>/dev/null | sed 's/^[* ]*//' | xargs) 2>/dev/null
 
+# No versions installed → offer plugin removal instead of just exiting
 if [ -z "$installed" ]; then
-    yoga_fogo "No versions installed for $language"
-    exit 1
+    yoga_agua "No versions installed for '$language', but the plugin still exists."
+    echo -n "$(yoga_ar 'Remove plugin entirely? (y/n): ')"
+    read -r confirm
+    if [[ "$confirm" =~ ^[Yy] ]]; then
+        remove_plugin "$language"
+        yoga_terra "Done. '$language' fully removed."
+    else
+        yoga_agua "Cancelled. Plugin kept."
+    fi
+    exit 0
 fi
 
 # No version provided → auto-select if single, prompt if multiple
@@ -76,12 +122,33 @@ if [ -z "$version" ]; then
         for v in ${(z)installed}; do
             echo "  $v"
         done
+        echo "  all  (remove everything + plugin)"
         echo ""
         echo -n "$(yoga_ar 'Version to remove: ')"
         read -r version
         if [ -z "$version" ]; then
             yoga_fogo "No version specified"
             exit 1
+        fi
+        # Handle "all" option
+        if [ "$version" = "all" ]; then
+            yoga_agua "This will uninstall ALL versions of '$language' and remove the plugin."
+            echo -n "$(yoga_ar 'Are you sure? (y/n): ')"
+            read -r confirm
+            if [[ ! "$confirm" =~ ^[Yy] ]]; then
+                yoga_agua "Cancelled"
+                exit 0
+            fi
+            for v in ${(z)installed}; do
+                if asdf uninstall "$language" "$v" 2>/dev/null; then
+                    yoga_terra "Uninstalled $language $v"
+                else
+                    yoga_fogo "Failed to uninstall $language $v"
+                fi
+            done
+            remove_plugin "$language"
+            yoga_terra "Done. '$language' fully removed."
+            exit 0
         fi
     fi
 fi
@@ -108,4 +175,10 @@ if asdf uninstall "$language" "$version"; then
 else
     yoga_fogo "Failed to uninstall $language $version"
     exit 1
+fi
+
+# Check if any versions remain — offer full cleanup
+local remaining=$(asdf list "$language" 2>/dev/null | sed 's/^[* ]*//' | xargs) 2>/dev/null
+if [ -z "$remaining" ]; then
+    offer_plugin_removal "$language"
 fi
