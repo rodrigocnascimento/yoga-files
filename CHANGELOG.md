@@ -4,6 +4,18 @@
 
 ---
 
+## [0.2.0] - 2026-04-03
+
+### Added
+- `yoga-remove` command for uninstalling ASDF-managed language runtimes
+- `package.json` as official version source for the project
+- Technical Design Document for yoga-remove feature
+
+### Changed
+- `asdf-remove` alias now points to `yoga remove` instead of `yoga asdf uninstall`
+
+---
+
 ## Unreleased
 
 - Docs: add missing guides under `docs/`

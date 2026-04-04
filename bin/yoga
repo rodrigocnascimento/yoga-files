@@ -10,6 +10,24 @@ if [ ! -f "$YOGA_HOME/init.sh" ]; then
   exit 1
 fi
 
+# Subcommand routing: yoga <subcommand> delegates to bin/yoga-<subcommand>
+if [ $# -gt 0 ]; then
+  local subcmd="$1"
+  shift
+  local subcmd_bin="$YOGA_HOME/bin/yoga-${subcmd}"
+
+  if [ -x "$subcmd_bin" ]; then
+    exec "$subcmd_bin" "$@"
+  else
+    echo "yoga: unknown subcommand '$subcmd'" >&2
+    echo "Available subcommands:" >&2
+    for f in "$YOGA_HOME"/bin/yoga-*; do
+      [ -x "$f" ] && echo "  ${$(basename "$f")#yoga-}" >&2
+    done
+    exit 1
+  fi
+fi
+
 # If not attached to a TTY, don't launch the interactive dashboard.
 if [ ! -t 1 ]; then
   "$YOGA_HOME/bin/yoga-status" || true

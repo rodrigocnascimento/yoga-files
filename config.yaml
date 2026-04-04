@@ -93,21 +93,29 @@ integrations:
     
 # Aliases customizados
 aliases:
-  # Desenvolvimento
-  dev: "npm run dev"
-  build: "npm run build"
-  test: "npm run test"
-  
-  # Git
-  gs: "git status"
-  gc: "git commit"
-  gp: "git push"
-  gl: "git pull"
-  
-  # Yoga
-  yogi: "yoga"
-  flow: "yoga-flow"
-  breathe: "yoga-breath"
+   # Desenvolvimento
+   dev: "npm run dev"
+   build: "npm run build"
+   test: "npm run test"
+   
+   # Git
+   gs: "git status"
+   gc: "git commit"
+   gp: "git push"
+   gl: "git pull"
+   
+   # Yoga
+   yogi: "yoga"
+   flow: "yoga-flow"
+   breathe: "yoga-breath"
+   
+   # ASDF Package Management
+   asdf-list: "yoga asdf list"
+   asdf-install: "yoga asdf install"
+   asdf-remove: "yoga remove"
+   asdf-set: "yoga asdf set"
+   asdf-update: "yoga asdf update"
+   asdf-check: "yoga asdf check"
   
 # Funções customizadas
 functions:

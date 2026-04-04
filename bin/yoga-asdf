@@ -1,0 +1,28 @@
+#!/usr/bin/env zsh
+
+# yoga-asdf - Yoga wrapper for ASDF package management
+# Provides yoga-themed interface for ASDF operations
+
+emulate -L zsh
+set -euo pipefail
+
+YOGA_HOME="${YOGA_HOME:-$HOME/.yoga}"
+
+# Source yoga initialization
+if [ -f "$YOGA_HOME/init.sh" ]; then
+    source "$YOGA_HOME/init.sh"
+else
+    echo "yoga-asdf: missing: $YOGA_HOME/init.sh" >&2
+    exit 1
+fi
+
+# Source ASDF if available
+if [ -f "$HOME/.asdf/asdf.sh" ]; then
+    source "$HOME/.asdf/asdf.sh"
+else
+    yoga_fogo "❌ ASDF not found at $HOME/.asdf/asdf.sh"
+    exit 1
+fi
+
+# Delegate to the existing ASDF interactive manager
+exec bash "$YOGA_HOME/core/version-managers/asdf/interactive.sh" "$@"
