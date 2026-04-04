@@ -94,8 +94,39 @@ yoga remove python
 asdf-remove go
 ```
 
-The command asks for confirmation before proceeding. It is safe to run on
-languages that are not installed (it will report that nothing was found).
+The command asks for confirmation before proceeding.
+
+#### Interactive version selection
+
+When multiple versions are installed, `yoga remove` lists them and lets you
+choose which one to uninstall. You can also type **`all`** to remove every
+version, the plugin, and the `~/.tool-versions` entry in one step:
+
+```text
+Installed versions for golang:
+  1.21.0
+  1.22.1
+  all  (remove everything + plugin)
+
+Version to remove: all
+```
+
+#### Ghost state handling
+
+If a plugin exists but has no versions installed (for example, after manually
+running `asdf uninstall`), `yoga remove` detects this and offers to remove the
+plugin entirely instead of just exiting:
+
+```text
+No versions installed for 'golang', but the plugin still exists.
+Remove plugin entirely? (y/n):
+```
+
+#### Post-uninstall cleanup
+
+After uninstalling the last remaining version, `yoga remove` automatically
+offers to remove the plugin and clean `~/.tool-versions` so no stale entries
+are left behind.
 
 ### Aliases (from config.yaml)
 

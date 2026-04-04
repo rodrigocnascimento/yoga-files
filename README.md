@@ -189,7 +189,7 @@ git-commit             # Commit assistido por IA
 # ASDF e Version Management
 asdf-menu             # Interface ASDF interativa
 yoga asdf              # Wrapper para o menu interativo ASDF
-yoga remove <lang>     # Desinstalar runtime gerenciado pelo ASDF (ex: go, python)
+yoga remove <lang>     # Desinstalar completamente: versoes + plugin + .tool-versions
 asdf-remove <lang>     # Alias para yoga remove
 node-version            # Gerenciar versões Node.js
 npm-version             # Gerenciar versões npm
@@ -300,7 +300,7 @@ yoga-files/
 ├── 📋 config.yaml                  # Configurações centrais
 ├── bin/                            # Executáveis yoga
 │   ├── yoga                      # Entrypoint principal (subcommand routing)
-│   ├── yoga-remove               # Desinstalar runtimes ASDF
+│   ├── yoga-remove               # Desinstalar runtimes ASDF (versoes + plugin + .tool-versions)
 │   ├── yoga-asdf                 # Wrapper para menu interativo ASDF
 │   └── opencode-compile          # Compilador de regras .opencode/ → AGENTS.md
 ├── specs/                          # Technical Design Documents (TDDs)

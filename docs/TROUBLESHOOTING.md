@@ -58,6 +58,30 @@ asdf plugin list
 
 If the language is not in the list, there is nothing for `yoga remove` to uninstall.
 
+## Plugin Exists But No Versions Installed (Ghost State)
+
+If you previously removed versions manually (e.g. `asdf uninstall golang 1.22`)
+but the plugin still shows up in `asdf plugin list`, run:
+
+```bash
+yoga remove golang
+```
+
+The command detects that the plugin has no versions and offers to remove it
+entirely, including cleaning stale entries from `~/.tool-versions`.
+
+If you want to skip the interactive prompt, you can remove the plugin directly:
+
+```bash
+asdf plugin remove golang
+```
+
+## yoga remove Cleaned My .tool-versions -- Is That Expected?
+
+Yes. Since v0.2.1, `yoga remove` automatically removes the matching line from
+`~/.tool-versions` after uninstalling the plugin. This prevents ASDF from
+complaining about missing runtimes the next time you open a shell.
+
 ## AGENTS.md Looks Corrupted or Out of Date
 
 If the auto-generated section of `AGENTS.md` is missing or contains garbage, recompile it:
