@@ -1,0 +1,10 @@
+{
+  "name": "yoga-files",
+  "version": "0.2.0",
+  "description": "ASDF + LazyVim + AI development environment with yoga-themed UI",
+  "private": true,
+  "scripts": {
+    "opencode:compile": "bin/opencode-compile"
+  },
+  "license": "MIT"
+}

@@ -1,0 +1,111 @@
+#!/usr/bin/env zsh
+
+# yoga-remove - Remove ASDF-managed language versions
+# Usage: yoga-remove <language> [version]
+
+emulate -L zsh
+set -euo pipefail
+
+YOGA_HOME="${YOGA_HOME:-$HOME/.yoga}"
+
+# Source yoga initialization
+if [ -f "$YOGA_HOME/init.sh" ]; then
+    source "$YOGA_HOME/init.sh"
+else
+    echo "yoga-remove: missing: $YOGA_HOME/init.sh" >&2
+    exit 1
+fi
+
+# Source ASDF
+if [ -f "$HOME/.asdf/asdf.sh" ]; then
+    source "$HOME/.asdf/asdf.sh"
+else
+    yoga_fogo "ASDF not found at $HOME/.asdf/asdf.sh"
+    exit 1
+fi
+
+language="${1:-}"
+version="${2:-}"
+
+# No language provided → show installed plugins and usage
+if [ -z "$language" ]; then
+    yoga_fogo "Usage: yoga-remove <language> [version]"
+    echo ""
+    yoga_espirito "Installed plugins:"
+    local plugins=$(asdf plugin list 2>/dev/null) 2>/dev/null
+    if [ -z "$plugins" ]; then
+        yoga_agua "  (none)"
+    else
+        while IFS= read -r p; do
+            local vers=$(asdf list "$p" 2>/dev/null | sed 's/^[* ]*//' | xargs) 2>/dev/null
+            if [ -n "$vers" ]; then
+                yoga_terra "  $p: $vers"
+            else
+                yoga_agua "  $p: (no versions)"
+            fi
+        done <<< "$plugins"
+    fi
+    exit 1
+fi
+
+# Check plugin exists
+if ! asdf plugin list 2>/dev/null | grep -q "^${language}$"; then
+    yoga_fogo "Plugin '$language' is not installed"
+    echo ""
+    yoga_agua "Installed plugins:"
+    asdf plugin list 2>/dev/null || echo "  (none)"
+    exit 1
+fi
+
+# Get installed versions (trimmed)
+local installed=$(asdf list "$language" 2>/dev/null | sed 's/^[* ]*//' | xargs) 2>/dev/null
+
+if [ -z "$installed" ]; then
+    yoga_fogo "No versions installed for $language"
+    exit 1
+fi
+
+# No version provided → auto-select if single, prompt if multiple
+if [ -z "$version" ]; then
+    local count=$(echo "$installed" | wc -w | tr -d ' ') 2>/dev/null
+    if [ "$count" -eq 1 ]; then
+        version="$installed"
+        yoga_agua "Only version installed: $version"
+    else
+        yoga_espirito "Installed versions for $language:"
+        for v in ${(z)installed}; do
+            echo "  $v"
+        done
+        echo ""
+        echo -n "$(yoga_ar 'Version to remove: ')"
+        read -r version
+        if [ -z "$version" ]; then
+            yoga_fogo "No version specified"
+            exit 1
+        fi
+    fi
+fi
+
+# Validate version is actually installed
+if ! asdf list "$language" 2>/dev/null | grep -q "$version"; then
+    yoga_fogo "Version $version is not installed for $language"
+    yoga_agua "Installed versions: $installed"
+    exit 1
+fi
+
+# Confirm
+yoga_agua "This will uninstall $language $version"
+echo -n "$(yoga_ar 'Are you sure? (y/n): ')"
+read -r confirm
+if [[ ! "$confirm" =~ ^[Yy] ]]; then
+    yoga_agua "Cancelled"
+    exit 0
+fi
+
+# Execute
+if asdf uninstall "$language" "$version"; then
+    yoga_terra "Successfully uninstalled $language $version"
+else
+    yoga_fogo "Failed to uninstall $language $version"
+    exit 1
+fi
