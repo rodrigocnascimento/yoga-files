@@ -57,6 +57,9 @@ yoga-doctor                     # Environment diagnostics
 
 # Version management
 asdf-menu                       # Interactive ASDF menu
+yoga asdf                       # Wrapper for interactive ASDF menu
+yoga remove <lang>              # Uninstall ASDF-managed runtime completely
+asdf-remove <lang>              # Alias for yoga remove
 node-version                    # Manage Node.js versions
 typescript-version              # Manage TypeScript versions
 
@@ -266,11 +269,13 @@ When generating code, ensure:
 
 Key files to consult for specifics:
 - `config.yaml` - Primary configuration for tools and preferences
+- `package.json` - Official project version source (semver)
 - `README.md` - Comprehensive usage guide and command reference
 - `docs/` directory - Detailed guides for each subsystem
+- `specs/` directory - Technical Design Documents (TDDs)
 - `tests/` directory - Examples of testing patterns
 - `core/` directory - Internal yoga-files implementations
-- `bin/` directory - Executable yoga commands
+- `bin/` directory - Executable yoga commands (yoga, yoga-remove, yoga-asdf, opencode-compile)
 
 ## 🔄 Workflow Recommendations
 

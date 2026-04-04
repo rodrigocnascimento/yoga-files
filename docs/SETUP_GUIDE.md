@@ -104,6 +104,16 @@ asdf list nodejs
 asdf current nodejs
 ```
 
+### Yoga Wrapper Commands para ASDF
+```bash
+# Menu interativo ASDF
+yoga asdf                  # ou asdf-menu
+
+# Desinstalar runtime completo (plugin + versões + .tool-versions)
+yoga remove go             # ou asdf-remove go
+yoga remove python
+```
+
 ---
 
 ## 🎨 **Passo 3: Configuração LazyVim**

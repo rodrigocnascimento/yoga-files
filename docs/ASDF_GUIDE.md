@@ -62,3 +62,47 @@ Commit `.tool-versions` with your project to make CI and teammates match your ru
 - Version not switching
   - Verify you are in the directory that contains `.tool-versions`
   - Run `asdf current` and confirm the plugin is installed
+
+## Yoga Wrapper Commands
+
+yoga-files provides convenient wrapper commands for common ASDF operations.
+
+### yoga asdf (Interactive Manager)
+
+Opens the interactive ASDF menu (same as `asdf-menu`):
+
+```bash
+yoga asdf
+```
+
+### yoga remove (Uninstall a Runtime)
+
+Completely removes a language runtime managed by ASDF. This includes:
+
+- All installed versions of the language
+- The ASDF plugin itself
+- Any entries for the language in `~/.tool-versions`
+
+```bash
+# Remove Go
+yoga remove go
+
+# Remove Python
+yoga remove python
+
+# Using the alias
+asdf-remove go
+```
+
+The command asks for confirmation before proceeding. It is safe to run on
+languages that are not installed (it will report that nothing was found).
+
+### Aliases (from config.yaml)
+
+| Alias | Command | Description |
+|-------|---------|-------------|
+| `asdf-menu` | `yoga asdf` | Interactive ASDF manager |
+| `asdf-list` | `asdf list` | List installed versions |
+| `asdf-install` | `asdf install` | Install a version |
+| `asdf-remove` | `yoga remove` | Uninstall a runtime completely |
+| `asdf-update` | ASDF update | Update ASDF and plugins |

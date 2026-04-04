@@ -117,6 +117,31 @@ Menu interativo do ASDF.
 asdf-menu
 ```
 
+### `yoga asdf`
+
+Wrapper para o menu interativo do ASDF. Equivalente ao `asdf-menu`.
+
+```bash
+yoga asdf
+```
+
+### `yoga remove`
+
+Remove completamente um runtime gerenciado pelo ASDF: desinstala todas as versoes, remove o plugin e limpa entradas do `~/.tool-versions`.
+
+```bash
+yoga remove go
+yoga remove python
+```
+
+Alias: `asdf-remove`
+
+```bash
+asdf-remove go
+```
+
+O comando pede confirmacao antes de prosseguir.
+
 ### `git-wizard`
 
 Wizard de perfis Git (personal/work). Configura e alterna identidade global/local.
