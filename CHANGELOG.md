@@ -4,6 +4,15 @@
 
 ---
 
+## [0.4.0] - 2026-04-05
+
+### Added
+- Comprehensive architecture documentation (ARCHITECTURE.md)
+- Complete testing guide (docs/GUIA_DE_TESTES.md)
+- Docusaurus documentation site (docs-site/)
+- AI provider migration from OpenAI to Gemini 1.5 Pro
+- Tailwind CSS import fix for landing page build
+
 ## [0.3.0] - 2026-04-05
 
 ### Added
