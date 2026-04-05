@@ -4,6 +4,19 @@
 
 ---
 
+## [0.3.0] - 2026-04-05
+
+### Added
+- Interactive Gum interface for yoga-files
+- Main interactive menu (yoga menu)
+- Project setup wizard (yoga setup)
+- System status dashboard (yoga dashboard)
+- Enhanced prompts with validation and autocomplete
+- Gum helper functions with graceful fallbacks
+- Integrated subcommands: yoga menu and yoga setup
+
+---
+
 ## [0.2.1] - 2026-04-03
 
 ### Fixed
