@@ -1,0 +1,158 @@
+#!/usr/bin/env zsh
+#
+# yoga-update-docs - Atualizador seguro de documentação
+# NÃO modifica configurações, apenas adiciona/atualiza arquivos de documentação
+#
+
+emulate -L zsh
+set -euo pipefail
+
+# Detectar diretórios
+YOGA_HOME="${YOGA_HOME:-$HOME/.yoga}"
+SCRIPT_DIR="${0:A:h:h}"  # Sobe de bin/ para raiz do repo
+
+# Cores para output (fallback se utils.sh não estiver disponível)
+yoga_ar() { echo "\033[0;34m$1\033[0m"; }
+yoga_terra() { echo "\033[0;32m$1\033[0m"; }
+yoga_fogo() { echo "\033[0;31m$1\033[0m"; }
+yoga_agua() { echo "\033[0;36m$1\033[0m"; }
+
+# Tentar carregar utils do yoga se disponível
+if [ -f "$YOGA_HOME/core/utils.sh" ]; then
+    source "$YOGA_HOME/core/utils.sh" 2>/dev/null || true
+fi
+
+echo ""
+yoga_ar "🌬️  Atualizador de Documentação Yoga"
+echo "==============================="
+echo ""
+
+# Verificar se yoga está instalado
+if [ ! -d "$YOGA_HOME" ]; then
+    yoga_fogo "❌ Yoga não está instalado em $YOGA_HOME"
+    echo ""
+    echo "   Para instalar o yoga-files, execute:"
+    echo "   curl -fsSL https://raw.githubusercontent.com/rodrigocnascimento/yoga-files/main/install.sh | zsh"
+    echo ""
+    exit 1
+fi
+
+yoga_terra "✅ Yoga encontrado em: $YOGA_HOME"
+echo ""
+
+# Verificar diretório do repositório
+if [ ! -f "$SCRIPT_DIR/README.md" ]; then
+    yoga_fogo "❌ Diretório do repositório não encontrado"
+    echo "   Esperado: $SCRIPT_DIR/README.md"
+    echo ""
+    echo "   Execute este script a partir do repositório yoga-files:"
+    echo "   ./bin/yoga-update-docs"
+    echo ""
+    exit 1
+fi
+
+yoga_terra "✅ Repositório fonte: $SCRIPT_DIR"
+echo ""
+
+# Contadores
+local docs_copied=0
+local docs_skipped=0
+local docs_updated=0
+
+yoga_agua "📚 Verificando arquivos de documentação..."
+echo ""
+
+# Arquivos de documentação na raiz
+for doc in README.md CONTRIBUTING.md CHANGELOG.md; do
+    if [ -f "$SCRIPT_DIR/$doc" ]; then
+        if [ ! -f "$YOGA_HOME/$doc" ]; then
+            # Arquivo não existe - copiar
+            cp "$SCRIPT_DIR/$doc" "$YOGA_HOME/"
+            yoga_terra "   ✅ Copiado: $doc"
+            docs_copied=$((docs_copied + 1))
+        else
+            # Arquivo existe - verificar se é diferente
+            if ! diff -q "$SCRIPT_DIR/$doc" "$YOGA_HOME/$doc" >/dev/null 2>&1; then
+                # São diferentes - fazer backup e atualizar
+                local backup_name="${doc}.backup.$(date +%Y%m%d-%H%M%S)"
+                cp "$YOGA_HOME/$doc" "$YOGA_HOME/$backup_name"
+                cp "$SCRIPT_DIR/$doc" "$YOGA_HOME/$doc"
+                yoga_agua "   🔄 Atualizado: $doc (backup: $backup_name)"
+                docs_updated=$((docs_updated + 1))
+            else
+                # São iguais - pular
+                echo "   ⏭️  Atualizado: $doc"
+                docs_skipped=$((docs_skipped + 1))
+            fi
+        fi
+    else
+        yoga_fogo "   ⚠️  Não encontrado no repositório: $doc"
+    fi
+done
+
+echo ""
+
+# Atualizar docs/
+if [ -d "$SCRIPT_DIR/docs" ]; then
+    yoga_agua "📂 Atualizando diretório docs/..."
+    echo ""
+    
+    # Garantir que o diretório existe
+    mkdir -p "$YOGA_HOME/docs"
+    
+    # Copiar arquivos (preservando existentes, atualizando diferentes)
+    local doc_files=($SCRIPT_DIR/docs/*(.N))
+    
+    for doc_file in $doc_files; do
+        local filename=$(basename "$doc_file")
+        local target_file="$YOGA_HOME/docs/$filename"
+        
+        if [ ! -f "$target_file" ]; then
+            # Novo arquivo
+            cp "$doc_file" "$target_file"
+            yoga_terra "   ✅ Novo: docs/$filename"
+            docs_copied=$((docs_copied + 1))
+        elif ! diff -q "$doc_file" "$target_file" >/dev/null 2>&1; then
+            # Arquivo diferente - atualizar com backup
+            local backup_name="${filename}.backup.$(date +%Y%m%d-%H%M%S)"
+            cp "$target_file" "$YOGA_HOME/docs/$backup_name"
+            cp "$doc_file" "$target_file"
+            yoga_agua "   🔄 Atualizado: docs/$filename (backup: $backup_name)"
+            docs_updated=$((docs_updated + 1))
+        else
+            # Igual - pular
+            echo "   ⏭️  Atualizado: docs/$filename"
+            docs_skipped=$((docs_skipped + 1))
+        fi
+    done
+    
+    echo ""
+fi
+
+# Relatório final
+echo "==============================="
+yoga_terra "🌿 Resumo da atualização:"
+echo ""
+echo "   📥 Novos arquivos:      $docs_copied"
+echo "   🔄 Arquivos atualizados: $docs_updated"
+echo "   ⏭️  Já atualizados:      $docs_skipped"
+echo ""
+
+if [ $docs_copied -gt 0 ] || [ $docs_updated -gt 0 ]; then
+    yoga_terra "✅ Documentação atualizada com sucesso!"
+    echo ""
+    echo "   Agora você pode usar:"
+    echo "   yoga → Documentação → [qualquer opção]"
+    echo ""
+    
+    if [ $docs_updated -gt 0 ]; then
+        yoga_agua "💡 Backups criados em: $YOGA_HOME/"
+        echo "   Arquivos .backup.* podem ser removidos manualmente se desejado"
+        echo ""
+    fi
+else
+    yoga_terra "✅ Todos os arquivos de documentação já estão atualizados!"
+    echo ""
+fi
+
+exit 0

@@ -34,4 +34,15 @@ if [ ! -t 1 ]; then
   exit 0
 fi
 
-exec zsh -ic "export YOGA_HOME='$YOGA_HOME'; source '$YOGA_HOME/init.sh'; yoga_dashboard"
+# Launch dashboard in a subshell that sources init.sh and keeps running until user exits
+(
+  export YOGA_HOME="$YOGA_HOME"
+  source "$YOGA_HOME/init.sh"
+  
+  # Loop principal do dashboard - só sai quando yoga_dashboard retornar explicitamente
+  while true; do
+    yoga_dashboard
+    # Se chegou aqui, usuário saiu do dashboard
+    break
+  done
+)
