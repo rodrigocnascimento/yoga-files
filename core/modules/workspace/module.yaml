@@ -1,0 +1,22 @@
+#!/usr/bin/env zsh
+# 🌌 core/modules/workspace/module.yaml
+# @name: workspace-module
+# @desc: Gerenciamento de Workspaces com Tmux 🌌
+# @usage: yoga workspace [list|create|switch|kill]
+# @author: Yoga 2.0 Efigenia Edition 🧘‍♂️
+
+name: "workspace"
+version: "2.0.0"
+description: "Gerenciamento de projetos e sessões Tmux"
+dependencies:
+  - tmux
+  - fzf
+commands:
+  - name: "list"
+    description: "Lista workspaces"
+  - name: "create"
+    description: "Cria novo workspace"
+  - name: "switch"
+    description: "Ativa/troca workspace"
+  - name: "kill"
+    description: "Remove workspace"

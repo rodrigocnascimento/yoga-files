@@ -1,0 +1,19 @@
+#!/usr/bin/env zsh
+# 🎯 core/modules/cc/module.yaml
+# @name: cc-module
+# @desc: Command Center - Busca interativa para comandos 🎯
+# @usage: yoga cc
+# @author: Yoga 2.0 Efigenia Edition 🧘‍♂️
+
+name: "cc"
+version: "2.0.0"
+description: "Command Center interativo usando fzf"
+dependencies:
+  - fzf
+  - jq
+commands:
+  - name: "run"
+    description: "Inicia interface interativa"
+hooks:
+  pre_load: []
+  post_load: []

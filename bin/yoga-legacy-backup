@@ -1,0 +1,48 @@
+#!/usr/bin/env zsh
+
+emulate -L zsh
+set -euo pipefail
+
+YOGA_HOME="${YOGA_HOME:-$HOME/.yoga}"
+
+if [ ! -f "$YOGA_HOME/init.sh" ]; then
+  echo "yoga: missing: $YOGA_HOME/init.sh" >&2
+  exit 1
+fi
+
+# Subcommand routing: yoga <subcommand> delegates to bin/yoga-<subcommand>
+if [ $# -gt 0 ]; then
+  local subcmd="$1"
+  shift
+  local subcmd_bin="$YOGA_HOME/bin/yoga-${subcmd}"
+
+  if [ -x "$subcmd_bin" ]; then
+    exec "$subcmd_bin" "$@"
+  else
+    echo "yoga: unknown subcommand '$subcmd'" >&2
+    echo "Available subcommands:" >&2
+    for f in "$YOGA_HOME"/bin/yoga-*; do
+      [ -x "$f" ] && echo "  ${$(basename "$f")#yoga-}" >&2
+    done
+    exit 1
+  fi
+fi
+
+# If not attached to a TTY, don't launch the interactive dashboard.
+if [ ! -t 1 ]; then
+  "$YOGA_HOME/bin/yoga-status" || true
+  exit 0
+fi
+
+# Launch dashboard in a subshell that sources init.sh and keeps running until user exits
+(
+  export YOGA_HOME="$YOGA_HOME"
+  source "$YOGA_HOME/init.sh"
+  
+  # Loop principal do dashboard - só sai quando yoga_dashboard retornar explicitamente
+  while true; do
+    yoga_dashboard
+    # Se chegou aqui, usuário saiu do dashboard
+    break
+  done
+)

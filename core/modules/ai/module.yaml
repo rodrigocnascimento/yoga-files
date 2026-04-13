@@ -1,0 +1,22 @@
+#!/usr/bin/env zsh
+# 🤖 core/modules/ai/module.yaml
+# @name: ai-module
+# @desc: AI Assistant com RAG local 🤖
+# @usage: yoga ai ask "pergunta"
+# @author: Yoga 2.0 Efigenia Edition 🧘‍♂️
+
+name: "ai"
+version: "2.0.0"
+description: "AI Assistant com integração local (Ollama) e RAG"
+dependencies:
+  - jq
+  - curl
+config:
+  provider: "ollama"  # ollama | openai | anthropic
+  model: "llama3.2"
+  host: "${OLLAMA_HOST:-http://localhost:11434}"
+commands:
+  - name: "ask"
+    description: "Pergunta à IA"
+  - name: "context"
+    description: "Gerencia contexto RAG"
