@@ -1,0 +1,30 @@
+#!/usr/bin/env zsh
+# 👹 bin/yoga-daemon
+# @name: yoga-daemon
+# @desc: Yoga 2.0 Daemon - Unix Socket Server 👹
+# @usage: yoga-daemon [--foreground]
+# @author: Yoga 2.0 Efigenia Edition 🧘‍♂️
+
+set -euo pipefail
+
+# 🏠 Config
+YOGA_HOME="${YOGA_HOME:-$HOME/.yoga-files}"
+export YOGA_HOME
+
+# 📦 Source
+source "${YOGA_HOME}/core/utils/ui.sh"
+source "${YOGA_HOME}/core/daemon/server.sh"
+
+# 🎯 Parse args
+foreground="${1:-}"
+
+# 🚀 Start
+if [[ "$foreground" == "--foreground" ]]; then
+    yoga_banner
+    yoga_header "👹 Yoga Daemon (Modo Foreground)"
+    yoga_sol "💡 Pressione Ctrl+C para parar"
+    echo ""
+    yoga_daemon_start --foreground
+else
+    yoga_daemon_start
+fi

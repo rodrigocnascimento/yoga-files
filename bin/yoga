@@ -1,48 +1,478 @@
 #!/usr/bin/env zsh
+# 🎭 bin/yoga
+# @name: yoga-cli
+# @desc: CLI Client for Yoga 2.0 - Main Entry Point 🧘‍♂️
+# @usage: yoga <command> [args...]
+# @author: Yoga 2.0 Efigenia Edition ✨
 
-emulate -L zsh
 set -euo pipefail
 
-YOGA_HOME="${YOGA_HOME:-$HOME/.yoga}"
+# 🏠 Config
+YOGA_HOME="${YOGA_HOME:-$HOME/.yoga-files}"
+export YOGA_HOME
 
-if [ ! -f "$YOGA_HOME/init.sh" ]; then
-  echo "yoga: missing: $YOGA_HOME/init.sh" >&2
-  exit 1
-fi
+# 📦 Source dependencies
+source "${YOGA_HOME}/core/utils/ui.sh"
+source "${YOGA_HOME}/core/daemon/lifecycle.sh"
+source "${YOGA_HOME}/core/daemon/client.sh"
 
-# Subcommand routing: yoga <subcommand> delegates to bin/yoga-<subcommand>
-if [ $# -gt 0 ]; then
-  local subcmd="$1"
-  shift
-  local subcmd_bin="$YOGA_HOME/bin/yoga-${subcmd}"
+# ═══════════════════════════════════════════════════════════
+# 🎯 MAIN
+# ═══════════════════════════════════════════════════════════
 
-  if [ -x "$subcmd_bin" ]; then
-    exec "$subcmd_bin" "$@"
-  else
-    echo "yoga: unknown subcommand '$subcmd'" >&2
-    echo "Available subcommands:" >&2
-    for f in "$YOGA_HOME"/bin/yoga-*; do
-      [ -x "$f" ] && echo "  ${$(basename "$f")#yoga-}" >&2
-    done
-    exit 1
-  fi
-fi
+function main {
+    local cmd="${1:-help}"
+    shift || true
+    
+    # 🎨 Banner nas operações principais
+    case "$cmd" in
+        daemon|cc|workspace|ai|plugin|state|update|version)
+            yoga_banner
+            ;;
+    esac
+    
+    # 🎯 Route commands
+    case "$cmd" in
+        # 👹 Daemon management
+        daemon)
+            yoga_daemon_command "$@"
+            ;;
+            
+        # 🎯 Command Center
+        cc)
+            _yoga_cmd_cc "$@"
+            ;;
+            
+        # 🌌 Workspaces
+        workspace|ws)
+            _yoga_cmd_workspace "$@"
+            ;;
+            
+        # 🤖 AI
+        ai|ask)
+            _yoga_cmd_ai "$@"
+            ;;
+            
+        # 🔌 Plugins
+        plugin|plugins)
+            _yoga_cmd_plugin "$@"
+            ;;
+            
+        # 💾 State
+        state)
+            _yoga_cmd_state "$@"
+            ;;
+            
+        # 📊 Status
+        status)
+            yoga_daemon_status
+            ;;
+            
+        # 🔄 Update
+        update)
+            _yoga_cmd_update
+            ;;
+            
+        # 📝 Logs
+        logs|log)
+            _yoga_cmd_logs "$@"
+            ;;
+            
+        # 📋 Version
+        version|--version|-v)
+            _yoga_cmd_version
+            ;;
+            
+        # ❓ Help
+        help|--help|-h)
+            _yoga_cmd_help
+            ;;
+            
+        # 🚫 Unknown
+        *)
+            yoga_fogo "❌ Comando desconhecido: $cmd"
+            echo ""
+            _yoga_cmd_help
+            return 1
+            ;;
+    esac
+}
 
-# If not attached to a TTY, don't launch the interactive dashboard.
-if [ ! -t 1 ]; then
-  "$YOGA_HOME/bin/yoga-status" || true
-  exit 0
-fi
+# ═══════════════════════════════════════════════════════════
+# 🎯 COMMAND IMPLEMENTATIONS
+# ═══════════════════════════════════════════════════════════
 
-# Launch dashboard in a subshell that sources init.sh and keeps running until user exits
-(
-  export YOGA_HOME="$YOGA_HOME"
-  source "$YOGA_HOME/init.sh"
-  
-  # Loop principal do dashboard - só sai quando yoga_dashboard retornar explicitamente
-  while true; do
-    yoga_dashboard
-    # Se chegou aqui, usuário saiu do dashboard
-    break
-  done
-)
+function _yoga_cmd_cc {
+    # 🔍 Verifica daemon
+    if ! yoga_daemon_is_running; then
+        yoga_fogo "👹 Daemon não está rodando!"
+        yoga_agua "💡 Inicie com: yoga daemon start"
+        return 1
+    fi
+    
+    yoga_section "🎯 Command Center"
+    yoga_agua "💫 Iniciando interface interativa..."
+    
+    # 🎯 Executa CC nativo (implementação futura)
+    source "${YOGA_HOME}/core/modules/cc/engine.sh"
+    cc_engine_run
+}
+
+function _yoga_cmd_workspace {
+    local action="${1:-list}"
+    shift || true
+    
+    # 🔍 Verifica daemon
+    if ! yoga_daemon_is_running; then
+        yoga_fogo "👹 Daemon não está rodando!"
+        return 1
+    fi
+    
+    yoga_section "🌌 Workspace Manager"
+    
+    case "$action" in
+        list|ls)
+            yoga_agua "📋 Listando workspaces..."
+            local data=$(yoga_client_workspace_list)
+            echo "$data" | jq -r '.workspaces[] // empty' | while read -r line; do
+                echo "  $line"
+            done
+            ;;
+        create|new)
+            local name="${1:-}"
+            local path="${2:-$(pwd)}"
+            [[ -z "$name" ]] && { yoga_fogo "🏷️ Nome é obrigatório!"; return 1; }
+            yoga_agua "🏗️ Criando workspace: $name"
+            yoga_client_workspace_create "$name" "$path"
+            ;;
+        activate|switch|use)
+            local id="${1:-}"
+            [[ -z "$id" ]] && { yoga_fogo "🆔 ID é obrigatório!"; return 1; }
+            yoga_agua "🔄 Ativando workspace: $id"
+            yoga_client_workspace_activate "$id"
+            ;;
+        kill|rm|delete)
+            local id="${1:-}"
+            [[ -z "$id" ]] && { yoga_fogo "🆔 ID é obrigatório!"; return 1; }
+            yoga_warning "💀 Removendo workspace: $id"
+            # Confirmação
+            yoga_prompt "Tem certeza? [y/N]: "
+            read -r confirm
+            [[ "$confirm" == "y" || "$confirm" == "Y" ]] || { yoga_sol "❌ Cancelado"; return 0; }
+            # Implementação futura via client
+            ;;
+        current)
+            yoga_agua "📍 Workspace atual:"
+            # Implementação futura
+            ;;
+        *)
+            yoga_error "❌ Ação desconhecida: $action"
+            echo ""
+            yoga_info "📋 Ações disponíveis:"
+            echo "  📋 list      - Lista workspaces"
+            echo "  ➕ create    - Cria novo workspace"
+            echo "  🔄 activate  - Ativa workspace"
+            echo "  💀 kill      - Remove workspace"
+            echo "  📍 current   - Mostra workspace atual"
+            return 1
+            ;;
+    esac
+}
+
+function _yoga_cmd_ai {
+    local action="${1:-ask}"
+    shift || true
+    
+    # 🔍 Verifica daemon
+    if ! yoga_daemon_is_running; then
+        yoga_fogo "👹 Daemon não está rodando!"
+        return 1
+    fi
+    
+    yoga_section "🤖 AI Assistant"
+    
+    case "$action" in
+        ask|query)
+            local question="$*"
+            [[ -z "$question" ]] && { 
+                yoga_prompt "❓ O que você quer saber?: "
+                read -r question
+            }
+            [[ -z "$question" ]] && { yoga_fogo "❓ Pergunta é obrigatória!"; return 1; }
+            
+            yoga_loading "🤖 Consultando IA..."
+            local response=$(yoga_client_ai_ask "$question")
+            echo ""
+            echo "$response" | jq -r '.response // "🤔 Sem resposta"'
+            ;;
+        context|ctx)
+            yoga_agua "📝 Adicionando contexto..."
+            # Implementação futura
+            ;;
+        *)
+            yoga_error "❌ Ação desconhecida: $action"
+            return 1
+            ;;
+    esac
+}
+
+function _yoga_cmd_plugin {
+    local action="${1:-list}"
+    shift || true
+    
+    # 🔍 Verifica daemon
+    if ! yoga_daemon_is_running; then
+        yoga_fogo "👹 Daemon não está rodando!"
+        return 1
+    fi
+    
+    yoga_section "🔌 Plugin Manager"
+    
+    case "$action" in
+        list|ls)
+            yoga_agua "📋 Listando plugins..."
+            local data=$(yoga_client_plugin_list)
+            echo "$data" | jq -r '.plugins[] // empty' | while read -r line; do
+                echo "  $line"
+            done
+            ;;
+        install)
+            local source="${1:-}"
+            [[ -z "$source" ]] && { yoga_fogo "📦 Fonte é obrigatória!"; return 1; }
+            yoga_agua "📦 Instalando plugin de: $source"
+            # Implementação futura
+            ;;
+        enable)
+            local name="${1:-}"
+            [[ -z "$name" ]] && { yoga_fogo "🏷️ Nome é obrigatório!"; return 1; }
+            yoga_agua "✅ Habilitando plugin: $name"
+            # Implementação futura
+            ;;
+        disable)
+            local name="${1:-}"
+            [[ -z "$name" ]] && { yoga_fogo "🏷️ Nome é obrigatório!"; return 1; }
+            yoga_agua "❌ Desabilitando plugin: $name"
+            # Implementação futura
+            ;;
+        remove|uninstall)
+            local name="${1:-}"
+            [[ -z "$name" ]] && { yoga_fogo "🏷️ Nome é obrigatório!"; return 1; }
+            yoga_warning "🗑️ Removendo plugin: $name"
+            # Implementação futura
+            ;;
+        *)
+            yoga_error "❌ Ação desconhecida: $action"
+            echo ""
+            yoga_info "📋 Ações disponíveis:"
+            echo "  📋 list      - Lista plugins"
+            echo "  📦 install   - Instala plugin"
+            echo "  ✅ enable    - Habilita plugin"
+            echo "  ❌ disable   - Desabilita plugin"
+            echo "  🗑️ remove    - Remove plugin"
+            return 1
+            ;;
+    esac
+}
+
+function _yoga_cmd_state {
+    local action="${1:-get}"
+    shift || true
+    
+    # 🔍 Verifica daemon
+    if ! yoga_daemon_is_running; then
+        yoga_fogo "👹 Daemon não está rodando!"
+        return 1
+    fi
+    
+    yoga_section "💾 State Manager"
+    
+    case "$action" in
+        get)
+            local key="${1:-}"
+            [[ -z "$key" ]] && { yoga_fogo "🔑 Key é obrigatória!"; return 1; }
+            local scope="${2:-global}"
+            local data=$(yoga_client_state_get "$key" "$scope")
+            echo "$data" | jq -r '.value // empty'
+            ;;
+        set)
+            local key="${1:-}"
+            local value="${2:-}"
+            [[ -z "$key" || -z "$value" ]] && { yoga_fogo "🔑 Key e Value são obrigatórios!"; return 1; }
+            local scope="${3:-global}"
+            yoga_agua "💾 Salvando: $key = $value"
+            yoga_client_state_set "$key" "$value" "$scope"
+            ;;
+        list|ls)
+            local scope="${1:-global}"
+            yoga_agua "📋 Listando keys (scope: $scope)..."
+            # Implementação futura
+            ;;
+        delete|del|rm)
+            local key="${1:-}"
+            [[ -z "$key" ]] && { yoga_fogo "🔑 Key é obrigatória!"; return 1; }
+            yoga_agua "🗑️ Removendo: $key"
+            # Implementação futura
+            ;;
+        *)
+            yoga_error "❌ Ação desconhecida: $action"
+            return 1
+            ;;
+    esac
+}
+
+function _yoga_cmd_logs {
+    local action="${1:-tail}"
+    shift || true
+    
+    yoga_section "📝 Logs"
+    
+    case "$action" in
+        tail|follow|f)
+            local logfile="${YOGA_HOME}/logs/yoga.jsonl"
+            if [[ -f "$logfile" ]]; then
+                yoga_agua "📜 Seguindo logs (Ctrl+C para sair)..."
+                tail -f "$logfile" | jq -r '. | "[\(.timestamp)] [\(.level)] [\(.module)] \(.message)"'
+            else
+                yoga_error "❌ Arquivo de log não encontrado"
+            fi
+            ;;
+        list|show)
+            local logfile="${YOGA_HOME}/logs/yoga.jsonl"
+            local lines="${1:-50}"
+            if [[ -f "$logfile" ]]; then
+                tail -n "$lines" "$logfile" | jq -r '. | "[\(.timestamp)] [\(.level)] [\(.module)] \(.message)"'
+            else
+                yoga_error "❌ Arquivo de log não encontrado"
+            fi
+            ;;
+        *)
+            yoga_error "❌ Ação desconhecida: $action"
+            return 1
+            ;;
+    esac
+}
+
+function _yoga_cmd_update {
+    yoga_section "🔄 Self Update"
+    
+    yoga_agua "📦 Verificando atualizações..."
+    
+    # 🔍 Verifica se é git repo
+    if [[ -d "${YOGA_HOME}/.git" ]]; then
+        cd "$YOGA_HOME"
+        
+        # 📝 Backup do estado atual
+        local current_ref=$(git rev-parse --short HEAD)
+        yoga_debug "📍 Commit atual: $current_ref"
+        
+        # 🔄 Fetch latest
+        if git fetch origin; then
+            local behind=$(git rev-list HEAD..origin/main --count 2>/dev/null || echo 0)
+            
+            if [[ "$behind" -gt 0 ]]; then
+                yoga_terra "📦 $behind atualizações disponíveis!"
+                yoga_prompt "Deseja atualizar? [y/N]: "
+                read -r confirm
+                
+                if [[ "$confirm" == "y" || "$confirm" == "Y" ]]; then
+                    # 🛑 Para daemon se estiver rodando
+                    if yoga_daemon_is_running; then
+                        yoga_warning "🛑 Parando daemon para atualização..."
+                        yoga_daemon_stop
+                    fi
+                    
+                    # 🔄 Pull changes
+                    if git pull origin main; then
+                        yoga_terra "✅ Atualizado com sucesso!"
+                        yoga_sol "🔄 Reinicie o daemon: yoga daemon start"
+                    else
+                        yoga_fogo "❌ Falha na atualização!"
+                        return 1
+                    fi
+                else
+                    yoga_sol "❌ Atualização cancelada"
+                fi
+            else
+                yoga_terra "✅ Você está na versão mais recente!"
+            fi
+        else
+            yoga_fogo "❌ Falha ao verificar atualizações"
+        fi
+    else
+        yoga_fogo "❌ Instalação não é um repositório git"
+        yoga_agua "💡 Reinstale via: git clone <repo> $YOGA_HOME"
+    fi
+}
+
+function _yoga_cmd_version {
+    yoga_banner
+    yoga_table_header "🔧 Propriedade" "📋 Valor"
+    yoga_table_row "🎨 Versão" "2.0.0-Efigenia"
+    yoga_table_row "🏷️ Codename" "🧘‍♂️ Efigenia Edition"
+    yoga_table_row "📅 Release" "2026"
+    yoga_table_row "📦 YOGA_HOME" "${YOGA_HOME/#$HOME/~}"
+    echo ""
+    
+    # 📊 Verifica daemon
+    if yoga_daemon_is_running; then
+        local data=$(yoga_client_daemon_ping)
+        local daemon_version=$(echo "$data" | jq -r '.version // "unknown"')
+        yoga_terra "👹 Daemon: Rodando (v$daemon_version)"
+    else
+        yoga_error "👹 Daemon: Parado"
+    fi
+}
+
+function _yoga_cmd_help {
+    yoga_banner
+    yoga_section "📖 Comandos Disponíveis"
+    
+    echo "👹 ${YOGA_COLOR_BOLD}Daemon:${YOGA_COLOR_RESET}"
+    echo "  🚀 daemon start      - Inicia o daemon"
+    echo "  🛑 daemon stop       - Para o daemon"
+    echo "  🔄 daemon restart    - Reinicia o daemon"
+    echo "  📊 daemon status     - Status do daemon"
+    echo ""
+    
+    echo "🎯 ${YOGA_COLOR_BOLD}Command Center:${YOGA_COLOR_RESET}"
+    echo "  🎯 cc               - Interface interativa (fzf)"
+    echo ""
+    
+    echo "🌌 ${YOGA_COLOR_BOLD}Workspaces:${YOGA_COLOR_RESET}"
+    echo "  📋 workspace list    - Lista workspaces"
+    echo "  ➕ workspace create  - Cria workspace"
+    echo "  🔄 workspace switch   - Troca workspace"
+    echo "  📍 workspace current  - Mostra atual"
+    echo ""
+    
+    echo "🤖 ${YOGA_COLOR_BOLD}AI:${YOGA_COLOR_RESET}"
+    echo "  ❓ ai ask <query>    - Pergunta à IA"
+    echo ""
+    
+    echo "🔌 ${YOGA_COLOR_BOLD}Plugins:${YOGA_COLOR_RESET}"
+    echo "  📋 plugin list       - Lista plugins"
+    echo "  📦 plugin install    - Instala plugin"
+    echo "  ✅ plugin enable     - Habilita plugin"
+    echo ""
+    
+    echo "💾 ${YOGA_COLOR_BOLD}State:${YOGA_COLOR_RESET}"
+    echo "  📖 state get <key>   - Lê valor"
+    echo "  💾 state set <k> <v> - Salva valor"
+    echo ""
+    
+    echo "📝 ${YOGA_COLOR_BOLD}Logs:${YOGA_COLOR_RESET}"
+    echo "  📜 logs tail         - Acompanha logs"
+    echo "  📋 logs show [n]      - Mostra últimos logs"
+    echo ""
+    
+    echo "⚙️  ${YOGA_COLOR_BOLD}Sistema:${YOGA_COLOR_RESET}"
+    echo "  🔄 update            - Atualiza yoga-files"
+    echo "  📋 version           - Mostra versão"
+    echo "  ❓ help              - Esta ajuda"
+    echo ""
+    
+    yoga_sol "💡 Para mais detalhes: yoga <comando> --help"
+}
+
+# 🏁 Run
+main "$@"
