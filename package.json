@@ -1,6 +1,6 @@
 {
   "name": "yoga-files",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "ASDF + LazyVim + AI development environment with yoga-themed UI",
   "private": true,
   "scripts": {

@@ -4,6 +4,34 @@
 
 ---
 
+## [0.5.0] - 2026-04-13
+
+### Added
+- 🧘‍♂️ **Yoga 2.0 Efigenia Edition**: Arquitetura completa de Engine de Desenvolvimento
+- 👹 **Daemon obrigatório**: Unix socket server para comunicação CLI-daemon
+- 🔌 **Protocolo de comunicação**: Client/server estruturado com socket
+- 📦 **Lifecycle management**: Start/stop/status do daemon
+- 🗄️ **SQLite State Manager**: Persistência de workspaces, plugins, logs e state
+- 📝 **JSONL Structured Logging**: Logs estruturados para debug e RAG
+- 🎨 **UI System**: Funções de interface com emojis (fogo🔥, terra🌍, água💧, ar💨, espírito👻, sol☀️, lua🌙)
+- 🎯 **Command Center (CC)**: Reimplementação nativa do cc.zsh com fzf
+- 🌌 **Workspace Manager**: Reimplementação nativa do ccp.zsh com tmux integration
+- 🤖 **AI Assistant**: Provider abstraction (Ollama/OpenAI/Anthropic) e RAG local
+- 🎭 **CLI Thin Client**: Interface de linha de comando completa
+- 📋 **TDD aprovado**: `specs/tdd-yoga-2-pragmatic-core.md` com arquitetura detalhada
+
+### Changed
+- 🎭 `bin/yoga` rewrite completo: de simples router para CLI client completo
+- 🗂️ Nova estrutura de diretórios: `core/{daemon,modules,state,utils}/`
+
+### Dependencies
+- 🧩 Nova dependência: `socat` ou `nc` para socket communication
+- 🗄️ Nova dependência: `sqlite3` para state persistence
+- 📦 Nova dependência: `jq` para JSON processing
+- 🖥️ Recomendado: `tmux` para workspace management
+
+---
+
 ## [0.4.0] - 2026-04-05
 
 ### Added
