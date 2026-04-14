@@ -84,27 +84,18 @@ yoga tunnel remove api.example.com
 
 ## How It Works
 
-```
-yoga tunnel <args>
-     │
-     ▼
-┌─────────────────────┐
-│   bin/yoga-tunnel    │  ← Yoga wrapper (UI + logging)
-│                     │
-│  1. Validate cf-tunnels exists
-│  2. Display Yoga UI header
-│  3. Delegate to ~/cf-tunnels/run.sh <args>
-│  4. Log command to yoga.jsonl
-└─────────────────────┘
-         │
-         ▼
-┌─────────────────────┐
-│ ~/cf-tunnels/run.sh  │  ← Independent tunnel manager
-│                     │
-│  - Manages cloudflared tunnels
-│  - Reads/writes tunnel configs
-│  - Starts/stops tunnel processes
-└─────────────────────┘
+```mermaid
+flowchart TD
+    A["yoga tunnel &lt;args&gt;"] --> B["bin/yoga-tunnel"]
+    B --> C{"~/cf-tunnels/ exists?"}
+    C -- No --> D["Error: cf-tunnels not found"]
+    C -- Yes --> E["Validate & Display Yoga UI header"]
+    E --> F["Delegate to ~/cf-tunnels/run.sh &lt;args&gt;"]
+    F --> G["Log command to yoga.jsonl"]
+    F --> H["cf-tunnels/run.sh"]
+    H --> I["Manages cloudflared tunnels"]
+    I --> J["Reads/writes tunnel configs"]
+    I --> K["Starts/stops tunnel processes"]
 ```
 
 The Yoga wrapper does not modify tunnel behavior — it adds UI, validation, and logging on top of the existing `cf-tunnels` tool.
