@@ -4,6 +4,44 @@
 
 ---
 
+## Tunnel Lifecycle Flow
+
+```mermaid
+sequenceDiagram
+    participant User
+    participant Yoga as bin/yoga-tunnel
+    participant CF as cf-tunnels (run.sh)
+    participant CFd as cloudflared
+    participant CFNet as Cloudflare Network
+    participant Internet as Internet User
+    participant Local as localhost:port
+
+    User->>Yoga: yoga tunnel add --hostname api.dev.example.com
+    Yoga->>CF: Validate cf-tunnels exists
+    CF-->>Yoga: OK
+    Yoga->>CF: Delegate to run.sh add
+    CF->>CFd: cloudflared tunnel create
+    CFd-->>CF: Tunnel created
+    CF-->>Yoga: Tunnel configured
+    Yoga-->>User: Tunnel added
+
+    User->>Yoga: yoga tunnel start api.dev.example.com
+    Yoga->>CF: Delegate to run.sh start
+    CF->>CFd: cloudflared tunnel route dns
+    CF->>CFd: cloudflared tunnel run
+    CFd->>CFNet: Register tunnel
+    CFNet-->>CFd: Tunnel established
+
+    Internet->>CFNet: Request to api.dev.example.com
+    CFNet->>CFd: Route via Cloudflare edge
+    CFd->>Local: Forward to localhost:port
+    Local-->>CFd: Response
+    CFd-->>CFNet: Response
+    CFNet-->>Internet: Response delivered
+```
+
+---
+
 ## yoga tunnel list
 
 List all configured tunnels.

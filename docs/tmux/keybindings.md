@@ -5,6 +5,41 @@
 
 Todas as teclas abaixo pressupõem que você já pressionou `Ctrl+Space` primeiro.
 
+```mermaid
+flowchart TD
+    P["Prefix (Ctrl+Space)"]
+    P --> W["Window Management"]
+    P --> PM["Pane Management"]
+    P --> SM["Session Management"]
+    P --> PK["Plugin & Popup Keys"]
+
+    W --> W1["c — New window"]
+    W --> W2["n / p — Next / Previous"]
+    W --> W3["& — Kill window"]
+    W --> W4["> / < — Swap window"]
+    W --> W5["Tab — Last window"]
+
+    PM --> PM1["\\ — Split horizontal"]
+    PM --> PM2["- — Split vertical"]
+    PM --> PM3["h / j / k / l — Resize"]
+    PM --> PM4["m — Maximize / Restore"]
+    PM --> PM5["x — Kill pane"]
+
+    SM --> SM1["s — Smart switcher<br/>(tms)"]
+    SM --> SM2["S — New session"]
+    SM --> SM3["$ — Rename session"]
+    SM --> SM4["X — Kill session"]
+    SM --> SM5[". — Last session"]
+    SM --> SM6["d — Detach"]
+
+    PK --> PK1["g — Lazygit popup"]
+    PK --> PK2["b — System monitor"]
+    PK --> PK3["t — Floating terminal"]
+    PK --> PK4["f — FZF windows"]
+    PK --> PK5["F — FZF sessions"]
+    PK --> PK6["P — FZF panes"]
+```
+
 ---
 
 ## Sessões (Session Management A+++)

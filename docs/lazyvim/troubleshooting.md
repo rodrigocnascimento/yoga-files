@@ -2,6 +2,55 @@
 
 Common issues and solutions for the Yoga Files LazyVim configuration.
 
+```mermaid
+flowchart TD
+    START((Problem?)) --> Q1{"Is it startup?"}
+    Q1 -->|Yes| A1[":checkhealth"]
+    A1 --> A1a{"Still broken?"}
+    A1a -->|Yes| A1b[":Lazy sync + restart"]
+    A1a -->|No| FIXED((Fixed))
+
+    Q1 -->|No| Q2{"Is it LSP?"}
+    Q2 -->|Yes| B1[":LspInfo"]
+    B1 --> B1a{"Server attached?"}
+    B1a -->|No| B1b[":Mason → install server"]
+    B1a -->|Yes| B1c[":LspRestart"]
+    B1b --> FIXED
+    B1c --> FIXED
+
+    Q2 -->|No| Q3{"Is it keymaps?"}
+    Q3 -->|Yes| C1[":Telescope keymaps"]
+    C1 --> C1a{"Conflict found?"}
+    C1a -->|Yes| C1b[":verbose map key"]
+    C1a -->|No| C1c["Check custom keymaps.lua"]
+    C1b --> FIXED
+    C1c --> FIXED
+
+    Q3 -->|No| Q4{"Is it DAP / Debug?"}
+    Q4 -->|Yes| D1[":MasonInstall js-debug-adapter"]
+    D1 --> D1a{"Adapter found?"}
+    D1a -->|No| D1b["Check Mason path"]
+    D1a -->|Yes| D1c["Check launch.json"]
+    D1b --> FIXED
+    D1c --> FIXED
+
+    Q4 -->|No| Q5{"Is it formatting?"}
+    Q5 -->|Yes| E1[":ConformInfo"]
+    E1 --> E1a{"Formatter installed?"}
+    E1a -->|No| E1b[":MasonInstall biome/prettier"]
+    E1a -->|Yes| E1c["Check vim.g.autoformat"]
+    E1b --> FIXED
+    E1c --> FIXED
+
+    Q5 -->|No| Q6{"Is it AI?"}
+    Q6 -->|Yes| F1["Check API keys & service"]
+    F1 --> FIXED
+
+    Q6 -->|No| NUCLEAR["Complete reset: rm -rf ~/.local/share/nvim"]
+    NUCLEAR --> REINSTALL[":Lazy sync → :Mason install"]
+    REINSTALL --> FIXED
+```
+
 ---
 
 ## Table of Contents

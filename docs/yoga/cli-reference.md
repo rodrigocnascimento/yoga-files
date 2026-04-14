@@ -2,6 +2,26 @@
 
 Complete reference for all `yoga` subcommands and standalone executables.
 
+## Roteamento de Comandos
+
+```mermaid
+flowchart LR
+    User["yoga &lt;command&gt;"] --> Router{"Router<br/>bin/yoga"}
+    Router -->|daemon| Daemon["daemon<br/>start/stop/restart/status<br/>cleanup/foreground"]
+    Router -->|cc| CC["cc<br/>Command Center (fzf)"]
+    Router -->|workspace / ws| Workspace["workspace<br/>list/create/switch/kill"]
+    Router -->|tunnel| Tunnel["tunnel<br/>Cloudflare Tunnels"]
+    Router -->|ai / ask| AI["ai<br/>ask/context"]
+    Router -->|plugin / plugins| Plugin["plugin<br/>list/install/enable/disable"]
+    Router -->|state| State["state<br/>get/set/list/delete"]
+    Router -->|status| Status["status<br/>Daemon & env status"]
+    Router -->|update| Update["update<br/>git pull self-update"]
+    Router -->|logs / log| Logs["logs<br/>tail/show"]
+    Router -->|version / -v| Version["version<br/>Version info"]
+    Router -->|help / -h| Help["help<br/>Show help text"]
+    Router -->|unknown| Unknown["Error + help text<br/>exit 1"]
+```
+
 ---
 
 ## Table of Contents

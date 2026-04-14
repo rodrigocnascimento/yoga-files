@@ -75,6 +75,25 @@ require("dap.ext.vscode").type_to_filetypes = {
 
 This mapping tells DAP which file types can use which adapter types, enabling VS Code `launch.json` files containing `"type": "pwa-node"` or `"type": "node"` to be recognized for all JS/TS file types.
 
+```mermaid
+flowchart LR
+    A["VS Code launch.json"] --> B[":LoadVSCodeLaunch / <leader>dl"]
+    B --> C{"launch.json found?"}
+    C -->|.vscode/launch.json| D["Parse configurations"]
+    C -->|src/.vscode/launch.json| D
+    C -->|Not found| E["Manual path input"]
+    E --> D
+    D --> F{"node-terminal type?"}
+    F -->|Yes| G["Convert to pwa-node"]
+    F -->|No| H["Use as-is"]
+    G --> I["nvim-dap-vscode-js"]
+    H --> I
+    I --> J["pwa-node adapter"]
+    J --> K["Mason js-debug-adapter"]
+    K --> L["Node.js process"]
+    L --> M["Breakpoints & Debug UI"]
+```
+
 ## How It Works
 
 ### Search Strategy

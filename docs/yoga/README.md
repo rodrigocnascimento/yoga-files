@@ -10,6 +10,36 @@ Filosofia central:
 - **Daemon-first**: Estado persistente e comunicação via socket Unix
 - **CLI-first**: Interface principal é a linha de comando (`yoga <comando>`)
 
+## Arquitetura do Sistema
+
+```mermaid
+flowchart TB
+    User[Usuário] --> CLI["yoga (CLI)"]
+    CLI --> Daemon["Daemon (Unix Socket)"]
+    CLI --> CC["Command Center"]
+    CLI --> Workspace["Workspace"]
+    CLI --> Tunnel["Tunnel"]
+    CLI --> AI_Entry["AI"]
+
+    Daemon --> State["State (SQLite)"]
+    Daemon --> Logging["Logging (JSONL)"]
+    Daemon --> Plugin["Plugins"]
+    Daemon --> AI_Mod["AI Module"]
+
+    CC --> FZF["fzf"]
+    CC --> State
+
+    Workspace --> TMUX["tmux"]
+    Workspace --> State
+
+    AI_Entry --> Daemon
+    AI_Mod --> Providers["AI Providers<br/>(Ollama, OpenAI, Gemini)"]
+
+    State --> SQLite[("SQLite<br/>state.db")]
+    Logging --> JSONL["yoga.jsonl"]
+    Plugin --> PluginDir["$YOGA_HOME/plugins/"]
+```
+
 ## Módulos
 
 | Módulo | Documentação | Descrição |

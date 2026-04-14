@@ -4,7 +4,57 @@ Complete reference for all functions, aliases, and exports across `core/` shell 
 
 ---
 
-## core/utils.sh (v2.1.0)
+## Grafo de Dependências
+
+```mermaid
+flowchart TD
+    subgraph UI["core/utils/ui.sh"]
+        yoga_fogo["yoga_fogo<br/>(error 🔥)"]
+        yoga_agua["yoga_agua<br/>(info 💧)"]
+        yoga_terra["yoga_terra<br/>(success 🌿)"]
+        yoga_ar["yoga_ar<br/>(warning 🌬️)"]
+        yoga_espirito["yoga_espirito<br/>(debug 🧘)"]
+        yoga_sol["yoga_sol<br/>(highlight ☀️)"]
+        yoga_lua["yoga_lua<br/>(subtle 🌙)"]
+        yoga_header["yoga_header"]
+        yoga_loading["yoga_loading"]
+        yoga_choice["yoga_choice"]
+        yoga_banner["yoga_banner"]
+    end
+
+    subgraph Utils["core/utils.sh (v2.1.0)"]
+        yoga_fail["yoga_fail → fogo"]
+        yoga_success_leg["yoga_success → terra"]
+        yoga_message["yoga_message → agua"]
+        yoga_warn["yoga_warn → ar"]
+        yoga_action["yoga_action"]
+        yoga_readln["yoga_readln"]
+        yoga_flow["yoga_flow"]
+        yoga_breath["yoga_breath"]
+        yoga_pose["yoga_pose"]
+        yoga_progress["yoga_progress"]
+        yoga_status["yoga_status"]
+        yoga_interactive_menu["yoga_interactive_menu"]
+    end
+
+    subgraph Functions["core/functions.sh"]
+        pid_port["pid_port"]
+        kill_port["kill_port"]
+        take["take"]
+        ssh_agent_run["ssh_agent_run"]
+        please["please"]
+        docker_nukem["docker_nukem"]
+        echo_ip["echo_ip"]
+        fzf_search["fzf_search"]
+        projects["projects"]
+    end
+
+    Utils --> UI
+    yoga_fail --> yoga_fogo
+    yoga_success_leg --> yoga_terra
+    yoga_message --> yoga_agua
+    yoga_warn --> yoga_ar
+```
 
 Core UI and utility functions. Sourced by `init.sh` and most other modules.
 

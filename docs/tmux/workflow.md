@@ -2,6 +2,34 @@
 
 > Common daily workflows with the Tmux A++ configuration
 
+```mermaid
+sequenceDiagram
+    participant Dev as Developer
+    participant T as Terminal
+    participant TM as tmux
+    participant S as Session
+    participant E as Editor Pane
+    participant X as Terminal Pane
+    participant L as Logs Pane
+
+    Dev->>T: Opens terminal
+    T->>TM: tmux starts
+    TM->>S: Creates session for project
+    Note over S: Smart switcher (prefix+s)
+    S->>E: Opens editor (Neovim)
+    E->>X: Split horizontal (prefix+\\)
+    X->>L: Split vertical (prefix+-)
+    Dev->>TM: Navigates panes (Ctrl+h/j/k/l)
+    Dev->>TM: Opens lazygit (prefix+g)
+    Dev->>TM: Checks system (prefix+b)
+    Dev->>TM: Detaches session (prefix+d)
+    Note over TM,S: tmux-continuum auto-saves every 10min
+    Dev->>T: Returns next day
+    T->>TM: tmux attach
+    TM->>S: Auto-restores session
+    Note over S: All panes and state restored
+```
+
 ---
 
 ## Starting a Session

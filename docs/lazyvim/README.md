@@ -13,6 +13,43 @@ Welcome to the Yoga Files LazyVim configuration. This is a pre-configured Neovim
 
 ## Overview
 
+```mermaid
+flowchart TD
+    A["init.lua"] --> B["lazy.nvim bootstrap"]
+    B --> C["lua/config/options.lua"]
+    B --> D["lua/config/keymaps.lua"]
+    B --> E["Plugin specs import"]
+    E --> F["Editor Plugins"]
+    E --> G["UI Plugins"]
+    E --> H["Coding Plugins"]
+    E --> I["Lang / LSP Plugins"]
+    E --> J["AI Plugins"]
+    F --> F1["which-key"]
+    F --> F2["mini.files"]
+    F --> F3["autopairs"]
+    G --> G1["gruvbox-material"]
+    G --> G2["lualine"]
+    G --> G3["noice"]
+    H --> H1["nvim-cmp"]
+    H --> H2["Luasnip"]
+    H --> H3["copilot"]
+    I --> I1["typescript-language-server"]
+    I --> I2["biome"]
+    I --> I3["sonarlint"]
+    J --> J1["supermaven"]
+    J --> J2["codecompanion"]
+    J --> J3["yoga-ai"]
+    E --> K["Specialized Plugins"]
+    K --> K1["DAP / pwa-node"]
+    K --> K2["kulala.nvim"]
+    K --> K3["vim-dadbod"]
+    K --> K4["aerial.nvim"]
+    K --> K5["diffview.nvim"]
+    I1 & I2 --> L["LSP, Completions, Diagnostics"]
+    F1 --> M["Keymaps & Mappings"]
+    K1 --> N["Breakpoints, Step, Stack Trace"]
+```
+
 Yoga Files ships a LazyVim starter configuration extended with custom plugins organized in `lua/plugins/*.lua`. The base LazyVim install provides sensible defaults for LSP, completion, formatting, git integration, and general editing. The custom plugins layer adds:
 
 - **JS/TS debugging** via `pwa-node` adapter and VS Code `launch.json` support

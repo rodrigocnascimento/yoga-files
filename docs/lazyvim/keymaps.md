@@ -21,6 +21,47 @@ Complete keymap reference for the Yoga Files LazyVim configuration. All keymaps 
 - [Session (Obsession)](#session-obsession)
 - [Terminal](#terminal)
 
+```mermaid
+flowchart LR
+    L["␣ Leader (Space)"] --> F["f — Find"]
+    L --> G["g — Git"]
+    L --> D["d — Debug"]
+    L --> C["c — Code / LSP"]
+    L --> A["a — AI"]
+    L --> R["R — REST (Kulala)"]
+    L --> B["b — Buffer / DB"]
+    L --> S["s — Search / Symbols"]
+    L --> U["u — Toggle"]
+
+    F --> F1["ff — Find files"]
+    F --> F2["fg — Live grep"]
+    F --> F3["fb — Buffers"]
+    F --> F4["fr — Recent files"]
+
+    G --> G1["gg — LazyGit"]
+    G --> G2["gd — Diffview open"]
+    G --> G3["gb — Branches"]
+    G --> G4["gh — File history"]
+
+    D --> D1["dc — Continue/Start"]
+    D --> D2["db — Toggle breakpoint"]
+    D --> D3["dl — Load launch.json"]
+
+    C --> C1["ca — Code action"]
+    C --> C2["cr — Rename"]
+    C --> C3["cf — Format"]
+
+    A --> A1["ah — AI Help"]
+    A --> A2["af — AI Fix"]
+    A --> A3["ac — AI Code"]
+
+    R --> R1["Rr — Run request"]
+    R --> R2["Rc — Copy as cURL"]
+
+    B --> B1["bt — DB UI toggle"]
+    B --> B2["bf — Find DB buffer"]
+```
+
 ---
 
 ## General
