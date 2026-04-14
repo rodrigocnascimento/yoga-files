@@ -29,11 +29,13 @@ zsh -n "$ROOT_DIR/core/utils.sh"
 zsh -n "$ROOT_DIR/core/common.sh"
 zsh -n "$ROOT_DIR/core/aliases.sh"
 zsh -n "$ROOT_DIR/core/functions.sh"
-zsh -n "$ROOT_DIR/core/dashboard.sh"
 zsh -n "$ROOT_DIR/core/ai/yoga-ai-terminal.sh"
 
 print "==> source init.sh"
-zsh -c "export YOGA_HOME='$ROOT_DIR'; export YOGA_SILENT=1; source '$ROOT_DIR/init.sh'; whence -w yoga_status >/dev/null; whence -w yoga_dashboard >/dev/null"
+zsh -c "export YOGA_HOME='$ROOT_DIR'; export YOGA_SILENT=1; source '$ROOT_DIR/init.sh'; whence -w yoga_status >/dev/null"
+
+print "==> bin/yoga CLI"
+zsh -c "export YOGA_HOME='$ROOT_DIR'; export YOGA_SILENT=1; source '$ROOT_DIR/init.sh'; command -v yoga >/dev/null"
 
 print "==> bin commands"
 zsh -c "export YOGA_HOME='$ROOT_DIR'; export PATH='$ROOT_DIR/bin:'\"\$PATH\"; command -v yoga-ai >/dev/null; yoga-ai --help >/dev/null"

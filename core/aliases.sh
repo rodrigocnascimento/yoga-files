@@ -8,8 +8,8 @@ alias ....='cd ../../..'
 
 # bash does not support some alias names (like '~' or '-')
 if [ -n "${ZSH_VERSION-}" ]; then
-  alias ~='cd ~'
-  alias -- -='cd -'
+	alias ~='cd ~'
+	alias -- -='cd -'
 fi
 
 # Listagem aprimorada
@@ -60,8 +60,7 @@ alias start='npm run start'
 alias watch='npm run watch'
 
 # Yoga commands
-alias yoga='yoga_dashboard'
-alias yogi='yoga_dashboard'
+alias yogi='yoga'
 alias flow='yoga_flow'
 alias breathe='yoga_breath'
 alias pose='yoga_pose'
@@ -101,19 +100,19 @@ alias zshrc='nvim ~/.zshrc'
 alias yogarc='nvim ~/.yoga/config.yaml'
 alias path='echo $PATH | tr ":" "\n"'
 ports() {
-  if command -v lsof >/dev/null 2>&1; then
-    lsof -nP -iTCP -sTCP:LISTEN
-    return 0
-  fi
+	if command -v lsof >/dev/null 2>&1; then
+		lsof -nP -iTCP -sTCP:LISTEN
+		return 0
+	fi
 
-  if command -v netstat >/dev/null 2>&1; then
-    # macOS netstat doesn't support -p; Linux often does.
-    netstat -an 2>/dev/null | grep LISTEN || true
-    return 0
-  fi
+	if command -v netstat >/dev/null 2>&1; then
+		# macOS netstat doesn't support -p; Linux often does.
+		netstat -an 2>/dev/null | grep LISTEN || true
+		return 0
+	fi
 
-  echo "ports: missing lsof/netstat" >&2
-  return 1
+	echo "ports: missing lsof/netstat" >&2
+	return 1
 }
 
 # Docker (se instalado)
@@ -133,33 +132,33 @@ alias weather='curl wttr.in'
 alias myip='curl ipecho.net/plain'
 alias speedtest='curl -s https://raw.githubusercontent.com/sivel/speedtest-cli/master/speedtest.py | python -'
 serve() {
-  local port="${1:-8000}"
+	local port="${1:-8000}"
 
-  if command -v python3 >/dev/null 2>&1; then
-    python3 -m http.server "$port"
-    return 0
-  fi
+	if command -v python3 >/dev/null 2>&1; then
+		python3 -m http.server "$port"
+		return 0
+	fi
 
-  if command -v python >/dev/null 2>&1; then
-    python -m http.server "$port"
-    return 0
-  fi
+	if command -v python >/dev/null 2>&1; then
+		python -m http.server "$port"
+		return 0
+	fi
 
-  echo "serve: missing python3/python" >&2
-  return 1
+	echo "serve: missing python3/python" >&2
+	return 1
 }
 alias json='python -m json.tool'
 
 # Clipboard (cross-platform)
 if [[ "$OSTYPE" == "darwin"* ]]; then
-    # macOS já tem pbcopy/pbpaste
-    :
+	# macOS já tem pbcopy/pbpaste
+	:
 elif command -v xclip &>/dev/null; then
-    alias pbcopy='xclip -selection clipboard'
-    alias pbpaste='xclip -selection clipboard -o'
+	alias pbcopy='xclip -selection clipboard'
+	alias pbpaste='xclip -selection clipboard -o'
 elif command -v xsel &>/dev/null; then
-    alias pbcopy='xsel --clipboard --input'
-    alias pbpaste='xsel --clipboard --output'
+	alias pbcopy='xsel --clipboard --input'
+	alias pbpaste='xsel --clipboard --output'
 fi
 
 # Funções úteis como aliases

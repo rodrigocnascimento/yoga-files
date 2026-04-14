@@ -48,11 +48,6 @@ function main {
             _yoga_cmd_workspace "$@"
             ;;
             
-        # 🚇 Tunnel (cf-tunnels integration)
-        tunnel)
-            _yoga_cmd_tunnel "$@"
-            ;;
-            
         # 🤖 AI
         ai|ask)
             _yoga_cmd_ai "$@"
@@ -108,63 +103,80 @@ function main {
 # ═══════════════════════════════════════════════════════════
 
 function _yoga_cmd_cc {
-    # 🦜 Lôro Barizon: Usa standalone (não precisa de ~/.zsh/)
-    yoga_section "🎯 Command Center"
-    yoga_agua "💫 Iniciando interface nativa..."
+    # 🔍 Verifica daemon
+    if ! yoga_daemon_is_running; then
+        yoga_fogo "👹 Daemon não está rodando!"
+        yoga_agua "💡 Inicie com: yoga daemon start"
+        return 1
+    fi
     
-    # 🎯 Executa CC standalone
-    source "${YOGA_HOME}/core/modules/cc/standalone.sh"
-    cc_standalone_run "$@"
+    yoga_section "🎯 Command Center"
+    yoga_agua "💫 Iniciando interface interativa..."
+    
+    # 🎯 Executa CC nativo (implementação futura)
+    source "${YOGA_HOME}/core/modules/cc/engine.sh"
+    cc_engine_run
 }
 
 function _yoga_cmd_workspace {
     local action="${1:-list}"
     shift || true
     
-    # 🦜 Lôro Barizon: Usa standalone
-    yoga_section "🌌 Workspace Manager"
+    # 🔍 Verifica daemon
+    if ! yoga_daemon_is_running; then
+        yoga_fogo "👹 Daemon não está rodando!"
+        return 1
+    fi
     
-    # Source standalone
-    source "${YOGA_HOME}/core/modules/workspace/standalone.sh"
+    yoga_section "🌌 Workspace Manager"
     
     case "$action" in
         list|ls)
-            if [[ "$1" == "--simple" ]]; then
-                workspace_standalone_list_simple
-            else
-                workspace_standalone_list_interactive
-            fi
+            yoga_agua "📋 Listando workspaces..."
+            local data=$(yoga_client_workspace_list)
+            echo "$data" | jq -r '.workspaces[] // empty' | while read -r line; do
+                echo "  $line"
+            done
             ;;
         create|new)
             local name="${1:-}"
             local path="${2:-$(pwd)}"
             [[ -z "$name" ]] && { yoga_fogo "🏷️ Nome é obrigatório!"; return 1; }
             yoga_agua "🏗️ Criando workspace: $name"
-            # Cria diretório se não existir
-            [[ ! -d "$path" ]] && mkdir -p "$path"
-            workspace_standalone_action_switch "$name" "$path"
+            yoga_client_workspace_create "$name" "$path"
             ;;
         activate|switch|use)
-            local name="${1:-}"
-            [[ -z "$name" ]] && { yoga_fogo "🏷️ Nome é obrigatório!"; return 1; }
-            local path="${CODE_DIR:-$HOME/code}/$name"
-            workspace_standalone_action_switch "$name" "$path"
+            local id="${1:-}"
+            [[ -z "$id" ]] && { yoga_fogo "🆔 ID é obrigatório!"; return 1; }
+            yoga_agua "🔄 Ativando workspace: $id"
+            yoga_client_workspace_activate "$id"
             ;;
         kill|rm|delete)
-            local name="${1:-}"
-            [[ -z "$name" ]] && { yoga_fogo "🏷️ Nome é obrigatório!"; return 1; }
-            workspace_standalone_action_kill "$name"
+            local id="${1:-}"
+            [[ -z "$id" ]] && { yoga_fogo "🆔 ID é obrigatório!"; return 1; }
+            yoga_warning "💀 Removendo workspace: $id"
+            # Confirmação
+            yoga_prompt "Tem certeza? [y/N]: "
+            read -r confirm
+            [[ "$confirm" == "y" || "$confirm" == "Y" ]] || { yoga_sol "❌ Cancelado"; return 0; }
+            # Implementação futura via client
+            ;;
+        current)
+            yoga_agua "📍 Workspace atual:"
+            # Implementação futura
             ;;
         *)
-            # Default: lista interativa
-            workspace_standalone_list_interactive
+            yoga_error "❌ Ação desconhecida: $action"
+            echo ""
+            yoga_info "📋 Ações disponíveis:"
+            echo "  📋 list      - Lista workspaces"
+            echo "  ➕ create    - Cria novo workspace"
+            echo "  🔄 activate  - Ativa workspace"
+            echo "  💀 kill      - Remove workspace"
+            echo "  📍 current   - Mostra workspace atual"
+            return 1
             ;;
     esac
-}
-
-function _yoga_cmd_tunnel {
-    # 🚇 Cloudflare Tunnel via ~/cf-tunnels/
-    "${YOGA_HOME}/bin/yoga-tunnel" "$@"
 }
 
 function _yoga_cmd_ai {
