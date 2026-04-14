@@ -69,7 +69,6 @@ flowchart TB
     ACTION_SH --> TMUX
     ACTION_NW --> TMUX
     STATE --> DB
-end
 ```
 
 ## Arquivos
