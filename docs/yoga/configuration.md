@@ -4,7 +4,16 @@ Complete reference for Yoga configuration — `config.yaml` and environment vari
 
 ---
 
-## Environment Variables
+## Resolução de Configuração
+
+```mermaid
+flowchart TD
+    CLI["CLI args<br/><code>yoga cc --query=git</code>"] --> |Maior prioridade| Merge["Merge / Resolução"]
+    ConfigYAML["config.yaml<br/><code>$YOGA_HOME/config.yaml</code>"] --> Merge
+    EnvVars["Variáveis de ambiente<br/><code>YOGA_*, GEMINI_API_KEY, etc.</code>"] --> Merge
+    Defaults["Valores padrão<br/><code>YOGA_HOME=$HOME/.yoga<br/>YOGA_SILENT=(unset)<br/>YOGA_AI_PROVIDER=ollama</code>"] --> |Menor prioridade| Merge
+    Merge --> Final["Configuração Final<br/>utilizada pelo sistema"]
+```
 
 | Variable | Default | Description | Set By |
 |----------|---------|-------------|--------|

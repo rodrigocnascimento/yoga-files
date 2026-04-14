@@ -10,6 +10,41 @@ Esta é a configuração **OBRIGATÓRIA** para debugar JavaScript e TypeScript n
 - nvim-dap configurado com `pwa-node` (não `node2`)
 - VS Code launch.json support habilitado
 
+```mermaid
+sequenceDiagram
+    participant N as Neovim
+    participant D as nvim-dap
+    participant A as pwa-node Adapter
+    participant T as Node.js Process
+
+    N->>D: F5 / <leader>dc (dap.continue)
+    D->>D: Check for launch.json
+    alt launch.json found
+        D->>D: Load config via :LoadVSCodeLaunch
+        Note over D: "node-terminal" → "pwa-node" conversion
+    else No launch.json
+        D->>D: Use default config
+    end
+    D->>A: Initialize adapter (Mason js-debug-adapter)
+    A->>T: Launch / Attach to process
+
+    loop Debug Session
+        T-->>A: Breakpoint hit
+        A-->>D: Stopped event (reason: breakpoint)
+        D-->>N: DAP UI opens (scopes, watch, stack)
+        N->>D: Step into / over / out
+        D->>A: Step request
+        A->>T: Continue execution
+        T-->>A: Variable values
+        A-->>D: Variables response
+        D-->>N: Virtual text inline
+    end
+
+    T-->>A: Process exit
+    A-->>D: Terminated event
+    D-->>N: DAP UI closes
+```
+
 ## Instalação
 
 ### 1. Instalar js-debug-adapter

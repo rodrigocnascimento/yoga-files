@@ -4,6 +4,41 @@
 
 ---
 
+## Tunnel Scenarios Overview
+
+```mermaid
+flowchart LR
+    subgraph Local["Local Services"]
+        API["Node.js API\nlocalhost:3000"]
+        DB["PostgreSQL\nlocalhost:5432"]
+        WEB["Web App\nlocalhost:8080"]
+        SSH["SSH Server\nlocalhost:22"]
+        HK["Webhook Handler\nlocalhost:4000"]
+    end
+
+    subgraph CF["Cloudflare Tunnel"]
+        CLOUD["cloudflared"]
+    end
+
+    subgraph Internet["Internet Users"]
+        CLIENT["Client Browser"]
+        DEV["Remote Developer"]
+        PROVIDER["Webhook Provider"]
+    end
+
+    API --> CLOUD
+    DB --> CLOUD
+    WEB --> CLOUD
+    SSH --> CLOUD
+    HK --> CLOUD
+
+    CLOUD -->|HTTPS| CLIENT
+    CLOUD -->|TCP| DEV
+    CLOUD -->|HTTPS| PROVIDER
+```
+
+---
+
 ## Exposing a Local Node.js API
 
 Expose a Node.js/Express API running on port 3000:

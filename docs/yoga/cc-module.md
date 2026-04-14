@@ -25,16 +25,27 @@ yoga cc --query="git"      # Busca pré-filtrada
 
 ## Arquitetura
 
-```
-Usuário → yoga cc → cc_standalone_run()
-    ↓
-    cc_standalone_collect()  # Coleta dados
-    ↓
-    fzf interface            # Preview + seleção
-    ↓
-    cc_standalone_action()   # Executa
-    ↓
-    cc_standalone_log()      # SQLite + JSONL
+```mermaid
+sequenceDiagram
+    participant User as Usuário
+    participant Run as cc_standalone_run()
+    participant Collect as cc_standalone_collect()
+    participant FZF as fzf interface
+    participant Action as cc_standalone_action()
+    participant Log as cc_standalone_log()
+    participant SQLite as SQLite (commands)
+
+    User->>Run: yoga cc
+    Run->>Collect: Coleta dados do ambiente
+    Collect-->>Collect: aliases, functions,<br/>git branches, docker,<br/>history, favoritos
+    Collect->>FZF: Lista formatada "type|label|command"
+    FZF->>FZF: Preview (cc_standalone_preview)
+    FZF->>Action: Seleção do usuário
+    Action->>Action: Executa comando<br/>ou copia/edita/ação contextual
+    Action->>Log: Registra execução
+    Log->>SQLite: INSERT/UPDATE commands
+    Log-->>Log: Append yoga.jsonl
+    SQLite-->>User: Comando executado
 ```
 
 ## Funções

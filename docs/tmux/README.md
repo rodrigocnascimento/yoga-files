@@ -8,6 +8,31 @@ Tmux A++ is the enhanced tmux configuration bundled with Yoga 3.0. It replaces t
 
 The configuration lives at `~/.config/tmux/tmux.conf` and is managed via TPM (Tmux Plugin Manager).
 
+```mermaid
+flowchart TD
+    A["tmux.conf"] --> B["TPM — Plugin Manager"]
+    B --> C1["tmux-sensible"]
+    B --> C2["tmux-resurrect"]
+    B --> C3["tmux-continuum"]
+    B --> C4["tmux-yank"]
+    B --> C5["tmux-fzf"]
+    B --> C6["t-smart-tmux-session-manager"]
+    B --> C7["tmux-cpu-mem-monitor"]
+    B --> C8["tmux-prefix-highlight"]
+    B --> C9["vim-tmux-navigator"]
+
+    C2 -.->|persists| D["Sessions"]
+    C3 -.->|auto-saves| D
+    C6 -.->|switches| D
+    C1 -.->|configures| D
+    D --> E["Windows"]
+    E --> F["Panes"]
+
+    G["Yoga 3.0 Theme<br/>Catppuccin Mocha"] -.->|styles| D
+    G -.->|styles| E
+    G -.->|styles| F
+```
+
 ## Prefix Key
 
 **`Ctrl+Space`**

@@ -2,6 +2,29 @@
 
 > Every plugin in the Yoga 3.0 Tmux A++ configuration, documented with bindings, options, and URLs.
 
+```mermaid
+flowchart TD
+    A["TPM Bootstrap<br/>~/.config/tmux/plugins/tpm"] --> B["tpm<br/>Plugin Manager"]
+    B --> C["tmux-sensible<br/>Base settings"]
+    C --> D["tmux-resurrect<br/>Session persistence"]
+    D --> E["tmux-continuum<br/>Auto-save / restore"]
+    C --> F["tmux-yank<br/>System clipboard"]
+    C --> G["tmux-fzf<br/>Fuzzy finder"]
+    C --> H["t-smart-tmux-session-manager<br/>Session switcher"]
+    C --> I["tmux-cpu-mem-monitor<br/>Status bar stats"]
+    C --> J["tmux-prefix-highlight<br/>Prefix indicator"]
+    C --> K["vim-tmux-navigator<br/>Seamless navigation"]
+
+    E -.->|"extends"| D
+    D -.->|"depends on"| C
+    F -.->|"depends on"| C
+    G -.->|"depends on"| C
+
+    style A fill:#313244,stroke:#89b4fa,color:#cdd6f4
+    style B fill:#313244,stroke:#89b4fa,color:#cdd6f4
+    style C fill:#313244,stroke:#a6e3a1,color:#cdd6f4
+```
+
 ---
 
 ## t-smart-tmux-session-manager

@@ -29,6 +29,45 @@ The core colors used across all elements:
 | Peach | `#fab387` | — | Modified state |
 | Mauve | `#cba6f7` | — | Directory |
 
+```mermaid
+flowchart LR
+    subgraph Elements
+        SB["Status bar<br/>background"]
+        AW["Window tabs<br/>(active)"]
+        IW["Window tabs<br/>(inactive)"]
+        AB["Pane borders<br/>(active)"]
+        IB["Pane borders<br/>(inactive)"]
+        MSG["Messages &<br/>highlights"]
+        TXT["Primary text"]
+        BG["Backgrounds"]
+    end
+
+    subgraph Yoga Elements
+        FO["FOGO 🔥<br/>Accent / Active"]
+        AG["ÁGUA 🌊<br/>Dimmed / Inactive"]
+        TE["TERRA 🌿<br/>Success / Growth"]
+        AR["AR 🌬️<br/>Light / Text"]
+        ES["ESPÍRITO ✨<br/>Foundation / Base"]
+    end
+
+    subgraph ANSI Hex
+        H1["#89b4fa<br/>Blue"]
+        H2["#6c7086<br/>Overlay0"]
+        H3["#a6e3a1<br/>Green"]
+        H4["#cdd6f4<br/>Text"]
+        H5["#181825<br/>Mantle"]
+    end
+
+    AW --> FO --> H1
+    AB --> FO
+    SB --> AG --> H2
+    IW --> AG
+    MSG --> TE --> H3
+    TXT --> AR --> H4
+    IB --> AR
+    BG --> ES --> H5
+```
+
 ---
 
 ## Status Line Layout

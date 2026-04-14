@@ -2,6 +2,57 @@
 
 Complete reference for every executable in `bin/`.
 
+## Entry Points e Dependências
+
+```mermaid
+flowchart TD
+    yoga["bin/yoga<br/>(CLI router)"]
+    yoga --> ui["core/utils/ui.sh"]
+    yoga --> lifecycle["core/daemon/lifecycle.sh"]
+    yoga --> client["core/daemon/client.sh"]
+
+    yoga_daemon["bin/yoga-daemon"]
+    yoga_daemon --> ui
+    yoga_daemon --> server["core/daemon/server.sh"]
+
+    yoga_tunnel["bin/yoga-tunnel"]
+    yoga_tunnel --> ui
+    yoga_tunnel --> cf_tunnels["$HOME/cf-tunnels/run.sh"]
+
+    yoga_ai["bin/yoga-ai"]
+    yoga_ai --> ai_terminal["core/ai/yoga-ai-terminal.sh"]
+
+    yoga_asdf["bin/yoga-asdf"]
+    yoga_asdf --> init["init.sh"]
+    yoga_asdf --> asdf_interactive["core/version-managers/asdf/interactive.sh"]
+
+    yoga_create["bin/yoga-create"]
+    yoga_doctor["bin/yoga-doctor"]
+    yoga_doctor --> utils["core/utils.sh"]
+
+    yoga_status["bin/yoga-status"]
+    yoga_status --> utils
+
+    yoga_plugin["bin/yoga-plugin"]
+    yoga_wizard["bin/git-wizard"]
+    yoga_wizard --> git_wiz["core/git/git-wizard.sh"]
+
+    yoga_update["bin/yoga-update"]
+    yoga_update_docs["bin/yoga-update-docs"]
+    yoga_update_docs --> ui
+
+    yoga_remove["bin/yoga-remove"]
+    yoga_remove --> init
+
+    opencode_compile["bin/opencode-compile"]
+
+    asdf_menu["bin/asdf-menu"]
+    asdf_menu --> asdf_interactive
+
+    create_js["bin/create_js_project"]
+    create_js --> yoga_create
+```
+
 ---
 
 ## yoga — Main CLI

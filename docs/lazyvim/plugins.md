@@ -2,6 +2,57 @@
 
 Complete reference for all plugins configured in the Yoga Files LazyVim setup. Each plugin is documented with its source, purpose, configuration, keymaps, and dependencies.
 
+```mermaid
+flowchart TD
+    CORE["lazy.nvim / LazyVim"] --> EDITOR["Editor"]
+    CORE --> UI["UI"]
+    CORE --> CODING["Coding"]
+    CORE --> LANG["Language / LSP"]
+    CORE --> AI["AI"]
+    CORE --> SPECIAL["Specialized"]
+
+    EDITOR --> E1["which-key"]
+    EDITOR --> E2["mini.files"]
+    EDITOR --> E3["autopairs"]
+    EDITOR --> E4["telescope.nvim"]
+
+    UI --> U1["gruvbox-material"]
+    UI --> U2["lualine.nvim"]
+    UI --> U3["noice.nvim"]
+
+    CODING --> C1["nvim-cmp"]
+    CODING --> C2["Luasnip"]
+    CODING --> C3["copilot"]
+
+    LANG --> L1["typescript-language-server"]
+    LANG --> L2["biome (conform.nvim)"]
+    LANG --> L3["sonarlint"]
+    LANG --> L4["treesitter"]
+
+    AI --> A1["supermaven"]
+    AI --> A2["codecompanion.nvim"]
+    AI --> A3["yoga-ai CLI"]
+
+    SPECIAL --> S1["nvim-dap + pwa-node"]
+    SPECIAL --> S2["kulala.nvim"]
+    SPECIAL --> S3["vim-dadbod"]
+    SPECIAL --> S4["aerial.nvim"]
+    SPECIAL --> S5["diffview.nvim"]
+    SPECIAL --> S6["vim-obsession"]
+
+    S1 --> S1a["nvim-dap-ui"]
+    S1 --> S1b["nvim-dap-vscode-js"]
+    S1 --> S1c["nvim-dap-virtual-text"]
+
+    S3 --> S3a["vim-dadbod-ui"]
+    S3 --> S3b["vim-dadbod-completion"]
+
+    L1 & L2 & L3 --> LSP["LSP, Diagnostics, Formatting"]
+
+    L1 -.-> S1
+    L1 -.-> S3
+```
+
 ---
 
 ## Table of Contents
