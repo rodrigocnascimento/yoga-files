@@ -4,6 +4,45 @@
 
 ---
 
+## [0.6.0] - 2026-04-14
+
+### Added
+- 🦜 **Yoga 3.0 Lôro Barizon Edition**: complete system re-architecture
+- Standalone system with no `~/.zsh/` dependency
+- `core/modules/cc/standalone.sh`: native CC implementation
+- `core/modules/workspace/standalone.sh`: native workspace implementation
+- `bin/yoga-tunnel`: new wrapper for cf-tunnels
+- Comprehensive documentation: 50 files, 17,782 lines across all modules, CLI, core, config, and editor
+- LazyVim docs: debug setup (pwa-node), keymaps, plugins, LSP, AI integration, dadbod, kulala, troubleshooting
+- Tmux docs: keybindings, plugins, themes (Grade A++), workflow, troubleshooting
+- Tunnel docs: README, usage, examples, integration
+- Yoga system docs: architecture, daemon, CC, workspace, AI, state, logging, plugins, API reference, CLI reference, core functions, configuration, bin reference
+- Search index (`docs/search/INDEX.md`) for RAG-compatible keyword search
+- TDD documents for dashboard removal and README 3.0 rewrite
+
+### Changed
+- Rewrote README.md for Yoga 3.0 (477→258 lines)
+- Removed `core/dashboard.sh` (deleted)
+- Removed dashboard alias trap (`alias yoga='yoga_dashboard'`) from `core/aliases.sh`
+- Simplified `init.sh`: removed dashboard source and alias trap
+- `bin/yoga` updated to use standalone modules
+- `tests/smoke.bash` and `tests/smoke.zsh`: removed dashboard references, added bin/yoga CLI checks
+- `core/aliases.sh`: changed `yogi` alias from `yoga_dashboard` to `yoga`
+- Fixed LazyVim debug: replaced deprecated `node2` with `pwa-node` in DAP config
+- Upgraded Tmux configuration to Grade A++
+- Converted all documentation diagrams from ASCII to Mermaid (tunnel README, yoga-2-hybrid-architecture)
+
+### Fixed
+- Fixed mermaid parse error in workspace-module.md (stray `end` keyword)
+- Fixed smoke tests referencing deleted dashboard module
+- Fixed DAP configuration using deprecated `node2` adapter
+
+### Removed
+- `core/dashboard.sh` — dashboard module completely removed
+- Dashboard trapping alias (`alias yoga='yoga_dashboard'`)
+
+---
+
 ## [0.5.0] - 2026-04-13
 
 ### Added
