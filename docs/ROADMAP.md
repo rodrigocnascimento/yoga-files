@@ -16,13 +16,13 @@ Construir um ambiente de desenvolvimento que seja:
 Progresso (estimativa):
 
 ```text
-v2.0.0 (Q1 2026): 83%
-v2.1.0 (Q2 2026): 20%
-v2.2.0 (Q3 2026): 0%
-v2.3.0 (Q4 2026): 0%
-v3.0.0 (2027): 0%
+v2.0.0 (Q1 2026): 100% ✅
+v2.1.0 (Q2 2026): 100% ✅
+v2.2.0 (Q3 2026): 100% ✅
+v2.3.0 (Q4 2026): 100% ✅
+v3.0.0 (Q1 2026): 83%
 
-Geral: 29%
+Geral: 96%
 ```
 
 ---
@@ -32,7 +32,6 @@ Geral: 29%
 - [x] Novo README e estrutura de docs
 - [x] install.sh e init.sh reestruturados
 - [x] Cores/mensagens Yoga (core/utils.sh)
-- [x] Dashboard interativo (core/dashboard.sh)
 - [x] Hardening do installer (quoting, checks, idempotencia)
 - [x] CI com smoke tests (macos + ubuntu)
 
@@ -41,7 +40,7 @@ Geral: 29%
 ## 📅 Q2 2026 - v2.1.0 AI Layer
 
 - [x] Yoga AI no terminal (core/ai/yoga-ai-terminal.sh)
-- [x] Configurar provider/model via config.yaml (openai)
+- [x] Configurar provider/model via config.yaml (openai, gemini, copilot)
 - [x] Melhorar prompts por modo (help/fix/cmd/explain/debug/code/learn)
 - [x] Padrao de seguranca: nao executar nada automaticamente
 - [x] Integracao minima no Neovim (commands + docs)
@@ -59,24 +58,34 @@ Geral: 29%
 
 ## 📅 Q4 2026 - v2.3.0 Workflow Automation
 
-- [x] Git profiles wizard integrado ao dashboard
+- [x] Git profiles wizard integrado ao CLI
 - [x] Comandos consistentes: `yoga-status`, `yoga-update`, `yoga-doctor`
 - [x] Releases: changelog e checklist
 
 ---
 
-## 📅 v0.2.0 - ASDF Package Management & Tooling
+## 📅 v3.0.0 - Lôro Barizon Edition (Current)
 
+- [x] CLI-first (dashboard removido)
+- [x] Daemon com Unix socket + SQLite
+- [x] Command Center (fzf)
+- [x] Workspace Manager com tmux
+- [x] Standalone modules (cc, workspace)
+- [x] Cloudflare Tunnels wrapper (`yoga tunnel`)
 - [x] `yoga remove` - Desinstalacao completa de runtimes ASDF
 - [x] `yoga asdf` - Wrapper para menu interativo ASDF
 - [x] `bin/opencode-compile` - Compilador de regras .opencode/ para AGENTS.md
-- [x] Subcommand routing no `bin/yoga` (yoga <sub> delega para bin/yoga-<sub>)
-- [x] Aliases ASDF no config.yaml (asdf-list, asdf-install, asdf-remove)
+- [x] Subcommand routing no `bin/yoga`
+- [x] Aliases ASDF no config.yaml
 - [x] package.json como fonte oficial de versao
+- [x] Documentacao completa (50+ arquivos)
+- [ ] Plugin system (modulos independentes)
+- [ ] Templates da comunidade (curated)
+- [ ] Observabilidade opt-in (diagnostico e performance)
 
 ---
 
-## 🔮 2027 - v3.0.0 Ecosystem Expansion
+## 🔮 Future
 
 - [ ] Plugin system (modulos independentes)
 - [ ] Templates da comunidade (curated)

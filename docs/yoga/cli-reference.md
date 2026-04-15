@@ -76,7 +76,7 @@ yoga <command> [args...]
 
 | Variable | Default | Description |
 |----------|---------|-------------|
-| `YOGA_HOME` | `$HOME/.yoga-files` | Root directory for yoga-files installation |
+| `YOGA_HOME` | `$HOME/.yoga` | Root directory for yoga-files installation |
 
 ### Behavior
 
@@ -86,7 +86,7 @@ On startup, `yoga` sources three core modules:
 2. **`core/daemon/lifecycle.sh`** — Daemon start/stop/restart/status/cleanup management (sources `server.sh` + `state/api.sh` transitively)
 3. **`core/daemon/client.sh`** — Unix socket client for communicating with the daemon (`_yoga_client_send` and high-level API functions)
 
-For commands `daemon`, `cc`, `workspace`, `ai`, `plugin`, `state`, `update`, and `version`, the CLI displays the Yoga 2.0 banner via `yoga_banner` before executing.
+For commands `daemon`, `cc`, `workspace`, `ai`, `plugin`, `state`, `update`, and `version`, the CLI displays the Yoga 3.0 banner via `yoga_banner` before executing.
 
 ### Unknown Command Handling
 
@@ -436,9 +436,9 @@ yoga status
 🧘 Workspace Status
 🔹 PID: 12345
 🔹 Uptime: 01:23:45
-🔹 Socket: ~/.yoga-files/daemon.sock
-🔹 Database: ~/.yoga-files/state.db
-🔹 Log: ~/.yoga-files/logs/daemon.log
+🔹 Socket: ~/.yoga/daemon.sock
+🔹 Database: ~/.yoga/state.db
+🔹 Log: ~/.yoga/logs/daemon.log
 
 📈 Statistics
   🌌 Workspaces: 3
@@ -563,16 +563,16 @@ yoga --version
 
 ```
 ╭──────────────────────────────────────╮
-│  🧘‍♂️  YOGA 2.0 - Efigenia Edition  │
+│  🦜  YOGA 3.0 - Lôro Barizon Edition  │
 │     ✨ Engine de Desenvolvimento     │
 ╰──────────────────────────────────────╯
 
 🔧 Propriedade          📋 Valor
 ────────────────────────────────────────────────
-🎨 Versão               2.0.0-Efigenia
-🏷️ Codename              🧘‍♂️ Efigenia Edition
+🎨 Versão               3.0.0-Lôro Barizon
+🏷️ Codename              🦜 Lôro Barizon Edition
 📅 Release               2026
-📦 YOGA_HOME             ~/.yoga-files
+📦 YOGA_HOME             ~/.yoga
 
 👹 Daemon: Rodando (v1.0)  # or: 👹 Daemon: Parado
 ```
@@ -621,7 +621,7 @@ yoga-daemon [--foreground]
 
 #### Behavior
 
-1. Sets `YOGA_HOME` (default: `$HOME/.yoga-files`)
+1. Sets `YOGA_HOME` (default: `$HOME/.yoga`)
 2. Sources `core/utils/ui.sh` and `core/daemon/server.sh`
 3. If `--foreground`, displays banner and header, then calls `yoga_daemon_start --foreground`
 4. Otherwise, calls `yoga_daemon_start` (background)

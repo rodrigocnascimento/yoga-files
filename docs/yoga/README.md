@@ -113,7 +113,7 @@ yoga version                # Versão e status do daemon
 │   ├── git-wizard                 # Wizard de Git profiles
 │   └── asdf-menu                  # Menu interativo ASDF
 ├── core/                          # Bibliotecas core
-│   ├── utils.sh                   # Funções de UI e cores (v2.1.0)
+│   ├── utils.sh                   # Funções de UI e cores (v3.0.0)
 │   ├── utils/ui.sh                # UI estendida (daemon-era)
 │   ├── common.sh                  # Helpers compartilhados
 │   ├── functions.sh               # Funções utilitárias

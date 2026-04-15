@@ -1,6 +1,6 @@
 # State Management
 
-Yoga 2.0 uses SQLite as a persistent state backend, providing key-value storage, workspace management, AI context indexing (RAG), plugin registries, command history, and structured logging. This document covers every function, table, and configuration detail.
+Yoga 3.0 uses SQLite as a persistent state backend, providing key-value storage, workspace management, AI context indexing (RAG), plugin registries, command history, and structured logging. This document covers every function, table, and configuration detail.
 
 ---
 
@@ -69,7 +69,7 @@ Tracks schema migrations applied to the database.
 | `applied_at` | DATETIME | DEFAULT CURRENT_TIMESTAMP | When the migration was applied |
 | `description` | TEXT | — | Description of the migration |
 
-**Initial row:** `(1, 'Initial schema for Yoga 2.0 Efigenia Edition')`
+**Initial row:** `(1, 'Initial schema for Yoga 3.0 Lôro Barizon Edition')`
 
 ---
 
@@ -824,7 +824,7 @@ function yoga_ai_context_add {
 
 **Example:**
 ```zsh
-yoga_ai_context_add "Deployed v2.1.0 to production" "deploy"
+yoga_ai_context_add "Deployed v3.0.0 to production" "deploy"
 yoga_ai_context_add "Fixed memory leak in worker" "fix" "a1b2c3d4"
 ```
 

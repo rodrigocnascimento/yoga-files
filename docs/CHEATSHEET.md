@@ -21,12 +21,21 @@ Um guia rápido com todos os comandos, aliases e atalhos disponíveis no seu amb
 
 ## 🤖 Inteligência Artificial (`yoga-ai`)
 
-- **`ai`** (ou `yai`) : Inicia o assistente de IA.
-- **`ai-chat`** : Inicia uma sessão de chat contínua.
-- **`ai-code <pedido>`** : Pede para a IA gerar código específico.
-- **`ai-fix <comando>`** : Pede ajuda para consertar um comando que falhou.
-- **`ai-explain <comando>`** : Explica o que um comando complexo faz.
-- **`ai-debug <erro>`** : Analisa e debuga mensagens de erro.
+O assistente de IA pode ser usado de duas formas:
+
+**Via CLI (requer daemon):**
+- **`yoga ai ask "<pergunta>"`** : Pergunta à IA via daemon
+
+**Via standalone (`yoga-ai`):**
+- **`yoga-ai help "<descrição>"`** : Ajuda com comandos de terminal
+- **`yoga-ai fix "<comando>"`** : Corrige um comando que falhou
+- **`yoga-ai cmd "<descrição>"`** : Gera um comando seguro
+- **`yoga-ai explain "<comando>"`** : Explica o que um comando faz
+- **`yoga-ai debug "<erro>"`** : Analisa mensagens de erro
+- **`yoga-ai optimize "<código>"`** : Otimiza código ou query
+- **`yoga-ai code "<descrição>"`** : Gera código
+- **`yoga-ai learn "<tópico>"`** : Explica um tópico
+- **`yoga-ai "<pergunta>"`** : Pergunta livre
 
 ---
 
@@ -86,7 +95,7 @@ Um guia rápido com todos os comandos, aliases e atalhos disponíveis no seu amb
 
 ## 🧘 Ferramentas Core do Yoga
 
-- **`yoga`** : Abre o Dashboard principal do ambiente.
+- **`yoga`** : Abre o CLI principal do ambiente (use `yoga help` para comandos).
 - **`yoga-status`** : Status e check das ferramentas instaladas.
 - **`yoga-doctor`** : Verifica a saúde do sistema e dependências.
 - **`yoga-update`** : Atualiza todo o toolkit.

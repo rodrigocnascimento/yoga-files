@@ -44,7 +44,7 @@ This implementation is designed for the daemon architecture. It sources its own 
 
 ```yaml
 name: "ai"
-version: "2.0.0"
+version: "3.0.0"
 description: "AI Assistant com integracao local (Ollama) e RAG"
 dependencies:
   - jq
@@ -65,7 +65,7 @@ commands:
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
 | `name` | string | `"ai"` | Module identifier |
-| `version` | string | `"2.0.0"` | Module version |
+| `version` | string | `"3.0.0"` | Module version |
 | `dependencies` | list | `[jq, curl]` | Required external tools |
 | `config.provider` | string | `"ollama"` | Active AI provider |
 | `config.model` | string | `"llama3.2"` | Default model name |
@@ -146,8 +146,8 @@ function ai_provider_query {
 
 | Variable | Default | Description |
 |----------|---------|-------------|
-| `YOGA_AI_PROVIDER` | `ollama` | Active AI provider |
-| `YOGA_AI_MODEL` | `llama3.2` | Model to use for generation |
+| `YOGA_AI_PROVIDER` | `ollama` | Active AI provider (daemon default; terminal helper defaults to `openai`) |
+| `YOGA_AI_MODEL` | `llama3.2` | Model to use for generation (daemon default; terminal helper defaults to `gpt-4`) |
 | `YOGA_OLLAMA_HOST` | `${OLLAMA_HOST:-http://localhost:11434}` | Ollama server host |
 
 **Example:**

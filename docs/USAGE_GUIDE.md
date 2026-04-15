@@ -42,7 +42,7 @@ yoga-update
 
 ### `yoga`
 
-Abre o dashboard interativo.
+Abre o CLI principal. Use `yoga help` para ver os comandos disponíveis.
 
 ```bash
 yoga

@@ -21,8 +21,8 @@ flowchart TD
 | `YOGA_CONFIG` | `$YOGA_HOME/config.yaml` | Path to config file | Various scripts |
 | `YOGA_SILENT` | (unset) | Set to `1` for ninja mode (no welcome) | User environment |
 | `YOGA_WELCOMED` | (unset) | Set to `1` after first init | init.sh |
-| `YOGA_SOCKET` | `$YOGA_HOME/yoga.sock` | Unix socket for daemon | ui.sh, daemon |
-| `YOGA_PIDFILE` | `$YOGA_HOME/yoga.pid` | Daemon PID file | daemon |
+| `YOGA_SOCKET` | `$YOGA_HOME/daemon.sock` | Unix socket for daemon | ui.sh, daemon |
+| `YOGA_PIDFILE` | `$YOGA_HOME/daemon.pid` | Daemon PID file | daemon |
 | `YOGA_LOG` | `$YOGA_HOME/logs/daemon.log` | Daemon log file | daemon |
 | `YOGA_STATE_DB` | `$YOGA_HOME/state.db` | SQLite database | api.sh |
 | `YOGA_STATE_SCHEMA` | `$YOGA_HOME/core/state/schema.sql` | Schema file | api.sh |
@@ -31,8 +31,8 @@ flowchart TD
 | `YOGA_DEBUG` | (unset) | Set to `1` for debug output | logger.sh |
 | `ASDF_DATA_DIR` | `$HOME/.asdf` | ASDF data directory | init.sh |
 | `ASDF_DEFAULT_TOOL_VERSIONS_SOURCE_PRIORITY` | `asdf` | ASDF version resolution | init.sh |
-| `YOGA_AI_PROVIDER` | `ollama` | AI provider (ollama, openai, anthropic) | ai module |
-| `YOGA_AI_MODEL` | `llama3.2` | AI model name | ai module |
+| `YOGA_AI_PROVIDER` | `ollama` | AI provider (ollama for daemon, openai for terminal) | ai module |
+| `YOGA_AI_MODEL` | `llama3.2` | AI model name (daemon default; terminal default is gpt-4) | ai module |
 | `YOGA_OLLAMA_HOST` | `http://localhost:11434` | Ollama server URL | ai module |
 | `CODE_DIR` | `$HOME/code` | Base projects directory | workspace module |
 | `CF_TUNNEL_PATH` | `$HOME/cf-tunnels` | cf-tunnels directory | yoga-tunnel |
@@ -67,17 +67,19 @@ user:
 ```yaml
 preferences:
   theme: "yoga_elements"   # yoga_elements | dark | light | auto
-  ai_provider: "gemini"    # openai | copilot | claude | gemini
+  ai_provider: "gemini"    # openai | copilot | gemini (daemon uses ollama)
   auto_save: true          # Auto-save files in editor
   auto_format: true        # Auto-format on save (biome/prettier)
   git_signing: false       # GPG sign commits
 ```
 
-**`ai_provider`** controls which AI backend the terminal assistant and CodeCompanion use:
-- `openai` — OpenAI GPT-4
-- `copilot` — GitHub Copilot
-- `claude` — Anthropic Claude
-- `gemini` — Google Gemini (default in Yoga 3.0)
+**`ai_provider`** controls which AI backend the system uses:
+- `ollama` — Ollama local AI (daemon default, model: llama3.2)
+- `openai` — OpenAI GPT-4 (terminal helper default)
+- `gemini` — Google Gemini (config default, requires GEMINI_API_KEY)
+- `copilot` — GitHub Copilot (requires `gh copilot`)
+
+Note: The daemon module and terminal module have **different defaults**. The daemon defaults to `ollama`/`llama3.2`, while `bin/yoga-ai` defaults to `openai`/`gpt-4`.
 
 ### plugins
 
@@ -325,8 +327,8 @@ Yoga uses a consistent variable naming convention:
 | `YOGA_HOME` | Root directory | `~/.yoga` |
 | `YOGA_COLOR_*` | ANSI color codes | `YOGA_COLOR_FOGO` |
 | `YOGA_*_ICON` | Emoji icons | `YOGA_FOGO_ICON` |
-| `YOGA_SOCKET` | Socket path | `~/.yoga/yoga.sock` |
-| `YOGA_PIDFILE` | PID file | `~/.yoga/yoga.pid` |
+| `YOGA_SOCKET` | Socket path | `~/.yoga/daemon.sock` |
+| `YOGA_PIDFILE` | PID file | `~/.yoga/daemon.pid` |
 | `YOGA_LOG_FILE` | Log file | `~/.yoga/logs/yoga.jsonl` |
 | `YOGA_LOG_LEVEL` | Min log level | `INFO` |
 | `YOGA_STATE_DB` | SQLite path | `~/.yoga/state.db` |

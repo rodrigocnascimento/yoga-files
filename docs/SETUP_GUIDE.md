@@ -6,11 +6,11 @@
 
 ## 🎯 **Visão Geral do Setup**
 
-Este guia levará você através da instalação completa do yoga-files v2.1.0, incluindo:
+Este guia levará você através da instalação completa do yoga-files v3.0.0 (Lôro Barizon Edition), incluindo:
 
 - 🛠️ **ASDF** - Version manager universal
 - 🎨 **LazyVim** - Editor moderno com plugins JavaScript/TypeScript
-- 🤖 **OpenAI Integration** - Ferramentas de IA assistente
+- 🤖 **IA Multi-provider** - OpenAI, Gemini, Copilot e Ollama
 - 🔗 **Git Multi-Perfil** - Sistema inteligente de perfis
 - 🌈 **Tema Yoga** - Interface visual com cores vibrantes
 
@@ -184,7 +184,7 @@ echo "export OPENAI_API_KEY='sua-chave-aqui'" >> ~/.zshrc
 ### Ferramentas OpenAI Incluídas
 
 #### 1. CLI Personalizado (yoga-ai)
-- **Chat direto** com GPT-4
+- **Múltiplos providers**: OpenAI, Gemini, Copilot, Ollama
 - **Geração de código** assistida
 - **Review de código** especializado
 - **Explicação** contextualizada
@@ -209,8 +209,8 @@ npm install -g typescript tsx
 Para comandos de IA no terminal (se carregado pelo `init.sh`):
 
 ```bash
-yai help "como listar arquivos modificados no git"
-yai fix "git comit -m 'msg'"
+yoga-ai help "como listar arquivos modificados no git"
+yoga-ai fix "git comit -m 'msg'"
 ```
 
 ---
@@ -244,8 +244,11 @@ bash core/git/git-wizard.sh current
 
 ### Testar Ambiente
 ```bash
-# Abrir dashboard
+# Abrir CLI principal
 yoga
+
+# Ver comandos disponíveis
+yoga help
 
 # Checagens rapidas
 asdf --version
@@ -311,14 +314,7 @@ echo 'export YOGA_AGUA="\033[0;36;1m"' >> ~/.zshrc   # Ciano personalizado
 
 ## 📚 **Próximos Passos**
 
-### 1. Sincronização de Configurações
-```bash
-# Backup e sincronizar
-yoga-backup
-yoga-sync
-```
-
-### 2. Aprendizado da Ferramentas
+### 1. Aprendizado da Ferramentas
 - Estudar comandos: `yoga --help`
 - Explorar plugins LazyVim: `:Telescope`
 - Dominar ASDF: Leia `docs/ASDF_GUIDE.md`
@@ -350,14 +346,14 @@ Ao completar este guia, você terá:
 # Carregar ambiente
 source ~/.yoga/init.sh
 
-# Abrir dashboard
+# Abrir CLI principal
 yoga
+
+# Ver comandos disponíveis
+yoga help
 
 # Criar primeiro projeto
 yoga-create react meu-primeiro-projeto-yoga
-
-# Fazer commit com assistência IA
-git-add-auto && git-commit-ai
 
 # Namastê! 🧘
 ```
