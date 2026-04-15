@@ -4,7 +4,7 @@ Complete reference for every function, variable, and alias in the Yoga framework
 
 ---
 
-## core/utils.sh (v2.1.0)
+## core/utils.sh (v3.0.0)
 
 Core UI and utility functions providing the element-based color system and interactive features.
 
@@ -905,14 +905,14 @@ done
 
 **Signature:** `yoga_banner`
 
-**Description:** Print the Yoga 2.0 decorative banner.
+**Description:** Print the Yoga 3.0 decorative banner.
 
 **Parameters:** None.
 
 **Output:**
 ```
     ╭──────────────────────────────────────╮
-    │  🧘‍♂️  YOGA 2.0 - Efigenia Edition  │
+    │  🦜  YOGA 3.0 - Lôro Barizon Edition  │
     │     ✨ Engine de Desenvolvimento     │
     ╰──────────────────────────────────────╯
 ```
@@ -1335,7 +1335,6 @@ All shell aliases organized by category.
 |-------|-----------|-------------|
 | `ai` | `yoga-ai` | AI terminal |
 | `yai` | `yoga-ai` | AI terminal (alt) |
-| `ai-chat` | `yoga-ai chat` | AI chat |
 | `ai-code` | `yoga-ai code` | AI code generation |
 | `ai-help` | `yoga-ai help` | AI command help |
 | `ai-fix` | `yoga-ai fix` | AI command fix |

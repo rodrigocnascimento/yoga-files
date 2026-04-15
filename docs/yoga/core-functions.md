@@ -22,7 +22,7 @@ flowchart TD
         yoga_banner["yoga_banner"]
     end
 
-    subgraph Utils["core/utils.sh (v2.1.0)"]
+    subgraph Utils["core/utils.sh (v3.0.0)"]
         yoga_fail["yoga_fail → fogo"]
         yoga_success_leg["yoga_success → terra"]
         yoga_message["yoga_message → agua"]
@@ -105,7 +105,7 @@ Core UI and utility functions. Sourced by `init.sh` and most other modules.
 | `yoga_pose` | `yoga_pose "theme"` | Random yoga pose | 0 |
 | `yoga_meditation` | `yoga_meditation` | Meditation timer | 0 |
 | `yoga_progress` | `yoga_progress "msg" "pct"` | Progress bar | 0 |
-| `yoga_status` | `yoga_status` | Full environment status dashboard | 0 |
+| `yoga_status` | `yoga_status` | Full environment status report | 0 |
 | `yoga_interactive_menu` | `yoga_interactive_menu "title" "opts"` | fzf-based menu | selected option |
 
 All `yoga_fogo`, `yoga_terra`, `yoga_agua`, `yoga_ar`, `yoga_espirito`, `yoga_sol`, `yoga_lua` functions are exported via `export -f` when running in Bash.
@@ -114,7 +114,7 @@ All `yoga_fogo`, `yoga_terra`, `yoga_agua`, `yoga_ar`, `yoga_espirito`, `yoga_so
 
 ## core/utils/ui.sh
 
-UI utilities for the daemon era (Yoga 2.0+). Auto-initializes via `yoga_ui_init`.
+UI utilities for the daemon era (Yoga 3.0+). Auto-initializes via `yoga_ui_init`.
 
 ### Extended Color Constants
 
@@ -134,10 +134,10 @@ UI utilities for the daemon era (Yoga 2.0+). Auto-initializes via `yoga_ui_init`
 
 | Variable | Default | Description |
 |----------|---------|-------------|
-| `YOGA_SOCKET` | `${YOGA_HOME}/yoga.sock` | Unix socket path |
-| `YOGA_PIDFILE` | `${YOGA_HOME}/yoga.pid` | Daemon PID file |
+| `YOGA_SOCKET` | `${YOGA_HOME}/daemon.sock` | Unix socket path |
+| `YOGA_PIDFILE` | `${YOGA_HOME}/daemon.pid` | Daemon PID file |
 | `YOGA_LOG` | `${YOGA_HOME}/logs/daemon.log` | Daemon log |
-| `YOGA_STATE_DB` | `${YOGA_HOME}/state/yoga.db` | SQLite database |
+| `YOGA_STATE_DB` | `${YOGA_HOME}/state.db` | SQLite database |
 | `YOGA_STATE_SCHEMA` | `${YOGA_HOME}/core/state/schema.sql` | Schema file |
 
 ### Additional UI Functions
@@ -269,7 +269,7 @@ Interactive menu with `projects` and `gotodir` options via fzf.
 
 ---
 
-## core/aliases.sh (v2.0)
+## core/aliases.sh (v3.0)
 
 Complete alias reference organized by category.
 
@@ -354,7 +354,7 @@ Complete alias reference organized by category.
 |-------|---------|
 | `ai` | `yoga-ai` |
 | `yai` | `yoga-ai` |
-| `ai-chat` | `yoga-ai chat` |
+| `ai-debug` | `yoga-ai debug` |
 | `ai-code` | `yoga-ai code` |
 | `ai-help` | `yoga-ai help` |
 | `ai-fix` | `yoga-ai fix` |

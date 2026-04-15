@@ -4,6 +4,50 @@
 
 ---
 
+## [3.0.0] - 2026-04-15
+
+### Added
+- 🦜 **Yoga 3.0 Lôro Barizon Edition**: complete system re-architecture
+- Standalone system with no `~/.zsh/` dependency
+- `core/modules/cc/standalone.sh`: native CC implementation
+- `core/modules/workspace/standalone.sh`: native workspace implementation
+- `bin/yoga-tunnel`: new wrapper for cf-tunnels
+- Comprehensive documentation: 50+ files across all modules, CLI, core, config, and editor
+- Full AI provider support: ollama, openai, gemini, copilot with clear daemon vs terminal defaults
+- Uninstall script with farewell jokes generator (`uninstall.sh`)
+- README section for uninstallation
+
+### Changed
+- **BREAKING**: YOGA_HOME default path: `.yoga-files` → `.yoga` (aligned with `init.sh`)
+- **BREAKING**: Daemon socket/pid paths: `yoga.sock`/`yoga.pid` → `daemon.sock`/`daemon.pid`
+- Version: `2.0.0-Efigenia` → `3.0.0-Lôro Barizon`
+- Documentation overhaul: 79 inconsistencies fixed across 17+ files
+- `bin/yoga`: YOGA_HOME default and version string updated
+- `AI_INTEGRATION.md`: rewritten with all providers and dual entrypoints (`yoga ai ask` vs `yoga-ai`)
+- `ROADMAP.md`: updated to reflect v3.0 as current
+- `yoga-2-hybrid-architecture.md`: marked as historical document
+
+### Fixed
+- Documentation references to deleted dashboard feature removed
+- Nonexistent commands removed (`yai`, `ai-chat`, `yoga-backup`, `yoga-sync`, `git-add-auto`)
+- Socket/PID/DB path mismatches corrected in `core-functions.md` and `configuration.md`
+- AI provider documentation: added gemini, copilot, ollama; clarified daemon vs terminal defaults
+- `yoga-remove` description clarified (ASDF runtime removal, not yoga-files uninstall)
+- `yoga-doctor --network` flag removed from docs (doesn't exist)
+- `CHEATSHEET.md`: dashboard reference replaced with CLI, `ai-chat` removed, `optimize` mode added
+- `GUIA_DE_TESTES.md`: removed `yoga-plugin add/update`, `yoga-asdf status`, landing-page section
+- `SETUP_GUIDE.md`: removed `yoga-backup`, `yoga-sync`, `git-add-auto`, dashboard references
+- `USAGE_GUIDE.md`: dashboard reference replaced with CLI description
+- `cli-reference.md`: version, YOGA_HOME, socket paths, ai-chat alias fixed
+- `workspace-module.md`, `ai-module.md`, `logging.md`, `state-management.md`: version 2.0 → 3.0
+
+### Removed
+- References to dashboard feature (removed in 3.0)
+- `landing-page/` section from test guide (directory never existed)
+- `yoga-doctor --network` flag documentation (flag doesn't exist)
+
+---
+
 ## [0.6.0] - 2026-04-14
 
 ### Added

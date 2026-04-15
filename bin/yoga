@@ -1,14 +1,14 @@
 #!/usr/bin/env zsh
 # 🎭 bin/yoga
 # @name: yoga-cli
-# @desc: CLI Client for Yoga 2.0 - Main Entry Point 🧘‍♂️
+# @desc: CLI Client for Yoga 3.0 - Main Entry Point 🧘‍♂️
 # @usage: yoga <command> [args...]
-# @author: Yoga 2.0 Efigenia Edition ✨
+# @author: Yoga 3.0 Lôro Barizon Edition 🦜
 
 set -euo pipefail
 
 # 🏠 Config
-YOGA_HOME="${YOGA_HOME:-$HOME/.yoga-files}"
+YOGA_HOME="${YOGA_HOME:-$HOME/.yoga}"
 export YOGA_HOME
 
 # 📦 Source dependencies
@@ -395,8 +395,8 @@ function _yoga_cmd_update {
 function _yoga_cmd_version {
     yoga_banner
     yoga_table_header "🔧 Propriedade" "📋 Valor"
-    yoga_table_row "🎨 Versão" "2.0.0-Efigenia"
-    yoga_table_row "🏷️ Codename" "🧘‍♂️ Efigenia Edition"
+    yoga_table_row "🎨 Versão" "3.0.0-Lôro Barizon"
+    yoga_table_row "🏷️ Codename" "🦜 Lôro Barizon Edition"
     yoga_table_row "📅 Release" "2026"
     yoga_table_row "📦 YOGA_HOME" "${YOGA_HOME/#$HOME/~}"
     echo ""

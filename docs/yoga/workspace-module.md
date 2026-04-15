@@ -4,7 +4,7 @@
 
 Módulo **Workspace** — Gerenciamento de projetos e sessões tmux.
 
-Versão: 2.0.0  
+Versão: 3.0.0  
 Standalone: Sim (não depende de daemon para operações básicas)  
 Arquivos: `core/modules/workspace/{standalone.sh, engine.sh, tmux.sh, module.yaml}`
 
@@ -324,7 +324,7 @@ Utilitários de integração com tmux.
 
 ```yaml
 name: "workspace"
-version: "2.0.0"
+version: "3.0.0"
 description: "Gerenciamento de projetos e sessões Tmux"
 dependencies:
   - tmux

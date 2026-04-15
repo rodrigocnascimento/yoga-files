@@ -1,5 +1,7 @@
 # 🚀 Yoga 2.0: Arquitetura de Orquestração de Ambientes
 
+> **⚠️ ARQUIVO HISTÓRICO** — Este documento descreve uma proposta de arquitetura para o Yoga 2.0 que foi substituída pela arquitetura Yoga 3.0 (Lôro Barizon Edition), que é CLI-first e baseada em daemon. Consulte `docs/yoga/README.md` para a documentação atual.
+
 **Uma proposta alternativa ao Paradigma CLI-First Tradicional**
 
 ---

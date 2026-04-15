@@ -1,6 +1,6 @@
 # Logging
 
-Yoga 2.0 provides three logging subsystems that work together: a **structured JSONL logger** (daemon-era), an **opt-in observability logger**, and **module-level standalone loggers**. All three write to `${YOGA_HOME}/logs/yoga.jsonl` and/or SQLite for persistence and RAG retrieval.
+Yoga 3.0 provides three logging subsystems that work together: a **structured JSONL logger** (daemon-era), an **opt-in observability logger**, and **module-level standalone loggers**. All three write to `${YOGA_HOME}/logs/yoga.jsonl` and/or SQLite for persistence and RAG retrieval.
 
 ---
 
