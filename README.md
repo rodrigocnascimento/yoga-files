@@ -52,6 +52,28 @@ yoga daemon start
 
 ---
 
+## 🗑️ **Desinstalação**
+
+Para remover completamente o yoga-files do seu sistema:
+
+```bash
+# Desinstalação completa (remove configs, aliases, daemon, ASDF hooks)
+curl -fsSL https://raw.githubusercontent.com/rodrigocnascimento/yoga-files/main/uninstall.sh | zsh
+
+# Ou, se já tem o repo clonado:
+./uninstall.sh
+```
+
+O desinstalador remove:
+1. Diretório `~/.yoga/` (config, state, logs)
+2. Hook `init.sh` do `~/.zshrc`
+3. Daemon socket e PID
+4. Aliases e funções da sessão atual
+
+> ⚠️ **Não remove** os runtimes ASDF instalados. Use `yoga remove <lang>` antes se quiser removê-los também.
+
+---
+
 ## 🎮 **Comandos (CLI 3.0)**
 
 | Comando | Descrição |
