@@ -286,7 +286,7 @@ function cc_standalone_contextual {
 function cc_standalone_log {
 	local cmd="$1"
 	local type="$2"
-	local status="$3"
+	local cc_status="$3"
 	local duration="$4"
 
 	# Log para SQLite (silencioso)
@@ -294,10 +294,10 @@ function cc_standalone_log {
 		local escaped_cmd=$(echo "$cmd" | sed "s/'/''/g")
 		sqlite3 "$YOGA_STATE_DB" "
             INSERT INTO commands (type, command, description, status, last_used)
-            VALUES ('$type', '$escaped_cmd', '${escaped_cmd:0:100}', '$status', datetime('now'))
+            VALUES ('$type', '$escaped_cmd', '${escaped_cmd:0:100}', '$cc_status', datetime('now'))
             ON CONFLICT(command) DO UPDATE SET
                 usage_count = usage_count + 1,
-                status = '$status',
+                status = '$cc_status',
                 last_used = datetime('now');
         " 2>/dev/null || true
 	fi
@@ -308,7 +308,7 @@ function cc_standalone_log {
 		--arg module "cc" \
 		--arg cmd "$cmd" \
 		--arg type "$type" \
-		--arg status "$status" \
+		--arg status "$cc_status" \
 		--argjson dur "$duration" \
 		'{timestamp: $ts, level: "INFO", module: $module, command: $cmd, type: $type, status: $status, duration_ms: $dur}')
 

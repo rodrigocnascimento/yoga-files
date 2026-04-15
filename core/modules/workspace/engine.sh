@@ -28,14 +28,14 @@ function workspace_engine_list_interactive {
 	for proj in ~/code/*(/N); do
 		local name=$(basename "$proj")
 		local tname=$(echo "$name" | tr '.' '_')
-		local status=""
+		local ws_status=""
 
 		# Verifica se sessão está ativa
 		if grep -q "^${tname}$" <<<"$active_sessions" 2>/dev/null; then
-			status=" 🟢"
+			ws_status=" 🟢"
 		fi
 
-		rows+=("${name}${status}|${proj}")
+		rows+=("${name}${ws_status}|${proj}")
 	done
 
 	# Fzf interface

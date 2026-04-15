@@ -47,13 +47,13 @@ function _yoga_client_send {
     fi
     
     # 📥 Parse response
-    local parts=(${(s:|:)response})
-    local status="${parts[1]:-ERROR}"
-    local data="${parts[2]:-{}}"
+local parts=(${(s:|:)response})
+    local reply_status="${parts[1]:-ERROR}"
+    local data="${parts[2]:-{}" 
     local resp_id="${parts[3]:-unknown}"
     
     # 🎯 Return data
-    if [[ "$status" == "OK" ]]; then
+    if [[ "$reply_status" == "OK" ]]; then
         echo "$data"
         return 0
     else

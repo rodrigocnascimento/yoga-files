@@ -233,10 +233,10 @@ function yoga_workspace_list {
         FROM workspaces 
         ORDER BY last_accessed DESC;
     " | while IFS='|' read -r id name path active session accessed; do
-		local status="⚪"
-		[[ "$active" == "1" ]] && status="🟢"
-		[[ -n "$session" ]] && status="${status}📦"
-		echo "${status}|${name}|${path}|${id}"
+		local ws_status="⚪"
+		[[ "$active" == "1" ]] && ws_status="🟢"
+		[[ -n "$session" ]] && ws_status="${ws_status}📦"
+		echo "${ws_status}|${name}|${path}|${id}"
 	done
 }
 
@@ -364,7 +364,7 @@ function yoga_log_db {
 	local command="$3"
 	local input="${4:-}"
 	local output="${5:-}"
-	local status="${6:-success}"
+	local cmd_status="${6:-success}"
 	local duration="${7:-0}"
 
 	local escaped_input=$(_yoga_state_escape "$input")
@@ -372,7 +372,7 @@ function yoga_log_db {
 
 	_yoga_state_query "
         INSERT INTO logs (level, module, command, input, output, status, duration_ms)
-        VALUES ('$level', '$module', '$command', '$escaped_input', '$escaped_output', '$status', $duration);
+        VALUES ('$level', '$module', '$command', '$escaped_input', '$escaped_output', '$cmd_status', $duration);
     "
 }
 

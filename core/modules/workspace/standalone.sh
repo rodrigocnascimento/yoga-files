@@ -58,14 +58,14 @@ function workspace_standalone_list_interactive {
 
 		local name=$(basename "$proj")
 		local tname=$(echo "$name" | tr '.' '_')
-		local status=""
+		local ws_status=""
 
 		# Verifica se sessão está ativa
 		if grep -q "^${tname}$" <<<"$active_sessions" 2>/dev/null; then
-			status=" 🟢"
+			ws_status=" 🟢"
 		fi
 
-		rows+=("${name}${status}|${proj}")
+		rows+=("${name}${ws_status}|${proj}")
 	done
 
 	# Se não encontrou projetos
@@ -246,12 +246,12 @@ function workspace_standalone_list_simple {
 
 		local name=$(basename "$proj")
 		local tname=$(echo "$name" | tr '.' '_')
-		local status="⚪"
+		local ws_status="⚪"
 
 		if grep -q "^${tname}$" <<<"$active_sessions" 2>/dev/null; then
-			status="🟢"
+			ws_status="🟢"
 		fi
 
-		printf "  %s %s\n" "$status" "$name"
+		printf "  %s %s\n" "$ws_status" "$name"
 	done
 }

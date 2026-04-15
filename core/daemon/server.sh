@@ -136,7 +136,7 @@ function _yoga_daemon_handle_request {
     
     # 🎯 Route to module
     local response=""
-    local status="OK"
+    local reply_status="OK"
     
     case "$module" in
         ping)
@@ -170,10 +170,10 @@ function _yoga_daemon_handle_request {
     esac
     
     # 📤 Send response
-    echo "${status}${DELIMITER}${response}${DELIMITER}${req_id}"
+    echo "${reply_status}${DELIMITER}${response}${DELIMITER}${req_id}"
     
     # 📝 Log
-    echo "[$timestamp] $module:$command | $status | $req_id" >> "$YOGA_LOG"
+    echo "[$timestamp] $module:$command | $reply_status | $req_id" >> "$YOGA_LOG"
 }
 
 # ═══════════════════════════════════════════════════════════
@@ -265,8 +265,8 @@ function _yoga_daemon_handle_cc {
             local command=$(echo "$args" | jq -r '.command // ""')
             # Executa e retorna resultado
             local output
-            output=$(eval "$command" 2>&1) && local status="success" || local status="error"
-            echo "{\"status\":\"$status\",\"output\":\"$output\"}"
+            output=$(eval "$command" 2>&1) && local cmd_status="success" || local cmd_status="error"
+            echo "{\"status\":\"$cmd_status\",\"output\":\"$output\"}"
             ;;
         *)
             echo "{\"error\":\"Unknown cc command: $cmd\"}"
