@@ -22,7 +22,7 @@ source "${YOGA_HOME}/core/daemon/client.sh"
 
 function main {
     local cmd="${1:-help}"
-    shift || true
+    [[ $# -gt 0 ]] && shift
     
     # 🎨 Banner nas operações principais
     case "$cmd" in
@@ -119,7 +119,7 @@ function _yoga_cmd_cc {
 
 function _yoga_cmd_workspace {
     local action="${1:-list}"
-    shift || true
+    [[ $# -gt 0 ]] && shift
     
     # 🦜 Lôro Barizon: Usa standalone
     yoga_section "🌌 Workspace Manager"
@@ -129,7 +129,7 @@ function _yoga_cmd_workspace {
     
     case "$action" in
         list|ls)
-            if [[ "$1" == "--simple" ]]; then
+            if [[ "${1:-}" == "--simple" ]]; then
                 workspace_standalone_list_simple
             else
                 workspace_standalone_list_interactive
@@ -169,7 +169,7 @@ function _yoga_cmd_tunnel {
 
 function _yoga_cmd_ai {
     local action="${1:-ask}"
-    shift || true
+    [[ $# -gt 0 ]] && shift
     
     # 🔍 Verifica daemon
     if ! yoga_daemon_is_running; then
@@ -206,7 +206,7 @@ function _yoga_cmd_ai {
 
 function _yoga_cmd_plugin {
     local action="${1:-list}"
-    shift || true
+    [[ $# -gt 0 ]] && shift
     
     # 🔍 Verifica daemon
     if ! yoga_daemon_is_running; then
@@ -264,7 +264,7 @@ function _yoga_cmd_plugin {
 
 function _yoga_cmd_state {
     local action="${1:-get}"
-    shift || true
+    [[ $# -gt 0 ]] && shift
     
     # 🔍 Verifica daemon
     if ! yoga_daemon_is_running; then
@@ -310,7 +310,7 @@ function _yoga_cmd_state {
 
 function _yoga_cmd_logs {
     local action="${1:-tail}"
-    shift || true
+    [[ $# -gt 0 ]] && shift
     
     yoga_section "📝 Logs"
     
