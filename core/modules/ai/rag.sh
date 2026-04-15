@@ -3,7 +3,7 @@
 # @name: ai-rag
 # @desc: RAG (Retrieval Augmented Generation) usando logs 🤖
 # @usage: source "${YOGA_HOME}/core/modules/ai/rag.sh"
-# @author: Yoga 2.0 Efigenia Edition 🧘‍♂️
+# @author: Yoga 3.0 Lôro Barizon Edition 🦜
 
 emulate -L zsh
 set -euo pipefail

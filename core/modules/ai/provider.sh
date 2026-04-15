@@ -3,7 +3,7 @@
 # @name: ai-provider
 # @desc: Provider abstraction (Ollama/OpenAI/Anthropic) 🤖
 # @usage: source "${YOGA_HOME}/core/modules/ai/provider.sh"
-# @author: Yoga 2.0 Efigenia Edition 🧘‍♂️
+# @author: Yoga 3.0 Lôro Barizon Edition 🦜
 
 emulate -L zsh
 set -euo pipefail

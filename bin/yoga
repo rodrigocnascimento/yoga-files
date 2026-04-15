@@ -395,8 +395,8 @@ function _yoga_cmd_update {
 function _yoga_cmd_version {
     yoga_banner
     yoga_table_header "🔧 Propriedade" "📋 Valor"
-    yoga_table_row "🎨 Versão" "3.0.0-Lôro Barizon"
-    yoga_table_row "🏷️ Codename" "🦜 Lôro Barizon Edition"
+    yoga_table_row "🎨 Versão" "${YOGA_VERSION}"
+    yoga_table_row "🏷️ Codename" "${YOGA_EMOJI} ${YOGA_CODENAME}"
     yoga_table_row "📅 Release" "2026"
     yoga_table_row "📦 YOGA_HOME" "${YOGA_HOME/#$HOME/~}"
     echo ""

@@ -3,7 +3,7 @@
 # @name: cc-data
 # @desc: Coleta dados de múltiplas fontes para CC 🎯
 # @usage: source "${YOGA_HOME}/core/modules/cc/data.sh"
-# @author: Yoga 2.0 Efigenia Edition 🧘‍♂️
+# @author: Yoga 3.0 Lôro Barizon Edition 🦜
 
 emulate -L zsh
 set -euo pipefail

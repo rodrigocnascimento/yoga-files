@@ -3,7 +3,7 @@
 # @name: workspace-tmux
 # @desc: Tmux integration for Workspaces 🌌
 # @usage: source "${YOGA_HOME}/core/modules/workspace/tmux.sh"
-# @author: Yoga 2.0 Efigenia Edition 🧘‍♂️
+# @author: Yoga 3.0 Lôro Barizon Edition 🦜
 
 emulate -L zsh
 set -euo pipefail

@@ -1,9 +1,14 @@
 #!/usr/bin/env zsh
 # 🎨 core/utils/ui.sh
 # @name: ui-utils
-# @desc: Funções de UI com emojis para Yoga 2.0 🧘‍♂️
+# @desc: Funções de UI com emojis para Yoga 3.0 🦜
 # @usage: source "$YOGA_HOME/core/utils/ui.sh"
-# @author: Yoga 2.0 Efigenia Edition ✨
+# @author: Yoga 3.0 Lôro Barizon Edition 🦜
+
+# 🏷️ Version & Identity (single source of truth)
+export YOGA_VERSION="${YOGA_VERSION:-3.0.0}"
+export YOGA_CODENAME="${YOGA_CODENAME:-Lôro Barizon Edition}"
+export YOGA_EMOJI="${YOGA_EMOJI:-🦜}"
 
 # 🌈 Cores ANSI
 export YOGA_COLOR_RESET='\033[0m'
@@ -185,11 +190,13 @@ function yoga_emoji {
 
 # 🎨 Banner
 function yoga_banner {
-	# 🧘‍♂️ Banner do Yoga
+	# 🦜 Banner do Yoga — uses YOGA_VERSION, YOGA_CODENAME, YOGA_EMOJI
+	local v_line="  ${YOGA_EMOJI}  YOGA ${YOGA_VERSION} - ${YOGA_CODENAME}  "
+	local s_line="     ✨ Engine de Desenvolvimento     "
 	printf "\n"
 	printf "${YOGA_COLOR_AGUA}    ╭──────────────────────────────────────╮${YOGA_COLOR_RESET}\n"
-	printf "${YOGA_COLOR_AGUA}    │${YOGA_COLOR_RESET}  🧘‍♂️  ${YOGA_COLOR_BOLD}YOGA 2.0${YOGA_COLOR_RESET} - Efigenia Edition  ${YOGA_COLOR_AGUA}│${YOGA_COLOR_RESET}\n"
-	printf "${YOGA_COLOR_AGUA}    │${YOGA_COLOR_RESET}     ✨ Engine de Desenvolvimento     ${YOGA_COLOR_AGUA}│${YOGA_COLOR_RESET}\n"
+	printf "${YOGA_COLOR_AGUA}    │${YOGA_COLOR_RESET}${YOGA_COLOR_BOLD}%s${YOGA_COLOR_RESET}${YOGA_COLOR_AGUA}│${YOGA_COLOR_RESET}\n" "$v_line"
+	printf "${YOGA_COLOR_AGUA}    │${YOGA_COLOR_RESET}%s${YOGA_COLOR_AGUA}│${YOGA_COLOR_RESET}\n" "$s_line"
 	printf "${YOGA_COLOR_AGUA}    ╰──────────────────────────────────────╯${YOGA_COLOR_RESET}\n"
 	printf "\n"
 }

@@ -1,9 +1,9 @@
 #!/usr/bin/env zsh
 # 📝 core/modules/logging/logger.sh
 # @name: logging-engine
-# @desc: Structured JSONL Logging for Yoga 2.0 📝
+# @desc: Structured JSONL Logging for Yoga 3.0 📝
 # @usage: source "$YOGA_HOME/core/modules/logging/logger.sh"
-# @author: Yoga 2.0 Efigenia Edition 🧘‍♂️
+# @author: Yoga 3.0 Lôro Barizon Edition 🦜
 
 emulate -L zsh
 set -euo pipefail

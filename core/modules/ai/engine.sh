@@ -3,7 +3,7 @@
 # @name: ai-engine
 # @desc: AI Assistant engine (reimplementação de rag*.zsh) 🤖
 # @usage: source "${YOGA_HOME}/core/modules/ai/engine.sh"
-# @author: Yoga 2.0 Efigenia Edition 🧘‍♂️
+# @author: Yoga 3.0 Lôro Barizon Edition 🦜
 
 emulate -L zsh
 set -euo pipefail

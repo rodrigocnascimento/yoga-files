@@ -3,7 +3,7 @@
 # @name: cc-engine
 # @desc: Command Center interativo (reimplementação de cc.zsh) 🎯
 # @usage: source "${YOGA_HOME}/core/modules/cc/engine.sh" && cc_engine_run
-# @author: Yoga 2.0 Efigenia Edition 🧘‍♂️
+# @author: Yoga 3.0 Lôro Barizon Edition 🦜
 
 emulate -L zsh
 set -euo pipefail

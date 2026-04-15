@@ -3,7 +3,7 @@
 # @name: cc-preview
 # @desc: Preview para itens do Command Center 🎯
 # @usage: cc_preview <line>
-# @author: Yoga 2.0 Efigenia Edition 🧘‍♂️
+# @author: Yoga 3.0 Lôro Barizon Edition 🦜
 
 emulate -L zsh
 set -euo pipefail

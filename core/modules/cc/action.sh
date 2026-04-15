@@ -3,7 +3,7 @@
 # @name: cc-action
 # @desc: Ações contextuais para Command Center 🎯
 # @usage: source "${YOGA_HOME}/core/modules/cc/action.sh"
-# @author: Yoga 2.0 Efigenia Edition 🧘‍♂️
+# @author: Yoga 3.0 Lôro Barizon Edition 🦜
 
 emulate -L zsh
 set -euo pipefail

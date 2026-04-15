@@ -1,9 +1,9 @@
 #!/usr/bin/env zsh
 # 🧠 core/state/api.sh
 # @name: state-api
-# @desc: SQLite State Manager API for Yoga 2.0 💾
+# @desc: SQLite State Manager API for Yoga 3.0 💾
 # @usage: source "$YOGA_HOME/core/state/api.sh"
-# @author: Yoga 2.0 Efigenia Edition 🧘‍♂️
+# @author: Yoga 3.0 Lôro Barizon Edition 🦜
 
 emulate -L zsh
 set -euo pipefail

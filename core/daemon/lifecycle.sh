@@ -3,7 +3,7 @@
 # @name: daemon-lifecycle
 # @desc: Daemon lifecycle management (start/stop/status/restart) 📦
 # @usage: source "$YOGA_HOME/core/daemon/lifecycle.sh"
-# @author: Yoga 2.0 Efigenia Edition 🧘‍♂️
+# @author: Yoga 3.0 Lôro Barizon Edition 🦜
 
 emulate -L zsh
 set -euo pipefail
