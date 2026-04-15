@@ -1,9 +1,9 @@
 #!/usr/bin/env zsh
 # 👹 core/daemon/server.sh
 # @name: daemon-server
-# @desc: Unix Socket Server for Yoga 2.0 Daemon 👹
+# @desc: Unix Socket Server for Yoga 3.0 Daemon 👹
 # @usage: (internal, started by yoga-daemon)
-# @author: Yoga 2.0 Efigenia Edition 🧘‍♂️
+# @author: Yoga 3.0 Lôro Barizon Edition 🦜
 
 emulate -L zsh
 set -euo pipefail
@@ -19,7 +19,7 @@ source "${YOGA_HOME}/core/state/api.sh"
 
 # 🎯 Protocol constants
 readonly PROTOCOL_VERSION="1.0"
-readonly DELIMITER=$'\x1E'  # ASCII Record Separator
+[[ -z "${DELIMITER:-}" ]] && readonly DELIMITER=$'\x1E'
 
 # ═══════════════════════════════════════════════════════════
 # 🚀 SERVER CORE

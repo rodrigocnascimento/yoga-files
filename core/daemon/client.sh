@@ -1,17 +1,17 @@
 #!/usr/bin/env zsh
 # 🔌 core/daemon/client.sh
 # @name: daemon-client
-# @desc: Unix Socket Client for Yoga 2.0 CLI 🔌
+# @desc: Unix Socket Client for Yoga 3.0 CLI 🔌
 # @usage: source "$YOGA_HOME/core/daemon/client.sh"
-# @author: Yoga 2.0 Efigenia Edition 🧘‍♂️
+# @author: Yoga 3.0 Lôro Barizon Edition 🦜
 
 emulate -L zsh
 set -euo pipefail
 
 # 🏠 Config
 YOGA_SOCKET="${YOGA_HOME}/daemon.sock"
-readonly DELIMITER=$'\x1E'  # ASCII Record Separator
-readonly TIMEOUT=5
+[[ -z "${DELIMITER:-}" ]] && readonly DELIMITER=$'\x1E'
+[[ -z "${TIMEOUT:-}" ]] && readonly TIMEOUT=5
 
 # 📦 Source
 source "${YOGA_HOME}/core/utils/ui.sh"
