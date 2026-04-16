@@ -13,7 +13,9 @@ Arquivos: `core/modules/workspace/{standalone.sh, engine.sh, tmux.sh, module.yam
 ```bash
 yoga workspace                  # Lista interativa (fzf)
 yoga workspace list             # Lista interativa
+yoga workspace list --open     # Lista apenas workspaces abertos
 yoga workspace list --simple    # Lista simples (sem fzf)
+yoga workspace list --simple --open  # Lista simples apenas abertos
 yoga workspace create foo       # Cria workspace foo
 yoga workspace switch foo       # Troca/cria workspace foo
 yoga workspace activate foo     # Ativa workspace foo

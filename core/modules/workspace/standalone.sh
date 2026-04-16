@@ -44,9 +44,11 @@ source "$YOGA_HOME/core/state/api.sh"
 # ═══════════════════════════════════════════════════════════════
 
 # 🌌 Lista workspaces interativo (principal)
-# @usage: workspace_standalone_list_interactive
+# @usage: workspace_standalone_list_interactive [filter_open]
+# @param: filter_open - "true" para filtrar apenas abertos
 # @return: Navega para workspace selecionado
 function workspace_standalone_list_interactive {
+	local filter_open="${1:-false}"
 	local -a rows=()
 
 	# Coleta sessões ativas uma única vez
@@ -67,6 +69,17 @@ function workspace_standalone_list_interactive {
 
 		rows+=("${name}${ws_status}|${proj}")
 	done
+
+	# Filtra apenas workspaces abertos se solicitado
+	if [[ "$filter_open" == "true" ]]; then
+		local -a filtered=()
+		for row in "${rows[@]}"; do
+			if [[ "$row" == *"🟢"* ]]; then
+				filtered+=("$row")
+			fi
+		done
+		rows=("${filtered[@]}")
+	fi
 
 	# Se não encontrou projetos
 	if [[ ${#rows[@]} -eq 0 ]]; then
@@ -235,7 +248,9 @@ function workspace_standalone_log {
 }
 
 # 📋 Lista simples (não interativo)
+# @param: filter_open - "true" para filtrar apenas abertos
 function workspace_standalone_list_simple {
+	local filter_open="${1:-false}"
 	echo "🌌 Workspaces em $CODE_DIR:"
 	echo ""
 
@@ -250,6 +265,11 @@ function workspace_standalone_list_simple {
 
 		if grep -q "^${tname}$" <<<"$active_sessions" 2>/dev/null; then
 			ws_status="🟢"
+		fi
+
+		# Filtra apenas abertos se solicitado
+		if [[ "$filter_open" == "true" ]] && [[ "$ws_status" == "⚪" ]]; then
+			continue
 		fi
 
 		printf "  %s %s\n" "$ws_status" "$name"

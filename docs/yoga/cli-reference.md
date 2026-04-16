@@ -233,7 +233,9 @@ yoga ws <action> [args...]
 
 ```bash
 yoga ws list                  # Interactive workspace list
+yoga ws list --open           # List only open workspaces
 yoga ws ls --simple           # Plain text workspace list
+yoga ws ls --simple --open    # Plain text only open workspaces
 yoga ws create my-project     # Create workspace in $CODE_DIR/my-project
 yoga ws create my-proj ~/dev # Create workspace in ~/dev
 yoga ws switch my-project     # Activate workspace

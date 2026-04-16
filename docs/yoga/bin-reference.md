@@ -94,10 +94,12 @@ Workspace manager with tmux integration. Sources `core/modules/workspace/standal
 
 ```bash
 yoga workspace list               # List workspaces (fzf)
-yoga workspace list --simple      # List (one per line)
-yoga workspace create myproject   # Create workspace
-yoga workspace switch myproject   # Switch to workspace
-yoga workspace activate myproject # Alias for switch
+yoga workspace list --open         # List only open workspaces
+yoga workspace list --simple        # List (one per line)
+yoga workspace list --simple --open # List only open (one per line)
+yoga workspace create myproject    # Create workspace
+yoga workspace switch myproject    # Switch to workspace
+yoga workspace activate myproject  # Alias for switch
 yoga workspace kill myproject      # Remove workspace
 yoga workspace delete myproject    # Alias for kill
 yoga ws list                      # Abbreviated

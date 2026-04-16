@@ -129,10 +129,15 @@ function _yoga_cmd_workspace {
     
     case "$action" in
         list|ls)
+            local filter_open=false
+            if [[ "${1:-}" == "--open" ]]; then
+                filter_open=true
+                shift
+            fi
             if [[ "${1:-}" == "--simple" ]]; then
-                workspace_standalone_list_simple
+                workspace_standalone_list_simple "$filter_open"
             else
-                workspace_standalone_list_interactive
+                workspace_standalone_list_interactive "$filter_open"
             fi
             ;;
         create|new)
