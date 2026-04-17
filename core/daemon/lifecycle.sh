@@ -150,9 +150,29 @@ function yoga_daemon_cleanup {
 # Handler para comando: yoga daemon <action>
 function yoga_daemon_command {
 	local action="${1:-status}"
-	shift || true
+	[[ $# -gt 0 ]] && shift
 
 	case "$action" in
+	--help | -h)
+		echo "👹 Yoga Daemon Manager"
+		echo ""
+		echo "Usage: yoga daemon <command>"
+		echo ""
+		echo "Commands:"
+		echo "  start        Inicia o daemon"
+		echo "  stop         Para o daemon"
+		echo "  restart      Reinicia o daemon"
+		echo "  status       Mostra status do daemon"
+		echo "  cleanup      Remove arquivos stale (socket, pid)"
+		echo "  foreground   Inicia em modo foreground (debug)"
+		echo ""
+		echo "Examples:"
+		echo "  yoga daemon start        # Inicia daemon"
+		echo "  yoga daemon status       # Verifica status"
+		echo "  yoga daemon restart      # Reinicia daemon"
+		echo "  yoga daemon cleanup      # Limpa arquivos antigos"
+		return 0
+		;;
 	start)
 		yoga_daemon_start "$@"
 		;;

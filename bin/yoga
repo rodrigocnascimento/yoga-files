@@ -128,6 +128,27 @@ function _yoga_cmd_workspace {
     source "${YOGA_HOME}/core/modules/workspace/standalone.sh"
     
     case "$action" in
+        --help|-h)
+            echo "🌌 Yoga Workspace Manager"
+            echo ""
+            echo "Usage: yoga workspace <command> [options]"
+            echo ""
+            echo "Commands:"
+            echo "  list [options]     Lista workspaces (padrão: interativo)"
+            echo "    --simple          Lista simples (sem fzf)"
+            echo "    --open            Filtra apenas workspaces com sessão ativa"
+            echo "  create <nome> [path]  Cria workspace"
+            echo "  switch <nome>      Troca/cria workspace (alias: activate, use)"
+            echo "  kill <nome>        Remove workspace (alias: rm, delete)"
+            echo ""
+            echo "Examples:"
+            echo "  yoga workspace              # Lista interativa"
+            echo "  yoga workspace list --simple # Lista simples"
+            echo "  yoga workspace create api   # Cria workspace 'api'"
+            echo "  yoga workspace switch api    # Troca para workspace 'api'"
+            echo "  yoga workspace kill api      # Remove workspace 'api'"
+            return 0
+            ;;
         list|ls)
             local filter_open=false
             if [[ "${1:-}" == "--open" ]]; then
@@ -168,6 +189,26 @@ function _yoga_cmd_workspace {
 }
 
 function _yoga_cmd_tunnel {
+    local action="${1:-}"
+    [[ $# -gt 0 ]] && shift
+    
+    case "$action" in
+        --help|-h)
+            echo "🚇 Yoga Tunnel Wrapper"
+            echo ""
+            echo "Usage: yoga tunnel <command> [options]"
+            echo ""
+            echo "Este comando é um wrapper para ~/cf-tunnels/"
+            echo "Para opções completas, rode: yoga-tunnel --help"
+            echo ""
+            echo "Commands:"
+            echo "  list              Lista túneis"
+            echo "  add               Adiciona túnel"
+            echo "  hud               Dashboard TUI"
+            return 0
+            ;;
+    esac
+    
     # 🚇 Cloudflare Tunnel via ~/cf-tunnels/
     "${YOGA_HOME}/bin/yoga-tunnel" "$@"
 }
@@ -346,6 +387,25 @@ function _yoga_cmd_logs {
 }
 
 function _yoga_cmd_update {
+    local action="${1:-}"
+    [[ $# -gt 0 ]] && shift
+    
+    case "$action" in
+        --help|-h)
+            echo "🔄 Yoga Self Update"
+            echo ""
+            echo "Usage: yoga update [options]"
+            echo ""
+            echo "Options:"
+            echo "  --check    Verifica se há atualizações (sem instalar)"
+            echo ""
+            echo "Description:"
+            echo "  Verifica se há atualizações no repositório git e aplica via git pull."
+            echo "  Para o daemon automaticamente antes de atualizar."
+            return 0
+            ;;
+    esac
+    
     yoga_section "🔄 Self Update"
     
     yoga_agua "📦 Verificando atualizações..."
