@@ -31,7 +31,7 @@ if [ -f "$HOME/.asdf/asdf.sh" ]; then
 fi
 
 # Mensagem silenciosa (opcional)
-if [ -z "$YOGA_SILENT" ] && [ -z "$YOGA_WELCOMED" ]; then
+if [ -z "${YOGA_SILENT:-}" ] && [ -z "${YOGA_WELCOMED:-}" ]; then
 	export YOGA_WELCOMED=1
 	# Silencioso por padrão (ninja mode)
 fi
