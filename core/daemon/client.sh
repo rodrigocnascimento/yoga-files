@@ -5,6 +5,7 @@
 # @usage: source "$YOGA_HOME/core/daemon/client.sh"
 # @author: Yoga 3.0 Lôro Barizon Edition 🦜
 
+# Required: uses zsh-specific features (${(s:|:)var} split)
 emulate -L zsh
 set -euo pipefail
 
@@ -89,8 +90,8 @@ function yoga_client_workspace_list {
 
 function yoga_client_workspace_create {
     local name="$1"
-    local path="$2"
-    local args=$(jq -n --arg name "$name" --arg path "$path" '{name: $name, path: $path}')
+    local ws_path="$2"
+    local args=$(jq -n --arg name "$name" --arg path "$ws_path" '{name: $name, path: $path}')
     _yoga_client_send "workspace" "create" "$args"
 }
 

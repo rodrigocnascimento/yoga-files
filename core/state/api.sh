@@ -5,7 +5,6 @@
 # @usage: source "$YOGA_HOME/core/state/api.sh"
 # @author: Yoga 3.0 Lôro Barizon Edition 🦜
 
-emulate -L zsh
 set -euo pipefail
 
 # 🗄️ Configuração do banco
@@ -154,16 +153,16 @@ function yoga_state_clear {
 # @usage: yoga_workspace_create <name> <path>
 function yoga_workspace_create {
 	local name="$1"
-	local path="$2"
+	local ws_path="$2"
 
-	[[ -z "$name" || -z "$path" ]] && {
+	[[ -z "$name" || -z "$ws_path" ]] && {
 		yoga_fogo "🏗️ Nome e path são obrigatórios!"
 		return 1
 	}
 
 	local escaped_name=$(_yoga_state_escape "$name")
-	local escaped_path=$(_yoga_state_escape "$path")
-	local id=$(echo "$path" | sha256sum | cut -c1-16)
+	local escaped_path=$(_yoga_state_escape "$ws_path")
+	local id=$(echo "$ws_path" | sha256sum | cut -c1-16)
 
 	_yoga_state_query "
         INSERT OR REPLACE INTO workspaces (id, name, path, created_at)

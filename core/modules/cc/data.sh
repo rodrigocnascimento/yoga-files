@@ -5,6 +5,7 @@
 # @usage: source "${YOGA_HOME}/core/modules/cc/data.sh"
 # @author: Yoga 3.0 Lôro Barizon Edition 🦜
 
+# Required: uses zsh-specific features (typeset +f, local -a)
 emulate -L zsh
 set -euo pipefail
 

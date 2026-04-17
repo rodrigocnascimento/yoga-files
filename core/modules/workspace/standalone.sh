@@ -31,6 +31,7 @@
 #   Tabela: workspaces (SQLite)
 #   Campos: id, name, path, tmux_session, is_active, last_accessed
 
+# Required: uses zsh-specific features (*(/N) glob qualifier)
 emulate -L zsh
 set -euo pipefail
 

@@ -163,18 +163,18 @@ function _yoga_cmd_workspace {
             ;;
         create|new)
             local name="${1:-}"
-            local path="${2:-$(pwd)}"
+            local dest_path="${2:-$(pwd)}"
             [[ -z "$name" ]] && { yoga_fogo "🏷️ Nome é obrigatório!"; return 1; }
             yoga_agua "🏗️ Criando workspace: $name"
             # Cria diretório se não existir
-            [[ ! -d "$path" ]] && mkdir -p "$path"
-            workspace_standalone_action_switch "$name" "$path"
+            [[ ! -d "$dest_path" ]] && mkdir -p "$dest_path"
+            workspace_standalone_action_switch "$name" "$dest_path"
             ;;
         activate|switch|use)
             local name="${1:-}"
             [[ -z "$name" ]] && { yoga_fogo "🏷️ Nome é obrigatório!"; return 1; }
-            local path="${CODE_DIR:-$HOME/code}/$name"
-            workspace_standalone_action_switch "$name" "$path"
+            local dest_path="${CODE_DIR:-$HOME/code}/$name"
+            workspace_standalone_action_switch "$name" "$dest_path"
             ;;
         kill|rm|delete)
             local name="${1:-}"

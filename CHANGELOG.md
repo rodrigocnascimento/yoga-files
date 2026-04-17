@@ -4,6 +4,14 @@
 
 ---
 
+## [3.0.1] - 2026-04-17
+
+### Fixed
+- Critical: fixed `local path=` shadowing bug that broke `yoga workspace create` (command not found: tmux)
+- Fixed: removed unnecessary `emulate -L zsh` from 11 cargo-cult files
+- Added explanatory comments to 6 files that need zsh-specific features
+- Removed stale backup file `bin/yoga-pre-loro-backup`
+
 ## [3.0.0] - 2026-04-15
 
 ### Added
