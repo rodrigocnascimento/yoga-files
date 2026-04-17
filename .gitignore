@@ -1,0 +1,11 @@
+# Runtime state
+state.db
+
+# Common temp files
+*.swp
+*.swo
+*~
+
+# IDE
+.idea/
+.vscode/
