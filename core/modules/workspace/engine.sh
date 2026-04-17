@@ -5,6 +5,7 @@
 # @usage: source "${YOGA_HOME}/core/modules/workspace/engine.sh"
 # @author: Yoga 3.0 Lôro Barizon Edition 🦜
 
+# Required: uses zsh-specific features (*(/N) glob qualifier)
 emulate -L zsh
 set -euo pipefail
 

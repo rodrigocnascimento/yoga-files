@@ -5,6 +5,7 @@
 # @usage: (internal, started by yoga-daemon)
 # @author: Yoga 3.0 Lôro Barizon Edition 🦜
 
+# Required: uses zsh-specific features (${(s:|:)var} split)
 emulate -L zsh
 set -euo pipefail
 
@@ -225,8 +226,8 @@ function _yoga_daemon_handle_workspace {
             ;;
         create)
             local name=$(echo "$args" | jq -r '.name // ""')
-            local path=$(echo "$args" | jq -r '.path // ""')
-            local id=$(yoga_workspace_create "$name" "$path")
+            local ws_path=$(echo "$args" | jq -r '.path // ""')
+            local id=$(yoga_workspace_create "$name" "$ws_path")
             echo "{\"id\":\"$id\",\"name\":\"$name\"}"
             ;;
         activate)

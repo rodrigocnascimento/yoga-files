@@ -5,7 +5,6 @@
 # @usage: source "${YOGA_HOME}/core/modules/workspace/tmux.sh"
 # @author: Yoga 3.0 Lôro Barizon Edition 🦜
 
-emulate -L zsh
 set -euo pipefail
 
 # 📦 Source

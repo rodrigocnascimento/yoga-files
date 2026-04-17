@@ -32,6 +32,7 @@
 #   ~/.yoga/logs/yoga.jsonl
 #   ~/.yoga/state.db (tabela commands)
 
+# Required: uses zsh-specific features (functions builtin, local -a)
 emulate -L zsh
 set -euo pipefail
 

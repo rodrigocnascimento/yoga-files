@@ -5,7 +5,6 @@
 # @usage: cc_preview <line>
 # @author: Yoga 3.0 Lôro Barizon Edition 🦜
 
-emulate -L zsh
 set -euo pipefail
 
 function cc_preview {
