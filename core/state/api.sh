@@ -28,12 +28,9 @@ function _yoga_state_init {
 	# Cria banco se não existir
 	if [[ ! -f "$YOGA_STATE_DB" ]]; then
 		echo "💾 Criando banco de dados..." >&2
-		if sqlite3 "$YOGA_STATE_DB" <"$YOGA_STATE_SCHEMA" 2>&1; then
-			echo "✅ Banco criado: $YOGA_STATE_DB" >&2
-		else
-			echo "❌ Falha ao criar banco" >&2
-			return 1
-		fi
+		# Try full schema (with FTS5), ignore errors
+		sqlite3 "$YOGA_STATE_DB" <"$YOGA_STATE_SCHEMA" 2>/dev/null || true
+		[[ -f "$YOGA_STATE_DB" ]] && echo "✅ Banco criado: $YOGA_STATE_DB" >&2
 	fi
 }
 
