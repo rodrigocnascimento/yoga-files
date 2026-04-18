@@ -27,7 +27,10 @@ jobs:
         if: runner.os == 'macOS'
         run: |
           brew update
-          brew install jq
+          brew install zsh jq
+
+      - name: Ensure bin/yoga is executable
+        run: chmod +x bin/yoga
 
       - name: Smoke
         run: |
