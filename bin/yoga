@@ -26,7 +26,7 @@ function main {
     
     # 🎨 Banner nas operações principais
     case "$cmd" in
-        daemon|cc|workspace|ai|plugin|state|update|version)
+        daemon|cc|workspace|ai|plugin|state|update|version|sync)
             yoga_banner
             ;;
     esac
@@ -56,6 +56,11 @@ function main {
         # 🤖 AI
         ai|ask)
             _yoga_cmd_ai "$@"
+            ;;
+            
+        # 🔗 Sync
+        sync)
+            _yoga_cmd_sync "$@"
             ;;
             
         # 🔌 Plugins
@@ -476,6 +481,168 @@ function _yoga_cmd_version {
     fi
 }
 
+function _yoga_cmd_sync {
+    local action="${1:-status}"
+    [[ $# -gt 0 ]] && shift
+    
+    case "$action" in
+        --help|-h)
+            echo "🔗 Yoga Sync"
+            echo ""
+            echo "Usage: yoga sync <command>"
+            echo ""
+            echo "Commands:"
+            echo "  setup    Configure cloud sync (Firebase)"
+            echo "  status   Show sync status"
+            echo "  push     Force upload local data to cloud"
+            echo "  pull     Force download cloud data to local"
+            echo "  reset    Disconnect cloud, revert to local mode"
+            echo ""
+            echo "Sync Modes:"
+            echo "  local    SQLite only (default, no sync)"
+            echo "  cloud    Firebase sync across devices"
+            echo ""
+            echo "Environment:"
+            echo "  YOGA_SYNC_MODE=local|cloud   Set sync mode"
+            echo "  YOGA_FIREBASE_CONFIG        Path to Firebase credentials"
+            echo ""
+            echo "Examples:"
+            echo "  yoga sync setup     # Start cloud sync setup wizard"
+            echo "  yoga sync status    # Check current sync status"
+            echo "  yoga sync push      # Upload data to cloud"
+            echo "  yoga sync pull      # Download data from cloud"
+            return 0
+            ;;
+        setup)
+            yoga_section "🔗 Sync Setup"
+            
+            YOGA_SYNC_MODE="${YOGA_SYNC_MODE:-local}"
+            
+            if [ "$YOGA_SYNC_MODE" = "cloud" ] && [ -f "${YOGA_HOME}/.firebase-credentials.json" ]; then
+                yoga_terra "✅ Cloud sync is already configured!"
+                yoga_agua "   Use 'yoga sync status' for details"
+                yoga_agua "   Use 'yoga sync reset' to disconnect"
+                return 0
+            fi
+            
+            yoga_agua "🌐 Choose your sync mode:"
+            echo ""
+            echo "  1) Local (SQLite only, no sync across devices)"
+            echo "  2) Cloud (Firebase, sync across devices)"
+            echo ""
+            yoga_prompt "Enter choice [1/2]: "
+            read -r choice
+            
+            case "$choice" in
+                2|cloud)
+                    yoga_agua "🔗 Setting up cloud sync..."
+                    yoga_sol "⚠️ Firebase setup is coming soon (Phase 2)"
+                    yoga_sol "   For now, set YOGA_SYNC_MODE=cloud and"
+                    yoga_sol "   place your Firebase credentials in:"
+                    yoga_sol "   ${YOGA_HOME}/.firebase-credentials.json"
+                    ;;
+                1|local|*)
+                    yoga_terra "📦 Local mode selected (SQLite)"
+                    yoga_agua "   Data stays on this machine only."
+                    ;;
+            esac
+            ;;
+        status)
+            yoga_section "🔗 Sync Status"
+            
+            YOGA_SYNC_MODE="${YOGA_SYNC_MODE:-local}"
+            
+            echo "  📁 Mode: $YOGA_SYNC_MODE"
+            
+            if [ "$YOGA_SYNC_MODE" = "cloud" ]; then
+                if [ -f "${YOGA_HOME}/.firebase-credentials.json" ]; then
+                    echo "  🔗 Cloud: configured (Firebase)"
+                    echo "  📤 Last synced: (not yet implemented)"
+                else
+                    echo "  ⚠️ Cloud: YOGA_SYNC_MODE=cloud but no credentials"
+                    echo "  💡 Run: yoga sync setup"
+                fi
+            else
+                echo "  📦 Cloud: not configured (local mode)"
+                echo "  💡 Run: yoga sync setup"
+            fi
+            
+            if [ -f "${YOGA_HOME}/state.db" ]; then
+                local ws_count=$(sqlite3 "${YOGA_HOME}/state.db" "SELECT COUNT(*) FROM workspaces;" 2>/dev/null || echo "?")
+                local cmd_count=$(sqlite3 "${YOGA_HOME}/state.db" "SELECT COUNT(*) FROM commands;" 2>/dev/null || echo "?")
+                echo "  🎯 Workspaces: $ws_count (local)"
+                echo "  📝 Commands: $cmd_count (local)"
+            else
+                echo "  ⚠️ Local DB: not found"
+            fi
+            
+            echo "  📋 Logs: local only (not synced)"
+            ;;
+        push)
+            yoga_section "🔗 Sync Push"
+            YOGA_SYNC_MODE="${YOGA_SYNC_MODE:-local}"
+            
+            if [ "$YOGA_SYNC_MODE" != "cloud" ]; then
+                yoga_fogo "❌ Cloud sync is not configured!"
+                yoga_sol "   Run: yoga sync setup"
+                return 1
+            fi
+            
+            if [ ! -f "${YOGA_HOME}/state.db" ]; then
+                yoga_fogo "❌ Local DB not found!"
+                return 1
+            fi
+            
+            yoga_sol "⚠️ Push is coming soon (Phase 2)"
+            yoga_agua "   Will upload workspaces, commands, AI context, and config to Firebase"
+            yoga_agua "   Logs stay local and are NOT synced"
+            ;;
+        pull)
+            yoga_section "🔗 Sync Pull"
+            YOGA_SYNC_MODE="${YOGA_SYNC_MODE:-local}"
+            
+            if [ "$YOGA_SYNC_MODE" != "cloud" ]; then
+                yoga_fogo "❌ Cloud sync is not configured!"
+                yoga_sol "   Run: yoga sync setup"
+                return 1
+            fi
+            
+            yoga_sol "⚠️ Pull is coming soon (Phase 2)"
+            yoga_agua "   Will download workspaces, commands, AI context, and config from Firebase"
+            yoga_agua "   Logs stay local and are NOT synced"
+            ;;
+        reset)
+            yoga_section "🔗 Sync Reset"
+            YOGA_SYNC_MODE="${YOGA_SYNC_MODE:-local}"
+            
+            if [ "$YOGA_SYNC_MODE" != "cloud" ]; then
+                yoga_agua "📦 Already in local mode"
+                return 0
+            fi
+            
+            yoga_prompt "⚠️ Disconnect from cloud sync? Local data will be kept. [y/N]: "
+            read -r confirm
+            
+            if [[ "$confirm" == "y" || "$confirm" == "Y" ]]; then
+                if [ -f "${YOGA_HOME}/.firebase-credentials.json" ]; then
+                    rm -f "${YOGA_HOME}/.firebase-credentials.json"
+                    yoga_terra "✅ Firebase credentials removed"
+                fi
+                yoga_terra "✅ Reverted to local mode (SQLite)"
+                yoga_sol "   Set YOGA_SYNC_MODE=local to make it permanent"
+            else
+                yoga_sol "❌ Reset cancelled"
+            fi
+            ;;
+        *)
+            yoga_fogo "❌ Unknown sync action: $action"
+            echo ""
+            _yoga_cmd_sync --help
+            return 1
+            ;;
+    esac
+}
+
 function _yoga_cmd_help {
     yoga_banner
     yoga_section "📖 Comandos Disponíveis"
@@ -500,6 +667,14 @@ function _yoga_cmd_help {
     
     echo "🤖 ${YOGA_COLOR_BOLD}AI:${YOGA_COLOR_RESET}"
     echo "  ❓ ai ask <query>    - Pergunta à IA"
+    echo ""
+    
+    echo "🔗 ${YOGA_COLOR_BOLD}Sync:${YOGA_COLOR_RESET}"
+    echo "  ⚙️ sync setup       - Configura sync na nuvem"
+    echo "  📊 sync status      - Mostra status do sync"
+    echo "  ⬆️ sync push        - Envia dados para nuvem"
+    echo "  ⬇️ sync pull        - Baixa dados da nuvem"
+    echo "  🔄 sync reset       - Desconecta da nuvem"
     echo ""
     
     echo "🔌 ${YOGA_COLOR_BOLD}Plugins:${YOGA_COLOR_RESET}"
