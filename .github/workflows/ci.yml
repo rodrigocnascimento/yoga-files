@@ -39,6 +39,7 @@ jobs:
           rm -f "$HOME/.yoga/state.db"
           chmod +x "$HOME/.yoga/bin/"* "$HOME/.yoga/init.sh" "$HOME/.yoga/install.sh"
           echo "YOGA_HOME=$HOME/.yoga" >> $GITHUB_ENV
+          echo "PATH=$(brew --prefix)/bin:$PATH" >> $GITHUB_ENV
 
       - name: Smoke
         run: |
