@@ -30,15 +30,16 @@ jobs:
           brew install zsh jq
 
       - name: Ensure bin/yoga is executable
-        run: chmod +x bin/yoga
+        run: chmod +x bin/yoga init.sh
 
       - name: Smoke
         run: |
           chmod +x tests/smoke.zsh
+          set -x
           zsh ./tests/smoke.zsh
           chmod +x tests/smoke.bash
           bash ./tests/smoke.bash
-        
+
   build-docs:
     runs-on: ubuntu-latest
     steps:
