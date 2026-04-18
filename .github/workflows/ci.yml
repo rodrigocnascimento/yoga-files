@@ -27,7 +27,7 @@ jobs:
         if: runner.os == 'macOS'
         run: |
           brew update
-          brew install zsh jq sqlite
+          brew install zsh jq sqlite3
 
       - name: Ensure bin/yoga is executable
         run: chmod +x bin/yoga init.sh
