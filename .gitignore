@@ -1,6 +1,13 @@
 # Runtime state
 state.db
 
+# Firebase credentials (NEVER commit these)
+.firebase-credentials.json
+.yoga-sync.json
+
+# Node modules
+node_modules/
+
 # Common temp files
 *.swp
 *.swo
