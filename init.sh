@@ -19,6 +19,12 @@ source "$YOGA_HOME/core/utils.sh"
 source "$YOGA_HOME/core/aliases.sh"
 source "$YOGA_HOME/core/functions.sh"
 
+# 💾 Initialize state DB if needed (creates fresh with local SQLite)
+if [ -f "$YOGA_HOME/core/state/api.sh" ] && [ -f "$YOGA_HOME/core/state/schema.sql" ]; then
+	source "$YOGA_HOME/core/state/api.sh"
+	_yoga_state_init 2>/dev/null || true
+fi
+
 # ❌ REMOVIDO: dashboard.sh (não existe mais na 3.0)
 # ❌ REMOVIDO: alias yoga='yoga_dashboard' (trap removido!)
 

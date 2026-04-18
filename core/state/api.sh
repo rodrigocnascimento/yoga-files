@@ -15,15 +15,25 @@ YOGA_STATE_SCHEMA="${YOGA_HOME}/core/state/schema.sql"
 function _yoga_state_init {
 	# Verifica se SQLite está instalado
 	if ! command -v sqlite3 &>/dev/null; then
-		yoga_fogo "💾 SQLite3 não encontrado! Instale com: apt install sqlite3"
+		echo "💾 SQLite3 não encontrado! Instale com: apt install sqlite3" >&2
+		return 1
+	fi
+
+	# Verifica se schema existe
+	if [[ ! -f "$YOGA_STATE_SCHEMA" ]]; then
+		echo "💾 Schema não encontrado: $YOGA_STATE_SCHEMA" >&2
 		return 1
 	fi
 
 	# Cria banco se não existir
 	if [[ ! -f "$YOGA_STATE_DB" ]]; then
-		yoga_agua "💾 Criando banco de dados..."
-		sqlite3 "$YOGA_STATE_DB" <"$YOGA_STATE_SCHEMA"
-		yoga_terra "✅ Banco criado em $YOGA_STATE_DB"
+		echo "💾 Criando banco de dados..." >&2
+		if sqlite3 "$YOGA_STATE_DB" <"$YOGA_STATE_SCHEMA" 2>&1; then
+			echo "✅ Banco criado: $YOGA_STATE_DB" >&2
+		else
+			echo "❌ Falha ao criar banco" >&2
+			return 1
+		fi
 	fi
 }
 
