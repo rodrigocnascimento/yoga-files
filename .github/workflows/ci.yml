@@ -32,6 +32,15 @@ jobs:
       - name: Ensure bin/yoga is executable
         run: chmod +x bin/yoga init.sh
 
+      - name: Diagnostic
+        run: |
+          echo "=== DIAGNOSTIC ==="
+          echo "YOGA_HOME=$YOGA_HOME"
+          echo "PWD=$(pwd)"
+          echo "ls bin/ =$(ls bin/ | head -5)"
+          echo "ls core/ =$(ls core/ | head -5)"
+          echo "=================="
+
       - name: Smoke
         run: |
           chmod +x tests/smoke.zsh
