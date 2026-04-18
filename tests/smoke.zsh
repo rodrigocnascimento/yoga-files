@@ -32,21 +32,21 @@ zsh -n "$ROOT_DIR/core/functions.sh"
 zsh -n "$ROOT_DIR/core/ai/yoga-ai-terminal.sh"
 
 print "==> source init.sh"
-zsh -c "export YOGA_HOME='$ROOT_DIR'; export YOGA_SILENT=1; source '$ROOT_DIR/init.sh'; whence -w yoga_status >/dev/null"
+zsh -o NO_GLOBAL_RCS -c "export YOGA_HOME='$ROOT_DIR'; export YOGA_SILENT=1; source '$ROOT_DIR/init.sh'; whence -w yoga_status >/dev/null"
 
 print "==> bin/yoga CLI"
-zsh -c "export YOGA_HOME='$ROOT_DIR'; export YOGA_SILENT=1; source '$ROOT_DIR/init.sh'; command -v yoga >/dev/null" 2>&1
+zsh -o NO_GLOBAL_RCS -c "export YOGA_HOME='$ROOT_DIR'; export YOGA_SILENT=1; source '$ROOT_DIR/init.sh'; command -v yoga >/dev/null" 2>&1 || exit 1
 
 print "==> bin commands"
-zsh -c "export YOGA_HOME='$ROOT_DIR'; export PATH='$ROOT_DIR/bin:'\"\$PATH\"; command -v yoga-ai >/dev/null; yoga-ai --help >/dev/null"
-zsh -c "export YOGA_HOME='$ROOT_DIR'; export PATH='$ROOT_DIR/bin:'\"\$PATH\"; command -v yoga-status >/dev/null; yoga-status >/dev/null"
-zsh -c "export YOGA_HOME='$ROOT_DIR'; export PATH='$ROOT_DIR/bin:'\"\$PATH\"; command -v yoga-doctor >/dev/null; yoga-doctor >/dev/null"
-zsh -c "export YOGA_HOME='$ROOT_DIR'; export PATH='$ROOT_DIR/bin:'\"\$PATH\"; command -v yoga-plugin >/dev/null; yoga-plugin --help >/dev/null"
-zsh -c "export YOGA_HOME='$ROOT_DIR'; export PATH='$ROOT_DIR/bin:'\"\$PATH\"; command -v yoga-templates >/dev/null; yoga-templates --help >/dev/null"
+zsh -o NO_GLOBAL_RCS -c "export YOGA_HOME='$ROOT_DIR'; export PATH='$ROOT_DIR/bin:'\"\$PATH\"; command -v yoga-ai >/dev/null" 2>&1 || { print "FAILED: yoga-ai not found"; exit 1; }
+zsh -o NO_GLOBAL_RCS -c "export YOGA_HOME='$ROOT_DIR'; export PATH='$ROOT_DIR/bin:'\"\$PATH\"; command -v yoga-status >/dev/null" 2>&1 || { print "FAILED: yoga-status not found"; exit 1; }
+zsh -o NO_GLOBAL_RCS -c "export YOGA_HOME='$ROOT_DIR'; export PATH='$ROOT_DIR/bin:'\"\$PATH\"; command -v yoga-doctor >/dev/null" 2>&1 || { print "FAILED: yoga-doctor not found"; exit 1; }
+zsh -o NO_GLOBAL_RCS -c "export YOGA_HOME='$ROOT_DIR'; export PATH='$ROOT_DIR/bin:'\"\$PATH\"; command -v yoga-plugin >/dev/null" 2>&1 || { print "FAILED: yoga-plugin not found"; exit 1; }
+zsh -o NO_GLOBAL_RCS -c "export YOGA_HOME='$ROOT_DIR'; export PATH='$ROOT_DIR/bin:'\"\$PATH\"; command -v yoga-templates >/dev/null" 2>&1 || { print "FAILED: yoga-templates not found"; exit 1; }
 
 print "==> bin/yoga sync"
-ROOT_DIR="$ROOT_DIR" zsh -c 'export YOGA_HOME="'$ROOT_DIR'"; export PATH="'$ROOT_DIR/bin':$PATH"; source "'$ROOT_DIR'/init.sh" 2>/dev/null && yoga sync --help >/dev/null'
-ROOT_DIR="$ROOT_DIR" zsh -c 'export YOGA_HOME="'$ROOT_DIR'"; export PATH="'$ROOT_DIR/bin':$PATH"; source "'$ROOT_DIR'/init.sh" 2>/dev/null && yoga sync status >/dev/null'
+ROOT_DIR="$ROOT_DIR" zsh -o NO_GLOBAL_RCS -c 'export YOGA_HOME="'$ROOT_DIR'"; export PATH="'$ROOT_DIR/bin':$PATH"; source "'$ROOT_DIR'/init.sh" 2>/dev/null && yoga sync --help >/dev/null'
+ROOT_DIR="$ROOT_DIR" zsh -o NO_GLOBAL_RCS -c 'export YOGA_HOME="'$ROOT_DIR'"; export PATH="'$ROOT_DIR/bin':$PATH"; source "'$ROOT_DIR'/init.sh" 2>/dev/null && yoga sync status >/dev/null'
 
 print "==> git wizard (non-interactive)"
 bash -c "export YOGA_HOME='$ROOT_DIR'; bash '$ROOT_DIR/core/git/git-wizard.sh' current >/dev/null"
