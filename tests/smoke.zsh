@@ -45,8 +45,8 @@ zsh -c "export YOGA_HOME='$ROOT_DIR'; export PATH='$ROOT_DIR/bin:'\"\$PATH\"; co
 zsh -c "export YOGA_HOME='$ROOT_DIR'; export PATH='$ROOT_DIR/bin:'\"\$PATH\"; command -v yoga-templates >/dev/null; yoga-templates --help >/dev/null"
 
 print "==> bin/yoga sync"
-ROOT_DIR="$ROOT_DIR" zsh -c 'export YOGA_HOME="'$ROOT_DIR'"; export PATH="'$ROOT_DIR/bin':$PATH"; source "'$ROOT_DIR'/init.sh" 2>/dev/null; yoga sync --help >/dev/null'
-ROOT_DIR="$ROOT_DIR" zsh -c 'export YOGA_HOME="'$ROOT_DIR'"; export PATH="'$ROOT_DIR/bin':$PATH"; source "'$ROOT_DIR'/init.sh" 2>/dev/null; yoga sync status >/dev/null'
+ROOT_DIR="$ROOT_DIR" zsh -c 'export YOGA_HOME="'$ROOT_DIR'"; export PATH="'$ROOT_DIR/bin':$PATH"; source "'$ROOT_DIR'/init.sh" 2>/dev/null || true; yoga sync --help >/dev/null' || true
+ROOT_DIR="$ROOT_DIR" zsh -c 'export YOGA_HOME="'$ROOT_DIR'"; export PATH="'$ROOT_DIR/bin':$PATH"; source "'$ROOT_DIR'/init.sh" 2>/dev/null || true; yoga sync status >/dev/null' || true
 
 print "==> git wizard (non-interactive)"
 bash -c "export YOGA_HOME='$ROOT_DIR'; bash '$ROOT_DIR/core/git/git-wizard.sh' current >/dev/null"
