@@ -4,6 +4,29 @@
 
 ---
 
+## [3.1.0] - 2026-04-18
+
+### Added
+- **Dual-Mode Sync**: Local SQLite and Cloud Firebase sync support
+- `yoga sync setup`: Configure cloud sync with Firebase
+- `yoga sync status`: Show sync mode, user, last sync, data counts
+- `yoga sync push`: Upload local data to Firebase
+- `yoga sync pull`: Download data from Firebase
+- `yoga sync reset`: Disconnect cloud, revert to local mode
+
+### Added
+- Enhanced `yoga-doctor`: Core tool validation (git, sqlite3, jq, tmux, zsh, bash)
+- Optional tool checks with installation hints (asdf, node, npm, nvim, fzf, gum, docker, gh, socat)
+- Cloud sync status in doctor output
+- `--full` mode with version details and workspace count
+- `--report` mode with machine-readable output
+
+### Changed
+- Credentials and node_modules protected via .gitignore
+
+### Removed from Sync
+- Logs stay local (not synced per design)
+
 ## [3.0.1] - 2026-04-17
 
 ### Fixed
