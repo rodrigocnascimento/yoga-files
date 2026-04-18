@@ -35,7 +35,7 @@ print "==> source init.sh"
 zsh -c "export YOGA_HOME='$ROOT_DIR'; export YOGA_SILENT=1; source '$ROOT_DIR/init.sh'; whence -w yoga_status >/dev/null"
 
 print "==> bin/yoga CLI"
-zsh -c "export YOGA_HOME='$ROOT_DIR'; export YOGA_SILENT=1; source '$ROOT_DIR/init.sh'; command -v yoga >/dev/null"
+zsh -c "export YOGA_HOME='$ROOT_DIR'; export YOGA_SILENT=1; source '$ROOT_DIR/init.sh'; command -v yoga >/dev/null" 2>&1
 
 print "==> bin commands"
 zsh -c "export YOGA_HOME='$ROOT_DIR'; export PATH='$ROOT_DIR/bin:'\"\$PATH\"; command -v yoga-ai >/dev/null; yoga-ai --help >/dev/null"
@@ -45,9 +45,8 @@ zsh -c "export YOGA_HOME='$ROOT_DIR'; export PATH='$ROOT_DIR/bin:'\"\$PATH\"; co
 zsh -c "export YOGA_HOME='$ROOT_DIR'; export PATH='$ROOT_DIR/bin:'\"\$PATH\"; command -v yoga-templates >/dev/null; yoga-templates --help >/dev/null"
 
 print "==> bin/yoga sync"
-if [[ -f "$ROOT_DIR/init.sh" ]]; then
-  zsh -c "export YOGA_HOME='$ROOT_DIR'; export PATH='$ROOT_DIR/bin:'\"\$PATH\"; source '$ROOT_DIR/init.sh' 2>/dev/null && yoga sync --help >/dev/null" 2>/dev/null && print "  sync: OK" || print "  sync: skipped (init failed)"
-fi
+ROOT_DIR="$ROOT_DIR" zsh -c 'export YOGA_HOME="'$ROOT_DIR'"; export PATH="'$ROOT_DIR/bin':$PATH"; source "'$ROOT_DIR'/init.sh" 2>/dev/null && yoga sync --help >/dev/null'
+ROOT_DIR="$ROOT_DIR" zsh -c 'export YOGA_HOME="'$ROOT_DIR'"; export PATH="'$ROOT_DIR/bin':$PATH"; source "'$ROOT_DIR'/init.sh" 2>/dev/null && yoga sync status >/dev/null'
 
 print "==> git wizard (non-interactive)"
 bash -c "export YOGA_HOME='$ROOT_DIR'; bash '$ROOT_DIR/core/git/git-wizard.sh' current >/dev/null"

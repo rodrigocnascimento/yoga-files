@@ -43,8 +43,7 @@ bash -c "export YOGA_HOME='$ROOT_DIR'; export PATH='$ROOT_DIR/bin:'\"\$PATH\"; c
 bash -c "export YOGA_HOME='$ROOT_DIR'; export PATH='$ROOT_DIR/bin:'\"\$PATH\"; command -v yoga-templates >/dev/null; yoga-templates --help >/dev/null"
 
 echo "==> bin/yoga sync"
-if [[ -f "$ROOT_DIR/init.sh" ]]; then
-	bash -c "export YOGA_HOME='$ROOT_DIR'; export PATH='$ROOT_DIR/bin:'\"\$PATH\"; source '$ROOT_DIR/init.sh' 2>/dev/null && yoga sync --help >/dev/null" 2>/dev/null && echo "  sync: OK" || echo "  sync: skipped (init failed)"
-fi
+ROOT_DIR="$ROOT_DIR" bash -c 'export YOGA_HOME="'$ROOT_DIR'"; export PATH="'$ROOT_DIR/bin':$PATH"; source "'$ROOT_DIR'/init.sh" 2>/dev/null && yoga sync --help >/dev/null'
+ROOT_DIR="$ROOT_DIR" bash -c 'export YOGA_HOME="'$ROOT_DIR'"; export PATH="'$ROOT_DIR/bin':$PATH"; source "'$ROOT_DIR'/init.sh" 2>/dev/null && YOGA_SYNC_MODE=local yoga sync status >/dev/null'
 
 echo "OK"
