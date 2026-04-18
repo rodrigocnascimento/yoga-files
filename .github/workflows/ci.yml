@@ -36,6 +36,7 @@ jobs:
         run: |
           mkdir -p "$HOME/.yoga"
           cp -r . "$HOME/.yoga/"
+          rm -f "$HOME/.yoga/state.db"
           chmod +x "$HOME/.yoga/bin/"* "$HOME/.yoga/init.sh" "$HOME/.yoga/install.sh"
           echo "YOGA_HOME=$HOME/.yoga" >> $GITHUB_ENV
           cat $GITHUB_ENV
