@@ -32,10 +32,12 @@ jobs:
       - name: Ensure bin/yoga is executable
         run: chmod +x bin/yoga init.sh
 
-      - name: Set YOGA_HOME
+      - name: Setup YOGA_HOME
         run: |
-          echo "YOGA_HOME=$(pwd)" >> $GITHUB_ENV
-          echo "PATH=$(pwd)/bin:$PATH" >> $GITHUB_ENV
+          mkdir -p "$HOME/.yoga"
+          cp -r . "$HOME/.yoga/"
+          chmod +x "$HOME/.yoga/bin/"* "$HOME/.yoga/init.sh" "$HOME/.yoga/install.sh"
+          echo "YOGA_HOME=$HOME/.yoga" >> $GITHUB_ENV
           cat $GITHUB_ENV
 
       - name: Diagnostic
