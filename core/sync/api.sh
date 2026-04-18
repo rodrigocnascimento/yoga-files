@@ -115,6 +115,12 @@ function _yoga_sync_setup_cloud {
 		return 1
 	fi
 
+	if ! command -v jq &>/dev/null; then
+		yoga_fogo "❌ jq is required for cloud sync!"
+		yoga_sol "   Install with: brew install jq"
+		return 1
+	fi
+
 	local sync_dir="${YOGA_HOME}/core/sync"
 	if [[ ! -d "$sync_dir/node_modules" ]]; then
 		yoga_agua "📦 Installing Firebase dependencies..."
@@ -124,14 +130,37 @@ function _yoga_sync_setup_cloud {
 		}
 	fi
 
-	yoga_sol "⚠️ Firebase OAuth setup is coming in the next phase."
-	yoga_sol "   For now, place your Firebase credentials in:"
-	yoga_sol "   ${YOGA_HOME}/.firebase-credentials.json"
-	yoga_sol ""
-	yoga_sol "   Set YOGA_SYNC_MODE=cloud to enable cloud sync."
+	if [[ ! -f "${YOGA_HOME}/.firebase-credentials.json" ]]; then
+		yoga_sol "📋 Place your Firebase credentials at:"
+		yoga_sol "   ${YOGA_HOME}/.firebase-credentials.json"
+		yoga_sol ""
+		yoga_sol "   Get them from: https://console.firebase.google.com"
+		yoga_sol "   Project Settings → Service Accounts → Create Key"
+		return 1
+	fi
+
+	yoga_agua "🧪 Testing Firebase connection..."
+	local test_result
+	test_result=$(cd "$sync_dir" && node sync.js test 2>&1) || {
+		yoga_fogo "❌ Firebase connection failed!"
+		yoga_sol "   Check your credentials file."
+		return 1
+	}
+	yoga_terra "✅ Firebase connection successful!"
+
+	local user_id=$(jq -r '.client_email' "${YOGA_HOME}/.firebase-credentials.json" 2>/dev/null || echo "unknown")
 
 	YOGA_SYNC_MODE="cloud"
-	jq -n --arg mode "cloud" --arg userId "pending" '{mode: $mode, userId: $userId, lastSync: "never"}' >"$YOGA_SYNC_CONFIG"
+	jq -n --arg mode "cloud" --arg userId "$user_id" '{mode: $mode, userId: $userId, lastSync: "never"}' >"$YOGA_SYNC_CONFIG"
+
+	yoga_terra "✅ Cloud sync configured!"
+	yoga_agua "   User: $user_id"
+	yoga_agua "   Mode: cloud"
+	yoga_agua ""
+	yoga_agua "   Commands:"
+	yoga_agua "     yoga sync status  - Check sync status"
+	yoga_agua "     yoga sync push   - Upload data to cloud"
+	yoga_agua "     yoga sync pull  - Download data from cloud"
 }
 
 function _yoga_sync_reset {
@@ -155,19 +184,22 @@ function _yoga_sync_push {
 		return 1
 	fi
 
-	yoga_agua "📤 Pushing data to Firebase..."
-
-	local sync_dir="${YOGA_HOME}/core/sync"
-	if [[ ! -d "$sync_dir/node_modules" ]]; then
-		yoga_fogo "❌ Firebase dependencies not installed!"
-		yoga_sol "   Run: yoga sync setup"
+	if [[ ! -f "${YOGA_HOME}/state.db" ]]; then
+		yoga_fogo "❌ Local DB not found!"
 		return 1
 	fi
 
-	node "${sync_dir}/sync.mjs" push 2>/dev/null || {
+	yoga_agua "📤 Pushing data to Firebase..."
+
+	local sync_dir="${YOGA_HOME}/core/sync"
+	local push_result
+	push_result=$(cd "$sync_dir" && YOGA_HOME="$YOGA_HOME" node sync.js push 2>&1) || {
 		yoga_fogo "❌ Push failed!"
+		yoga_sol "$push_result"
 		return 1
 	}
+
+	echo "$push_result"
 
 	local now=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
 	local tmp=$(mktemp)
@@ -186,16 +218,14 @@ function _yoga_sync_pull {
 	yoga_agua "📥 Pulling data from Firebase..."
 
 	local sync_dir="${YOGA_HOME}/core/sync"
-	if [[ ! -d "$sync_dir/node_modules" ]]; then
-		yoga_fogo "❌ Firebase dependencies not installed!"
-		yoga_sol "   Run: yoga sync setup"
-		return 1
-	fi
-
-	node "${sync_dir}/sync.mjs" pull 2>/dev/null || {
+	local pull_result
+	pull_result=$(cd "$sync_dir" && YOGA_HOME="$YOGA_HOME" node sync.js pull 2>&1) || {
 		yoga_fogo "❌ Pull failed!"
+		yoga_sol "$pull_result"
 		return 1
 	}
+
+	echo "$pull_result"
 
 	local now=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
 	local tmp=$(mktemp)
