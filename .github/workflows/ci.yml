@@ -27,7 +27,7 @@ jobs:
         if: runner.os == 'macOS'
         run: |
           brew update
-          brew install zsh jq sqlite3
+          brew install zsh jq sqlite
 
       - name: Ensure bin/yoga is executable
         run: chmod +x bin/yoga init.sh
@@ -39,16 +39,6 @@ jobs:
           rm -f "$HOME/.yoga/state.db"
           chmod +x "$HOME/.yoga/bin/"* "$HOME/.yoga/init.sh" "$HOME/.yoga/install.sh"
           echo "YOGA_HOME=$HOME/.yoga" >> $GITHUB_ENV
-          cat $GITHUB_ENV
-
-      - name: Diagnostic
-        run: |
-          echo "=== DIAGNOSTIC ==="
-          echo "YOGA_HOME=$YOGA_HOME"
-          echo "PWD=$(pwd)"
-          echo "ls bin/ =$(ls bin/ | head -5)"
-          echo "ls core/ =$(ls core/ | head -5)"
-          echo "=================="
 
       - name: Smoke
         run: |
