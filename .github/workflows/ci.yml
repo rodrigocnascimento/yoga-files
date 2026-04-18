@@ -21,13 +21,13 @@ jobs:
         if: runner.os == 'Linux'
         run: |
           sudo apt-get update
-          sudo apt-get install -y zsh jq
+          sudo apt-get install -y zsh jq sqlite3
 
       - name: Install deps (macos)
         if: runner.os == 'macOS'
         run: |
           brew update
-          brew install zsh jq
+          brew install zsh jq sqlite
 
       - name: Ensure bin/yoga is executable
         run: chmod +x bin/yoga init.sh
