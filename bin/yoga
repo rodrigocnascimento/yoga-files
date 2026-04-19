@@ -439,8 +439,9 @@ function _yoga_cmd_update {
                         yoga_daemon_stop
                     fi
                     
-                    # 🔄 Pull changes
-                    if git pull origin main; then
+                    # 🔄 Stash and pull
+                    yoga_agua "🔄 Atualizando..."
+                    if git stash -u && git pull origin main; then
                         yoga_terra "✅ Atualizado com sucesso!"
                         yoga_sol "🔄 Reinicie o daemon: yoga daemon start"
                     else
