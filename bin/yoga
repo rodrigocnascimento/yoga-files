@@ -439,10 +439,24 @@ function _yoga_cmd_update {
                         yoga_daemon_stop
                     fi
                     
-                    # 🔄 Stash and pull, then restore stashed changes
+                    # 🔄 Fetch and apply
                     yoga_agua "🔄 Atualizando..."
-                    if git stash -u && git pull origin main; then
-                        git stash pop 2>/dev/null || true
+                    if git fetch origin main; then
+                        # Save local sync config if exists
+                        local sync_config=""
+                        if [[ -f "$YOGA_HOME/.yoga-sync.json" ]]; then
+                            sync_config="$HOME/.yoga-sync.json.bak"
+                            cp "$YOGA_HOME/.yoga-sync.json" "$sync_config" 2>/dev/null || true
+                        fi
+                        # Force clean untracked and pull
+                        git clean -fd 2>/dev/null || true
+                        git pull origin main --force || {
+                            git reset --hard origin/main
+                        }
+                        # Restore sync config
+                        if [[ -n "$sync_config" && -f "$sync_config" ]]; then
+                            mv "$sync_config" "$YOGA_HOME/.yoga-sync.json" 2>/dev/null || true
+                        fi
                         yoga_terra "✅ Atualizado com sucesso!"
                         yoga_sol "🔄 Reinicie o daemon: yoga daemon start"
                     else
