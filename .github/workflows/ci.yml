@@ -21,21 +21,35 @@ jobs:
         if: runner.os == 'Linux'
         run: |
           sudo apt-get update
-          sudo apt-get install -y zsh jq
+          sudo apt-get install -y zsh jq sqlite3
 
       - name: Install deps (macos)
         if: runner.os == 'macOS'
         run: |
           brew update
-          brew install jq
+          brew install zsh jq sqlite
+
+      - name: Ensure bin/yoga is executable
+        run: chmod +x bin/yoga init.sh
+
+      - name: Setup YOGA_HOME
+        run: |
+          mkdir -p "$HOME/.yoga"
+          cp -r . "$HOME/.yoga/"
+          rm -f "$HOME/.yoga/state.db"
+          chmod +x "$HOME/.yoga/bin/"* "$HOME/.yoga/init.sh" "$HOME/.yoga/install.sh"
+          echo "YOGA_HOME=$HOME/.yoga" >> $GITHUB_ENV
+          # Add brew to PATH (will only have effect if it exists)
+          echo "PATH=/opt/homebrew/bin:$PATH" >> $GITHUB_ENV
 
       - name: Smoke
         run: |
           chmod +x tests/smoke.zsh
+          set -x
           zsh ./tests/smoke.zsh
           chmod +x tests/smoke.bash
           bash ./tests/smoke.bash
-        
+
   build-docs:
     runs-on: ubuntu-latest
     steps:

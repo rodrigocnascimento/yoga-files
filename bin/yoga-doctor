@@ -26,20 +26,36 @@ missing_required=0
 
 check_required() {
   local cmd="$1"
+  local desc="${2:-}"
   if command -v "$cmd" >/dev/null 2>&1; then
-    yoga_terra "required: $cmd"
+    yoga_terra "required: $cmd${desc:+ ($desc)}"
   else
-    yoga_fogo "missing required: $cmd"
+    yoga_fogo "missing required: $cmd${desc:+ ($desc)}"
     missing_required=1
   fi
 }
 
 check_optional() {
   local cmd="$1"
+  local desc="${2:-}"
   if command -v "$cmd" >/dev/null 2>&1; then
-    yoga_agua "optional: $cmd"
+    yoga_agua "optional: $cmd${desc:+ ($desc)}"
   else
-    yoga_sol "missing optional: $cmd"
+    yoga_sol "missing optional: $cmd${desc:+ ($desc)}"
+  fi
+}
+
+check_optional_with_hint() {
+  local cmd="$1"
+  local desc="${2:-}"
+  local hint="${3:-}"
+  if command -v "$cmd" >/dev/null 2>&1; then
+    yoga_agua "optional: $cmd${desc:+ ($desc)}"
+  else
+    yoga_sol "missing optional: $cmd${desc:+ ($desc)}"
+    if [ -n "$hint" ]; then
+      yoga_sol "  💡 Install: $hint"
+    fi
   fi
 }
 
@@ -47,40 +63,89 @@ yoga_espirito "🧘 yoga-doctor"
 echo "YOGA_HOME=$YOGA_HOME"
 echo ""
 
-check_required git
-check_required curl
-check_required jq
-check_required zsh
-check_required bash
+yoga_espirito "Core Dependencies (required)"
+echo ""
+
+check_required git "version control"
+check_required sqlite3 "local database"
+check_required jq "JSON processing"
+check_required tmux "terminal sessions"
+check_required zsh "shell"
+check_required bash "shell"
 
 echo ""
 
-check_optional asdf
-check_optional node
-check_optional npm
-check_optional nvim
-check_optional fzf
-check_optional gum
+yoga_espirito "Optional Dependencies (enhanced features)"
+echo ""
 
-if ! command -v gum >/dev/null 2>&1; then
-  echo ""
-  yoga_sol "💡 Dica: Instale o 'gum' (brew install gum ou github.com/charmbracelet/gum) para ter menus interativos mais bonitos!"
-fi
+check_optional_with_hint asdf "version manager" "https://asdf-vm.com"
+check_optional_with_hint node "runtime" "https://nodejs.org"
+check_optional_with_hint npm "package manager" "https://nodejs.org"
+check_optional_with_hint nvim "editor" "https://neovim.io"
+check_optional_with_hint fzf "fuzzy finder" "brew install fzf"
+check_optional_with_hint gum "UI prompts" "brew install gum"
+check_optional_with_hint docker "containers" "https://docker.com"
+check_optional_with_hint gh "GitHub CLI" "brew install gh"
+check_optional_with_hint socat "networking" "brew install socat"
 
+echo ""
+
+yoga_espirito "Environment"
 echo ""
 
 if [ -n "${OPENAI_API_KEY-}" ]; then
-  yoga_agua "OPENAI_API_KEY: set"
+  yoga_agua "OPENAI_API_KEY: set (AI commands enabled)"
 else
   yoga_sol "OPENAI_API_KEY: not set (AI commands disabled)"
+fi
+
+if [ -d "${YOGA_HOME}" ]; then
+  yoga_terra "YOGA_HOME: exists ($YOGA_HOME)"
+  if [ -f "${YOGA_HOME}/state.db" ]; then
+    local_mode="active"
+    yoga_agua "Local DB: state.db found"
+  else
+    yoga_sol "Local DB: state.db not found (run yoga to initialize)"
+    local_mode="missing"
+  fi
+
+  YOGA_SYNC_MODE="${YOGA_SYNC_MODE:-local}"
+  if [ "$YOGA_SYNC_MODE" = "cloud" ]; then
+    if [ -f "${YOGA_HOME}/.firebase-credentials.json" ]; then
+      yoga_terra "Cloud Sync: configured (Firebase)"
+    else
+      yoga_sol "Cloud Sync: YOGA_SYNC_MODE=cloud but no credentials (run: yoga sync setup)"
+    fi
+  else
+    yoga_agua "Cloud Sync: local mode (no sync)"
+  fi
+else
+  yoga_fogo "YOGA_HOME: not found ($YOGA_HOME)"
+  missing_required=1
 fi
 
 if [ "$full" -eq 1 ]; then
   echo ""
   yoga_espirito "Full checks"
+  echo ""
+
   if command -v nvim >/dev/null 2>&1; then
     yoga_agua "nvim: headless start"
     nvim --headless +qall >/dev/null 2>&1 || true
+  fi
+
+  if command -v tmux >/dev/null 2>&1; then
+    yoga_agua "tmux: $(tmux -V 2>/dev/null || echo 'version unknown')"
+  fi
+
+  if command -v sqlite3 >/dev/null 2>&1; then
+    sqlite_version=$(sqlite3 --version 2>/dev/null | head -1 || echo "unknown")
+    yoga_agua "sqlite3: $sqlite_version"
+  fi
+
+  if [ -f "${YOGA_HOME}/state.db" ]; then
+    ws_count=$(sqlite3 "${YOGA_HOME}/state.db" "SELECT COUNT(*) FROM workspaces;" 2>/dev/null || echo "0")
+    yoga_agua "Workspaces in DB: $ws_count"
   fi
 fi
 
@@ -88,6 +153,8 @@ echo ""
 
 if [ "$missing_required" -ne 0 ]; then
   yoga_fogo "Doctor result: FAIL"
+  echo ""
+  yoga_sol "💡 Install missing core tools before continuing."
   exit 1
 fi
 
@@ -99,11 +166,20 @@ if [ "$report" -eq 1 ]; then
   echo "arch=$(uname -m 2>/dev/null || true)"
   echo "shell=${SHELL-}"
   echo "zsh=$(command -v zsh >/dev/null 2>&1 && zsh --version | head -1 || echo missing)"
+  echo "bash=$(command -v bash >/dev/null 2>&1 && bash --version | head -1 || echo missing)"
   echo "git=$(command -v git >/dev/null 2>&1 && git --version || echo missing)"
+  echo "sqlite3=$(command -v sqlite3 >/dev/null 2>&1 && sqlite3 --version | head -1 || echo missing)"
+  echo "jq=$(command -v jq >/dev/null 2>&1 && jq --version || echo missing)"
+  echo "tmux=$(command -v tmux >/dev/null 2>&1 && tmux -V || echo missing)"
   echo "asdf=$(command -v asdf >/dev/null 2>&1 && asdf --version || echo missing)"
   echo "node=$(command -v node >/dev/null 2>&1 && node -v || echo missing)"
   echo "npm=$(command -v npm >/dev/null 2>&1 && npm -v || echo missing)"
   echo "nvim=$(command -v nvim >/dev/null 2>&1 && nvim --version | head -1 || echo missing)"
+  echo "fzf=$(command -v fzf >/dev/null 2>&1 || echo missing)"
+  echo "gum=$(command -v gum >/dev/null 2>&1 || echo missing)"
+  echo "docker=$(command -v docker >/dev/null 2>&1 || echo missing)"
+  echo "gh=$(command -v gh >/dev/null 2>&1 || echo missing)"
+  echo "sync_mode=${YOGA_SYNC_MODE:-local}"
   echo "openai_api_key=$([ -n "${OPENAI_API_KEY-}" ] && echo set || echo not-set)"
 fi
 

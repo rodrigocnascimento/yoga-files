@@ -26,7 +26,7 @@ function main {
     
     # 🎨 Banner nas operações principais
     case "$cmd" in
-        daemon|cc|workspace|ai|plugin|state|update|version)
+        daemon|cc|workspace|ai|plugin|state|update|version|sync)
             yoga_banner
             ;;
     esac
@@ -56,6 +56,11 @@ function main {
         # 🤖 AI
         ai|ask)
             _yoga_cmd_ai "$@"
+            ;;
+            
+        # 🔗 Sync
+        sync)
+            _yoga_cmd_sync "$@"
             ;;
             
         # 🔌 Plugins
@@ -476,6 +481,94 @@ function _yoga_cmd_version {
     fi
 }
 
+function _yoga_cmd_sync {
+    local action="${1:-status}"
+    [[ $# -gt 0 ]] && shift
+    
+    source "${YOGA_HOME}/core/sync/api.sh"
+    
+    case "$action" in
+        --help|-h)
+            echo "🔗 Yoga Sync"
+            echo ""
+            echo "Usage: yoga sync <command>"
+            echo ""
+            echo "Commands:"
+            echo "  setup    Configure cloud sync (Firebase)"
+            echo "  status   Show sync status"
+            echo "  push     Force upload local data to cloud"
+            echo "  pull     Force download cloud data to local"
+            echo "  reset    Disconnect cloud, revert to local mode"
+            echo ""
+            echo "Sync Modes:"
+            echo "  local    SQLite only (default, no sync)"
+            echo "  cloud    Firebase sync across devices"
+            echo ""
+            echo "Environment:"
+            echo "  YOGA_SYNC_MODE=local|cloud   Set sync mode"
+            echo "  YOGA_FIREBASE_CONFIG        Path to Firebase credentials"
+            echo ""
+            echo "Examples:"
+            echo "  yoga sync setup     # Start cloud sync setup wizard"
+            echo "  yoga sync status    # Check current sync status"
+            echo "  yoga sync push      # Upload data to cloud"
+            echo "  yoga sync pull      # Download data from cloud"
+            return 0
+            ;;
+        setup)
+            yoga_section "🔗 Sync Setup"
+            
+            YOGA_SYNC_MODE="${YOGA_SYNC_MODE:-local}"
+            
+            if _yoga_sync_is_cloud; then
+                yoga_terra "✅ Cloud sync is already configured!"
+                yoga_agua "   Use 'yoga sync status' for details"
+                yoga_agua "   Use 'yoga sync reset' to disconnect"
+                return 0
+            fi
+            
+            yoga_agua "🌐 Choose your sync mode:"
+            echo ""
+            echo "  1) Local (SQLite only, no sync across devices)"
+            echo "  2) Cloud (Firebase, sync across devices)"
+            echo ""
+            yoga_prompt "Enter choice [1/2]: "
+            read -r choice
+            
+            case "$choice" in
+                2|cloud)
+                    _yoga_sync_setup_cloud
+                    ;;
+                1|local|*)
+                    _yoga_sync_setup_local
+                    ;;
+            esac
+            ;;
+        status)
+            yoga_section "🔗 Sync Status"
+            _yoga_sync_status
+            ;;
+        push)
+            yoga_section "🔗 Sync Push"
+            _yoga_sync_push
+            ;;
+        pull)
+            yoga_section "🔗 Sync Pull"
+            _yoga_sync_pull
+            ;;
+        reset)
+            yoga_section "🔗 Sync Reset"
+            _yoga_sync_reset
+            ;;
+        *)
+            yoga_fogo "❌ Unknown sync action: $action"
+            echo ""
+            _yoga_cmd_sync --help
+            return 1
+            ;;
+    esac
+}
+
 function _yoga_cmd_help {
     yoga_banner
     yoga_section "📖 Comandos Disponíveis"
@@ -500,6 +593,14 @@ function _yoga_cmd_help {
     
     echo "🤖 ${YOGA_COLOR_BOLD}AI:${YOGA_COLOR_RESET}"
     echo "  ❓ ai ask <query>    - Pergunta à IA"
+    echo ""
+    
+    echo "🔗 ${YOGA_COLOR_BOLD}Sync:${YOGA_COLOR_RESET}"
+    echo "  ⚙️ sync setup       - Configura sync na nuvem"
+    echo "  📊 sync status      - Mostra status do sync"
+    echo "  ⬆️ sync push        - Envia dados para nuvem"
+    echo "  ⬇️ sync pull        - Baixa dados da nuvem"
+    echo "  🔄 sync reset       - Desconecta da nuvem"
     echo ""
     
     echo "🔌 ${YOGA_COLOR_BOLD}Plugins:${YOGA_COLOR_RESET}"

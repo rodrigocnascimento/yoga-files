@@ -1,0 +1,15 @@
+{
+  "name": "yoga-sync",
+  "version": "1.0.0",
+  "description": "Firebase Firestore sync client for Yoga 3.0",
+  "main": "sync.js",
+  "scripts": {
+    "sync:push": "node sync.js push",
+    "sync:pull": "node sync.js pull",
+    "sync:test": "node sync.js test",
+    "sync:status": "node sync.js status"
+  },
+  "dependencies": {
+    "firebase-admin": "^12.0.0"
+  }
+}
