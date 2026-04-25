@@ -8,7 +8,7 @@ export FZF_DEFAULT_OPTS='--height 50% --border --pointer=👉'
 # opencode
 export PATH=/Users/rodrigo.nascimento/.opencode/bin:$PATH
 
-export GEMINI_API_KEY="AIzaSyDyNObew-xHQvGaXFerx69ZWuO0lIBgei8"
+export GEMINI_API_KEY=""
 
 # OLLAMA HOST
 export OLLAMA_HOST=0.0.0.0
